@@ -2,6 +2,35 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const routes = [
+  // ── Public routes ──────────────────────────
+  {
+    path: '/',
+    component: () => import('@/components/layout/PublicLayout.vue'),
+    meta: { public: true },
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('@/views/home/HomeView.vue'),
+      },
+      {
+        path: 'legal/terminos',
+        name: 'legal.terminos',
+        component: () => import('@/views/legal/TerminosView.vue'),
+      },
+      {
+        path: 'legal/privacidad',
+        name: 'legal.privacidad',
+        component: () => import('@/views/legal/PrivacidadView.vue'),
+      },
+      {
+        path: 'legal/aviso-legal',
+        name: 'legal.aviso',
+        component: () => import('@/views/legal/AvisoLegalView.vue'),
+      },
+    ],
+  },
+
   {
     path: '/login',
     name: 'login',
@@ -9,16 +38,13 @@ const routes = [
     meta: { public: true },
   },
 
-  // Admin routes
+  // ── Admin routes ────────────────────────────
   {
     path: '/admin',
     component: () => import('@/components/layout/AppLayout.vue'),
     meta: { role: 'admin' },
     children: [
-      {
-        path: '',
-        redirect: '/admin/dashboard',
-      },
+      { path: '', redirect: '/admin/dashboard' },
       {
         path: 'dashboard',
         name: 'admin.dashboard',
@@ -42,16 +68,13 @@ const routes = [
     ],
   },
 
-  // Portal routes
+  // ── Portal routes ───────────────────────────
   {
     path: '/portal',
     component: () => import('@/components/layout/AppLayout.vue'),
     meta: { role: 'client' },
     children: [
-      {
-        path: '',
-        redirect: '/portal/dashboard',
-      },
+      { path: '', redirect: '/portal/dashboard' },
       {
         path: 'dashboard',
         name: 'portal.dashboard',
@@ -70,16 +93,18 @@ const routes = [
     ],
   },
 
-  // Redirect root
-  { path: '/', redirect: '/login' },
-
-  // 404
-  { path: '/:pathMatch(.*)*', redirect: '/login' },
+  // ── 404 ────────────────────────────────────
+  { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, _from, savedPosition) {
+    if (savedPosition) return savedPosition
+    if (to.hash) return { el: to.hash, behavior: 'smooth' }
+    return { top: 0 }
+  },
 })
 
 router.beforeEach((to) => {

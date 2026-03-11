@@ -1404,7 +1404,7 @@ const faqs = [
 
 // ── Blog section ────────────────────────
 .blog-section {
-  padding: $space-20 0;
+  padding: $space-16 0;
   background: $bg;
 
   .section-header {

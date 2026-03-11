@@ -14,6 +14,7 @@
           <a href="#empleados" class="navbar__link">Empleados</a>
           <a href="#paquetes" class="navbar__link">Paquetes</a>
           <a href="#faq" class="navbar__link">FAQ</a>
+          <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
         </nav>
 
         <div class="navbar__actions">
@@ -47,6 +48,7 @@
           <a href="#empleados" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</a>
           <a href="#paquetes" class="navbar__mobile-link" @click="mobileOpen = false">Paquetes</a>
           <a href="#faq" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</a>
+          <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <div class="navbar__mobile-actions">
             <a
               href="https://cal.com/diginode/demo"

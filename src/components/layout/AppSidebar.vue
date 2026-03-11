@@ -53,6 +53,7 @@ import {
   FileText,
   LifeBuoy,
   LogOut,
+  BookOpen,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -70,6 +71,7 @@ const adminNav = [
   { to: '/admin/leads',     label: 'Leads',       icon: Users },
   { to: '/admin/content',   label: 'Contenido',   icon: LayoutGrid },
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
+  { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
 ]
 
 const clientNav = [

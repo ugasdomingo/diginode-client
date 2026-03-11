@@ -268,6 +268,38 @@
       </div>
     </section>
 
+    <!-- ── BLOG ──────────────────────────────────── -->
+    <section v-if="blogPosts.length" id="blog" class="blog-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Últimas del Blog</h2>
+          <p class="section-subtitle">Ideas y recursos sobre automatización con IA</p>
+        </div>
+        <div class="blog-grid">
+          <RouterLink
+            v-for="post in blogPosts"
+            :key="post._id"
+            :to="`/blog/${post.slug}`"
+            class="blog-card"
+          >
+            <div class="blog-card__thumb">
+              <img v-if="post.thumbnail_url" :src="post.thumbnail_url" :alt="post.title" />
+              <div v-else class="blog-card__thumb-empty" />
+            </div>
+            <div class="blog-card__body">
+              <span class="blog-card__date">{{ formatBlogDate(post.published_at) }}</span>
+              <h3 class="blog-card__title">{{ post.title }}</h3>
+              <p v-if="post.excerpt" class="blog-card__excerpt">{{ post.excerpt }}</p>
+              <span class="blog-card__cta">Leer →</span>
+            </div>
+          </RouterLink>
+        </div>
+        <div class="blog-more">
+          <RouterLink to="/blog" class="btn-secondary">Ver todos los artículos →</RouterLink>
+        </div>
+      </div>
+    </section>
+
     <!-- ── FINAL CTA ──────────────────────────────── -->
     <section class="final-cta">
       <div class="container">
@@ -303,7 +335,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
   Sparkles, CalendarCheck, ArrowDown, CheckCircle,
   AlertTriangle, Users, LayoutGrid, Star, ChevronDown,
@@ -312,8 +344,23 @@ import {
   CreditCard, RefreshCcw, ShieldCheck,
 } from 'lucide-vue-next'
 
-const view    = ref('employees')
-const openFaq = ref(null)
+const view      = ref('employees')
+const openFaq   = ref(null)
+const blogPosts = ref([])
+
+function formatBlogDate(d) {
+  if (!d) return ''
+  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/blog?limit=3`).then(r => r.json())
+    blogPosts.value = res.data ?? []
+  } catch {
+    // fail silently — section won't render if empty
+  }
+})
 
 // ── Steps ──
 const steps = [
@@ -1353,6 +1400,106 @@ const faqs = [
       &:hover { text-decoration: underline; }
     }
   }
+}
+
+// ── Blog section ────────────────────────
+.blog-section {
+  padding: $space-20 0;
+  background: $bg;
+
+  .section-header {
+    margin-bottom: $space-10;
+  }
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $space-6;
+}
+
+.blog-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  text-decoration: none;
+  color: $text;
+  display: flex;
+  flex-direction: column;
+  transition: $transition;
+
+  &:hover {
+    border-color: $primary;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(124, 111, 255, 0.15);
+  }
+
+  &__thumb {
+    height: 168px;
+    overflow: hidden;
+    background: $bg-surface;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    &-empty {
+      height: 100%;
+      background: linear-gradient(135deg, $bg-surface 0%, $bg-card-2 100%);
+    }
+  }
+
+  &:hover &__thumb img {
+    transform: scale(1.04);
+  }
+
+  &__body {
+    padding: $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    flex: 1;
+  }
+
+  &__date {
+    font-size: $text-xs;
+    color: $text-subtle;
+    font-family: $font-mono;
+  }
+
+  &__title {
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    line-height: 1.4;
+  }
+
+  &__excerpt {
+    font-size: $text-sm;
+    color: $text-muted;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  &__cta {
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    color: $primary-light;
+    margin-top: $space-1;
+  }
+}
+
+.blog-more {
+  display: flex;
+  justify-content: center;
+  margin-top: $space-10;
 }
 
 // ── Transitions ─────────────────────────

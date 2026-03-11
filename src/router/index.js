@@ -28,6 +28,16 @@ const routes = [
         name: 'legal.aviso',
         component: () => import('@/views/legal/AvisoLegalView.vue'),
       },
+      {
+        path: 'blog',
+        name: 'blog.list',
+        component: () => import('@/views/blog/BlogListView.vue'),
+      },
+      {
+        path: 'blog/:slug',
+        name: 'blog.post',
+        component: () => import('@/views/blog/BlogPostView.vue'),
+      },
     ],
   },
 
@@ -64,6 +74,11 @@ const routes = [
         path: 'sales',
         name: 'admin.sales',
         component: () => import('@/views/admin/SalesView.vue'),
+      },
+      {
+        path: 'blog',
+        name: 'admin.blog',
+        component: () => import('@/views/admin/BlogView.vue'),
       },
     ],
   },

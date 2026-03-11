@@ -36,6 +36,28 @@
         </div>
       </section>
 
+      <!-- Blog teaser -->
+      <section v-if="blogPosts.length">
+        <div class="blog-header">
+          <h2 class="section-title">Últimas del Blog</h2>
+          <RouterLink to="/blog" class="blog-all-link">Ver todos →</RouterLink>
+        </div>
+        <div class="blog-list">
+          <RouterLink
+            v-for="post in blogPosts"
+            :key="post._id"
+            :to="`/blog/${post.slug}`"
+            class="blog-item"
+          >
+            <div class="blog-item__info">
+              <span class="blog-item__title">{{ post.title }}</span>
+              <span class="blog-item__date">{{ formatBlogDate(post.published_at) }}</span>
+            </div>
+            <span class="blog-item__arrow">→</span>
+          </RouterLink>
+        </div>
+      </section>
+
       <!-- Plan info -->
       <AppCard class="plan-card" v-if="clientData">
         <div class="plan-card__header">
@@ -81,6 +103,12 @@ const toast = useToastStore()
 
 const loading    = ref(true)
 const clientData = ref(null)
+const blogPosts  = ref([])
+
+function formatBlogDate(d) {
+  if (!d) return ''
+  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 const serviceMap = {
   recepcionista:   { name: 'La Recepcionista', description: 'Cualifica leads en WhatsApp, Instagram y LinkedIn 24/7', icon: MessageSquare, color: '#818cf8', bg: 'rgba(129,140,248,0.1)' },
@@ -109,9 +137,13 @@ function statusVariant(s) {
 
 onMounted(async () => {
   try {
-    clientData.value = await api.get('/portal/services')
-  } catch {
-    toast.error('No se pudo cargar la información')
+    const [svcs, blog] = await Promise.allSettled([
+      api.get('/portal/services'),
+      fetch(`${import.meta.env.VITE_API_URL}/blog?limit=3`).then(r => r.json()),
+    ])
+    if (svcs.status === 'fulfilled') clientData.value = svcs.value
+    else toast.error('No se pudo cargar la información')
+    if (blog.status === 'fulfilled') blogPosts.value = blog.value?.data ?? []
   } finally {
     loading.value = false
   }
@@ -258,6 +290,75 @@ onMounted(async () => {
     a {
       text-decoration: none;
     }
+  }
+}
+
+// Blog teaser
+.blog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-4;
+}
+
+.blog-all-link {
+  font-size: $text-sm;
+  font-weight: $fw-medium;
+  color: $primary-light;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.blog-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  padding: $space-3 $space-4;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  text-decoration: none;
+  color: $text;
+  transition: $transition;
+
+  &:hover {
+    border-color: $primary;
+    background: $primary-subtle;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__date {
+    font-size: $text-xs;
+    color: $text-subtle;
+    font-family: $font-mono;
+  }
+
+  &__arrow {
+    color: $primary-light;
+    font-size: $text-base;
+    flex-shrink: 0;
   }
 }
 </style>

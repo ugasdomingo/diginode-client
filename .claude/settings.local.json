@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(unzip -p \"Arquitectura del Sistema de tu Agencia_.docx\" word/document.xml)",
+      "Bash(sed 's/<[^>]*>//g')",
+      "Bash(unzip -p \"Diagramas de Flujos \\(Operación Interna\\).docx\" word/document.xml)",
+      "Bash(unzip -p \"Estructura API.docx\" word/document.xml)",
+      "Bash(unzip -l \"Estructura API.docx\")",
+      "Bash(unzip -p \"Mapa de Endpoints y Webhooks \\(Rutas y Controladores\\).docx\" word/document.xml)",
+      "Bash(unzip -p \"Plan de Viabilidad Financiera y Pricing.docx\" word/document.xml)",
+      "Bash(npm install)",
+      "Bash(npm run build)",
+      "Bash(python -c \"import pandas as pd; xl = pd.read_excel\\(r''C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Documentos\\\\Clientes\\\\Digiempresas\\\\drive-download-20260307T174020Z-1-001\\\\Productos.xlsx'', sheet_name=None\\); [print\\(f''\\\\n=== {n} ===\\\\n'', df.to_string\\(\\)\\) for n, df in xl.items\\(\\)]\")",
+      "Bash(pip install pandas openpyxl --quiet)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}

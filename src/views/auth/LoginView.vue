@@ -5,12 +5,12 @@
 
     <div class="login__container">
       <!-- Brand -->
-      <div class="login__brand">
+      <RouterLink to="/" class="login__brand">
         <div class="login__brand-icon">
           <Zap :size="24" />
         </div>
         <h1 class="login__brand-name">Diginode</h1>
-      </div>
+      </RouterLink>
 
       <div class="login__card">
         <div class="login__header">
@@ -157,6 +157,7 @@ async function handleLogin() {
     display: flex;
     align-items: center;
     gap: $space-3;
+    text-decoration: none;
   }
 
   &__brand-icon {

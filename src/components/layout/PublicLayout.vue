@@ -26,7 +26,10 @@
           >
             Agendar demo
           </a>
-          <RouterLink to="/login" class="navbar__login">
+          <RouterLink v-if="auth.isAuthenticated" :to="dashboardLink" class="navbar__login">
+            Dashboard
+          </RouterLink>
+          <RouterLink v-else to="/login" class="navbar__login">
             Acceder
           </RouterLink>
         </div>
@@ -60,6 +63,15 @@
               Agendar demo gratuita
             </a>
             <RouterLink
+              v-if="auth.isAuthenticated"
+              :to="dashboardLink"
+              class="navbar__login navbar__login--full"
+              @click="mobileOpen = false"
+            >
+              Dashboard
+            </RouterLink>
+            <RouterLink
+              v-else
               to="/login"
               class="navbar__login navbar__login--full"
               @click="mobileOpen = false"
@@ -116,11 +128,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Zap, Menu, X } from 'lucide-vue-next'
+import { useAuthStore } from '@/stores/auth'
 
 const mobileOpen = ref(false)
 const year = new Date().getFullYear()
+
+const auth = useAuthStore()
+const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
 </script>
 
 <style lang="scss" scoped>

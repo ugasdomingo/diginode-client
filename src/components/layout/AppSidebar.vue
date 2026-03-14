@@ -1,12 +1,12 @@
 <template>
   <aside class="sidebar" :class="{ 'sidebar--open': open }">
     <!-- Logo -->
-    <div class="sidebar__logo">
+    <RouterLink to="/" class="sidebar__logo">
       <div class="sidebar__logo-mark">
         <Zap :size="18" />
       </div>
       <span class="sidebar__logo-text">Diginode</span>
-    </div>
+    </RouterLink>
 
     <!-- Nav -->
     <nav class="sidebar__nav" aria-label="Navegación principal">
@@ -131,6 +131,7 @@ function handleLogout() {
     padding: $space-6;
     border-bottom: 1px solid $border;
     height: $header-height;
+    text-decoration: none;
   }
 
   &__logo-mark {

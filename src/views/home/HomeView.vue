@@ -38,7 +38,7 @@
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
-            Setup en 48h
+            Setup en 72h
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
@@ -61,6 +61,47 @@
             <component :is="step.icon" :size="24" class="how__step-icon" />
             <h3 class="how__step-title">{{ step.title }}</h3>
             <p class="how__step-desc">{{ step.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EMPLOYEE LIFECYCLE ──────────────────────────── -->
+    <section class="ep">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Así trabaja tu empleado IA</h2>
+          <p class="section-subtitle">No es software. Es un miembro más de tu equipo — sin los inconvenientes.</p>
+        </div>
+
+        <div class="ep__phases">
+          <div v-for="(phase, i) in employeeProcess" :key="i" class="ep__phase">
+            <div class="ep__icon-wrap" :style="{ background: phase.bg, borderColor: phase.borderColor }">
+              <component :is="phase.icon" :size="26" :style="{ color: phase.color }" />
+            </div>
+            <div class="ep__phase-num">0{{ i + 1 }}</div>
+            <h3 class="ep__phase-title">{{ phase.title }}</h3>
+            <p class="ep__phase-desc">{{ phase.desc }}</p>
+            <div class="ep__stat" :style="{ color: phase.color, borderColor: phase.borderColor }">
+              {{ phase.stat }}
+            </div>
+          </div>
+        </div>
+
+        <div class="ep__footer">
+          <div class="ep__footer-item">
+            <span class="ep__footer-num">0</span>
+            <span>días de baja</span>
+          </div>
+          <div class="ep__footer-sep" aria-hidden="true" />
+          <div class="ep__footer-item">
+            <span class="ep__footer-num">0€</span>
+            <span>seguros sociales</span>
+          </div>
+          <div class="ep__footer-sep" aria-hidden="true" />
+          <div class="ep__footer-item">
+            <span class="ep__footer-num">24/7</span>
+            <span>siempre disponible</span>
           </div>
         </div>
       </div>
@@ -362,6 +403,37 @@ onMounted(async () => {
   }
 })
 
+// ── Employee lifecycle ──
+const employeeProcess = [
+  {
+    icon: CreditCard,
+    color: '#7c6fff',
+    bg: 'rgba(124,111,255,0.12)',
+    borderColor: 'rgba(124,111,255,0.3)',
+    title: 'Lo contratas',
+    desc: 'Elige tu empleado y preparamos todo para incorporarlo a tu negocio.',
+    stat: 'Sin permanencia mínima',
+  },
+  {
+    icon: Wrench,
+    color: '#f59e0b',
+    bg: 'rgba(245,158,11,0.12)',
+    borderColor: 'rgba(245,158,11,0.3)',
+    title: 'Lo personalizamos',
+    desc: 'Configuramos su personalidad, tono y conocimiento de tu empresa. Lo conectamos a tus canales y flujos. Listo en 72 horas.',
+    stat: 'Listo en 72 h',
+  },
+  {
+    icon: Zap,
+    color: '#34d399',
+    bg: 'rgba(52,211,153,0.12)',
+    borderColor: 'rgba(52,211,153,0.3)',
+    title: 'Trabaja sin parar',
+    desc: 'Sin horarios, sin bajas, sin vacaciones. Tu empleado IA produce los 365 días del año, a cualquier hora.',
+    stat: '24/7 · 365 días',
+  },
+]
+
 // ── Steps ──
 const steps = [
   {
@@ -372,7 +444,7 @@ const steps = [
   {
     icon: CreditCard,
     title: 'Setup y pago',
-    desc: 'Abonas el setup único y configuramos toda la infraestructura de tu empleado IA en 48 horas.',
+    desc: 'Abonas el setup único y configuramos toda la infraestructura de tu empleado IA en 72 horas.',
   },
   {
     icon: Zap,
@@ -521,7 +593,7 @@ const faqs = [
   },
   {
     q: '¿Cuánto tarda en estar listo mi empleado IA?',
-    a: 'El proceso de configuración e integración suele completarse en 48 horas hábiles desde que se realiza el pago del setup. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
+    a: 'El proceso de configuración e integración suele completarse en 72 horas hábiles desde que se realiza el pago del setup. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
   },
   {
     q: '¿Puedo contratar solo un empleado y añadir más después?',
@@ -790,6 +862,144 @@ const faqs = [
     font-size: $text-sm;
     line-height: 1.6;
     text-align: center;
+  }
+}
+
+// ── Employee lifecycle ───────────────────
+.ep {
+  padding: $space-16 0;
+  border-bottom: 1px solid $border;
+
+  &__phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-6;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: calc(16.67% + 44px);
+      right: calc(16.67% + 44px);
+      height: 1px;
+      background: linear-gradient(90deg, rgba(124,111,255,0.4), rgba(245,158,11,0.4), rgba(52,211,153,0.4));
+      pointer-events: none;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+
+  &__phase {
+    text-align: center;
+    padding: $space-6 $space-4;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-3;
+    transition: $transition;
+
+    &:hover {
+      border-color: $border-hover;
+    }
+  }
+
+  &__icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: $radius-lg;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__phase-num {
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    letter-spacing: 0.1em;
+    color: $text-muted;
+    font-family: monospace;
+  }
+
+  &__phase-title {
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    color: $text;
+  }
+
+  &__phase-desc {
+    font-size: $text-sm;
+    line-height: 1.6;
+    color: $text-muted;
+    flex: 1;
+  }
+
+  &__stat {
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    letter-spacing: 0.05em;
+    padding: $space-1 $space-3;
+    border: 1px solid;
+    border-radius: $radius-full;
+    margin-top: $space-1;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-8;
+    margin-top: $space-8;
+    padding: $space-5 $space-8;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+
+    @media (max-width: 480px) {
+      gap: $space-4;
+      padding: $space-4;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-1;
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__footer-num {
+    font-size: $text-2xl;
+    font-weight: $fw-bold;
+    color: $accent;
+    line-height: 1;
+  }
+
+  &__footer-sep {
+    width: 1px;
+    height: 40px;
+    background: $border;
+
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__phases {
+      grid-template-columns: 1fr;
+    }
   }
 }
 

@@ -38,7 +38,7 @@
             <li>El Cliente solicita una demostración gratuita a través del sistema de reservas disponible en el sitio web.</li>
             <li>Tras la demostración, si el Cliente desea proceder, Diginode emite un enlace de pago a través de la plataforma Stripe.</li>
             <li>El pago del <em>setup</em> (configuración inicial) activa el proceso de implementación del servicio.</li>
-            <li>Una vez configurado el sistema (plazo estimado de 48 horas hábiles), se inicia la primera facturación mensual.</li>
+            <li>Una vez configurado el sistema (plazo estimado de 72 horas hábiles), se inicia la primera facturación mensual.</li>
           </ol>
         </section>
 

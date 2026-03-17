@@ -4,9 +4,7 @@
     <header class="navbar">
       <div class="navbar__inner">
         <RouterLink to="/" class="navbar__logo">
-          <div class="navbar__logo-mark">
-            <Zap :size="16" />
-          </div>
+          <img src="/logo.png" alt="Diginode" class="navbar__logo-img" />
           <span class="navbar__logo-text">Diginode</span>
         </RouterLink>
 
@@ -93,9 +91,7 @@
       <div class="footer__inner">
         <div class="footer__brand">
           <div class="footer__logo">
-            <div class="footer__logo-mark">
-              <Zap :size="14" />
-            </div>
+            <img src="/logo.png" alt="Diginode" class="footer__logo-img" />
             <span>Diginode</span>
           </div>
           <p class="footer__tagline">Tu agencia de empleados IA</p>
@@ -129,7 +125,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Zap, Menu, X } from 'lucide-vue-next'
+import { Menu, X } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 const calLink    = import.meta.env.VITE_CAL_BOOKING_LINK
@@ -173,16 +169,10 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
     text-decoration: none;
     flex-shrink: 0;
 
-    &-mark {
+    &-img {
       width: 30px;
       height: 30px;
-      background: $primary;
-      border-radius: $radius;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      box-shadow: 0 0 16px $primary-glow;
+      object-fit: contain;
     }
 
     &-text {
@@ -371,15 +361,10 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
     color: $text;
   }
 
-  &__logo-mark {
+  &__logo-img {
     width: 26px;
     height: 26px;
-    background: $primary;
-    border-radius: $radius-sm;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+    object-fit: contain;
   }
 
   &__tagline {

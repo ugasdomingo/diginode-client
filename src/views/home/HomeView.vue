@@ -874,22 +874,6 @@ const faqs = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: $space-6;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 40px;
-      left: calc(16.67% + 44px);
-      right: calc(16.67% + 44px);
-      height: 1px;
-      background: linear-gradient(90deg, rgba(124,111,255,0.4), rgba(245,158,11,0.4), rgba(52,211,153,0.4));
-      pointer-events: none;
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
   }
 
   &__phase {

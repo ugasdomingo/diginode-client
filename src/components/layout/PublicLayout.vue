@@ -19,7 +19,7 @@
 
         <div class="navbar__actions">
           <a
-            href="https://cal.com/diginode/demo"
+            :href="calLink"
             target="_blank"
             rel="noopener noreferrer"
             class="navbar__cta"
@@ -54,7 +54,7 @@
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <div class="navbar__mobile-actions">
             <a
-              href="https://cal.com/diginode/demo"
+              :href="calLink"
               target="_blank"
               rel="noopener noreferrer"
               class="navbar__cta navbar__cta--full"
@@ -132,6 +132,7 @@ import { ref, computed } from 'vue'
 import { Zap, Menu, X } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
+const calLink    = import.meta.env.VITE_CAL_BOOKING_LINK
 const mobileOpen = ref(false)
 const year = new Date().getFullYear()
 

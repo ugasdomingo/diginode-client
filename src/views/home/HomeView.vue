@@ -19,7 +19,7 @@
         </p>
         <div class="hero__actions">
           <a
-            href="https://cal.com/diginode/demo"
+            :href="calLink"
             target="_blank"
             rel="noopener noreferrer"
             class="btn-primary"
@@ -181,7 +181,7 @@
                   <div class="emp-card__price-setup">Setup: {{ emp.setup }}€ (único)</div>
                 </div>
                 <a
-                  href="https://cal.com/diginode/demo"
+                  :href="calLink"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="emp-card__cta"
@@ -238,7 +238,7 @@
                   <p class="pkg-card__setup">Setup: {{ pkg.setup }}€ pago único</p>
                 </div>
                 <a
-                  href="https://cal.com/diginode/demo"
+                  :href="calLink"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="pkg-card__cta"
@@ -350,7 +350,7 @@
           <h2 class="final-cta__title">¿Listo para incorporar tu primer empleado IA?</h2>
           <p class="final-cta__subtitle">La demo dura 30 minutos y es completamente gratuita. Sin compromiso.</p>
           <a
-            href="https://cal.com/diginode/demo"
+            :href="calLink"
             target="_blank"
             rel="noopener noreferrer"
             class="btn-primary btn-primary--lg"
@@ -385,6 +385,7 @@ import {
   CreditCard, RefreshCcw, ShieldCheck,
 } from 'lucide-vue-next'
 
+const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK
 const view      = ref('employees')
 const openFaq   = ref(null)
 const blogPosts = ref([])

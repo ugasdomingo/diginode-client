@@ -80,6 +80,11 @@ const routes = [
         name: 'admin.blog',
         component: () => import('@/views/admin/BlogView.vue'),
       },
+      {
+        path: 'courses',
+        name: 'admin.courses',
+        component: () => import('@/views/admin/CoursesView.vue'),
+      },
     ],
   },
 

@@ -22,7 +22,7 @@
           <Menu :size="20" />
         </button>
         <div class="layout__topbar-logo">
-          <Zap :size="16" />
+          <img src="/logo.png" alt="Diginode" class="layout__topbar-logo-img" />
           <span>Diginode</span>
         </div>
       </header>
@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Menu, Zap } from 'lucide-vue-next'
+import { Menu } from 'lucide-vue-next'
 import AppSidebar from './AppSidebar.vue'
 
 const sidebarOpen = ref(false)
@@ -115,8 +115,10 @@ const sidebarOpen = ref(false)
     font-weight: $fw-bold;
     color: $text;
 
-    svg {
-      color: $primary;
+    &-img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
     }
   }
 

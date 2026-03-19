@@ -2,9 +2,7 @@
   <aside class="sidebar" :class="{ 'sidebar--open': open }">
     <!-- Logo -->
     <RouterLink to="/" class="sidebar__logo">
-      <div class="sidebar__logo-mark">
-        <Zap :size="18" />
-      </div>
+      <img src="/logo.png" alt="Diginode" class="sidebar__logo-img" />
       <span class="sidebar__logo-text">Diginode</span>
     </RouterLink>
 
@@ -49,11 +47,11 @@ import {
   Users,
   LayoutGrid,
   BarChart3,
-  Zap,
   FileText,
   LifeBuoy,
   LogOut,
   BookOpen,
+  GraduationCap,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -72,6 +70,7 @@ const adminNav = [
   { to: '/admin/content',   label: 'Contenido',   icon: LayoutGrid },
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
+  { to: '/admin/courses',   label: 'Cursos',       icon: GraduationCap },
 ]
 
 const clientNav = [
@@ -134,16 +133,10 @@ function handleLogout() {
     text-decoration: none;
   }
 
-  &__logo-mark {
+  &__logo-img {
     width: 32px;
     height: 32px;
-    background: $primary;
-    border-radius: $radius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    box-shadow: 0 0 16px $primary-glow;
+    object-fit: contain;
     flex-shrink: 0;
   }
 

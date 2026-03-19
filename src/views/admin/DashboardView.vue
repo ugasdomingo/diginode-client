@@ -134,7 +134,7 @@ const stats = computed(() => {
     },
     {
       label: 'Clientes activos',
-      value: d.active_clients ?? 0,
+      value: d.total_clients ?? 0,
       icon: TrendingUp,
       color: '#34d399',
       bg: 'rgba(52,211,153,0.1)',
@@ -150,7 +150,7 @@ const stats = computed(() => {
     },
     {
       label: 'Borradores',
-      value: d.draft_content ?? 0,
+      value: d.content_drafts ?? 0,
       icon: LayoutGrid,
       color: '#7c6fff',
       bg: 'rgba(124,111,255,0.1)',
@@ -183,7 +183,8 @@ function platformIcon(p) {
 
 onMounted(async () => {
   try {
-    dashData.value = await api.get('/admin/dashboard')
+    const res = await api.get('/admin/dashboard')
+    dashData.value = res.data ?? res
   } catch {
     toast.error('No se pudo cargar el dashboard')
   } finally {
@@ -192,7 +193,7 @@ onMounted(async () => {
 
   try {
     const res = await api.get('/admin/leads?limit=5')
-    leads.value = res.leads ?? []
+    leads.value = res.data ?? []
   } catch {
     // silently fail
   } finally {
@@ -200,8 +201,8 @@ onMounted(async () => {
   }
 
   try {
-    const res = await api.get('/admin/content?status=draft&limit=5')
-    draftContent.value = res.posts ?? []
+    const res = await api.get('/admin/content/campaigns?status=pending&limit=5')
+    draftContent.value = res.data ?? []
   } catch {
     // silently fail
   } finally {

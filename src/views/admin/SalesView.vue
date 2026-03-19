@@ -136,7 +136,7 @@ async function analyze() {
   result.value    = null
   try {
     const data = await api.post('/admin/sales/analyze', { transcript: transcript.value })
-    result.value = data
+    result.value = data.data ?? data
   } catch (err) {
     toast.error(err.message ?? 'Error al analizar')
   } finally {

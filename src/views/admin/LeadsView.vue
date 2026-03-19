@@ -203,8 +203,8 @@ async function fetchLeads() {
     if (selectedStatus.value) params.set('status', selectedStatus.value)
 
     const res = await api.get(`/admin/leads?${params}`)
-    leads.value      = res.leads ?? []
-    totalPages.value = res.total_pages ?? 1
+    leads.value      = res.data ?? []
+    totalPages.value = Math.max(1, Math.ceil((res.total ?? 0) / 20))
   } catch {
     toast.error('Error cargando leads')
   } finally {

@@ -141,7 +141,7 @@ onMounted(async () => {
       api.get('/portal/services'),
       fetch(`${import.meta.env.VITE_API_URL}/blog?limit=3`).then(r => r.json()),
     ])
-    if (svcs.status === 'fulfilled') clientData.value = svcs.value
+    if (svcs.status === 'fulfilled') clientData.value = svcs.value.data ?? svcs.value
     else toast.error('No se pudo cargar la información')
     if (blog.status === 'fulfilled') blogPosts.value = blog.value?.data ?? []
   } finally {

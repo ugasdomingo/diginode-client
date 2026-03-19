@@ -160,7 +160,7 @@ async function fetchTickets() {
   loading.value = true
   try {
     const res = await api.get('/portal/tickets')
-    tickets.value = res.tickets ?? []
+    tickets.value = res.data ?? []
   } catch {
     toast.error('Error cargando tickets')
   } finally {
@@ -176,7 +176,7 @@ async function submitTicket() {
   submitting.value = true
   try {
     const res = await api.post('/portal/support', newTicket.value)
-    tickets.value.unshift(res.ticket ?? res)
+    tickets.value.unshift(res.data)
     showNewTicket.value = false
     newTicket.value = { title: '', description: '' }
     toast.success('Ticket creado. El Ingeniero lo revisará pronto.')

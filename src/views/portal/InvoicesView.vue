@@ -108,9 +108,12 @@ function invoiceStatusVariant(s) {
 onMounted(async () => {
   try {
     const res = await api.get('/portal/invoices')
-    invoices.value = res.invoices ?? []
-  } catch {
-    toast.error('No se pudieron cargar las facturas')
+    invoices.value = res.data ?? []
+  } catch (err) {
+    // Si el cliente aún no tiene Stripe vinculado, mostramos estado vacío sin toast de error
+    if (!err.message?.includes('404') && !err.message?.toLowerCase().includes('billing')) {
+      toast.error('No se pudieron cargar las facturas')
+    }
   } finally {
     loading.value = false
   }

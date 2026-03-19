@@ -309,6 +309,106 @@
       </div>
     </section>
 
+    <!-- ── COURSES ───────────────────────────────── -->
+    <section v-if="courses.length" id="cursos" class="courses-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Aprende a trabajar con IA</h2>
+          <p class="section-subtitle">Formación práctica para equipos y empresas que quieren ir en serio</p>
+        </div>
+        <div class="course-grid">
+          <div
+            v-for="course in courses"
+            :key="course._id"
+            class="course-card"
+            :class="{ 'course-card--inactive': !course.active }"
+          >
+            <div class="course-card__thumb">
+              <img v-if="course.thumbnail_url" :src="course.thumbnail_url" :alt="course.title" />
+              <div v-else class="course-card__thumb-empty">
+                <GraduationCap :size="40" />
+              </div>
+              <div v-if="!course.active" class="course-card__badge">Próximamente</div>
+              <div v-else class="course-card__badge course-card__badge--active">Disponible</div>
+            </div>
+            <div class="course-card__body">
+              <h3 class="course-card__title">{{ course.title }}</h3>
+              <p v-if="course.description" class="course-card__desc">{{ course.description }}</p>
+              <div class="course-card__meta">
+                <span class="course-card__date">{{ formatCourseDate(course.start_date) }}</span>
+                <span class="course-card__price">{{ course.price }}€</span>
+              </div>
+            </div>
+            <div class="course-card__footer">
+              <a
+                v-if="course.active"
+                :href="calLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="course-card__cta course-card__cta--primary"
+              >
+                <CalendarCheck :size="15" />
+                Ver curso
+              </a>
+              <button
+                v-else
+                class="course-card__cta course-card__cta--waitlist"
+                @click="openWaitlist(course)"
+              >
+                Apuntarme a la lista de espera
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WAITLIST MODAL ─────────────────────── -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="waitlistModal" class="modal-overlay" @click.self="closeWaitlist">
+          <div class="modal">
+            <button class="modal__close" @click="closeWaitlist" aria-label="Cerrar">
+              <X :size="20" />
+            </button>
+
+            <template v-if="waitlistStatus !== 'success'">
+              <GraduationCap :size="28" class="modal__icon" />
+              <h2 class="modal__title">Lista de espera</h2>
+              <p class="modal__subtitle">
+                Te avisamos cuando <strong>{{ waitlistModal.title }}</strong> esté disponible.
+              </p>
+              <form class="modal__form" @submit.prevent="submitWaitlist">
+                <label class="modal__label">
+                  Nombre
+                  <input v-model="waitlistForm.name" class="modal__input" type="text" placeholder="Tu nombre" required />
+                </label>
+                <label class="modal__label">
+                  Email
+                  <input v-model="waitlistForm.email" class="modal__input" type="email" placeholder="tu@email.com" required />
+                </label>
+                <label class="modal__label">
+                  Teléfono
+                  <input v-model="waitlistForm.phone" class="modal__input" type="tel" placeholder="+34 600 000 000" required />
+                </label>
+                <p v-if="waitlistError" class="modal__error">{{ waitlistError }}</p>
+                <button class="modal__submit btn-primary" type="submit" :disabled="waitlistStatus === 'loading'">
+                  {{ waitlistStatus === 'loading' ? 'Enviando…' : 'Apuntarme' }}
+                </button>
+              </form>
+            </template>
+
+            <template v-else>
+              <CheckCircle :size="40" class="modal__success-icon" />
+              <h2 class="modal__title">¡Apuntado!</h2>
+              <p class="modal__subtitle">Te avisaremos en cuanto el curso esté disponible.</p>
+              <button class="modal__submit btn-primary" @click="closeWaitlist">Cerrar</button>
+            </template>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
     <!-- ── BLOG ──────────────────────────────────── -->
     <section v-if="blogPosts.length" id="blog" class="blog-section">
       <div class="container">
@@ -382,13 +482,57 @@ import {
   AlertTriangle, Users, LayoutGrid, Star, ChevronDown,
   Info, Zap, MessageSquare, Settings, Wrench,
   PenLine, Palette, TrendingUp, Building2,
-  CreditCard, RefreshCcw, ShieldCheck,
+  CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X,
 } from 'lucide-vue-next'
 
 const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK
 const view      = ref('employees')
 const openFaq   = ref(null)
 const blogPosts = ref([])
+const courses   = ref([])
+
+// Waitlist modal state
+const waitlistModal  = ref(null)   // course object or null
+const waitlistForm   = ref({ name: '', email: '', phone: '' })
+const waitlistStatus = ref('')     // '' | 'loading' | 'success' | 'error'
+const waitlistError  = ref('')
+
+function openWaitlist(course) {
+  waitlistModal.value  = course
+  waitlistForm.value   = { name: '', email: '', phone: '' }
+  waitlistStatus.value = ''
+  waitlistError.value  = ''
+}
+
+function closeWaitlist() {
+  waitlistModal.value = null
+}
+
+async function submitWaitlist() {
+  waitlistStatus.value = 'loading'
+  waitlistError.value  = ''
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courses/${waitlistModal.value.slug}/waitlist`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(waitlistForm.value),
+      }
+    ).then(r => r.json())
+
+    if (!res.success) throw new Error(res.message)
+    waitlistStatus.value = 'success'
+  } catch (err) {
+    waitlistStatus.value = 'error'
+    waitlistError.value  = err.message || 'Error al apuntarse. Inténtalo de nuevo.'
+  }
+}
+
+function formatCourseDate(d) {
+  if (!d) return 'Fecha por confirmar'
+  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
+}
 
 function formatBlogDate(d) {
   if (!d) return ''
@@ -397,10 +541,15 @@ function formatBlogDate(d) {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/blog?limit=3`).then(r => r.json())
-    blogPosts.value = res.data ?? []
+    const API = import.meta.env.VITE_API_URL
+    const [coursesRes, blogRes] = await Promise.all([
+      fetch(`${API}/courses`).then(r => r.json()),
+      fetch(`${API}/blog?limit=3`).then(r => r.json()),
+    ])
+    courses.value   = coursesRes.data ?? []
+    blogPosts.value = blogRes.data ?? []
   } catch {
-    // fail silently — section won't render if empty
+    // fail silently — sections won't render if empty
   }
 })
 
@@ -1696,6 +1845,299 @@ const faqs = [
   justify-content: center;
   margin-top: $space-10;
 }
+
+// ── Courses ─────────────────────────────
+.courses-section {
+  padding: $space-16 0;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $space-6;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.course-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: $transition;
+
+  &:hover {
+    border-color: $border-hover;
+    box-shadow: $shadow-glow;
+    transform: translateY(-3px);
+  }
+
+  &--inactive {
+    opacity: 0.85;
+  }
+
+  &__thumb {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: $bg-surface;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    &-empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(124,111,255,0.08), rgba(52,211,153,0.06));
+      color: $text-subtle;
+    }
+  }
+
+  &:hover &__thumb img {
+    transform: scale(1.04);
+  }
+
+  &__badge {
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    padding: 3px $space-3;
+    border-radius: $radius-full;
+    background: rgba(139,138,168,0.2);
+    border: 1px solid rgba(139,138,168,0.3);
+    color: $text-muted;
+    letter-spacing: 0.04em;
+
+    &--active {
+      background: rgba(52,211,153,0.15);
+      border-color: rgba(52,211,153,0.3);
+      color: $accent;
+    }
+  }
+
+  &__body {
+    padding: $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $text-lg;
+    font-weight: $fw-bold;
+    color: $text;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  &__desc {
+    font-size: $text-sm;
+    color: $text-muted;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: $space-2;
+  }
+
+  &__date {
+    font-size: $text-xs;
+    color: $text-subtle;
+    font-family: $font-mono;
+  }
+
+  &__price {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__footer {
+    padding: $space-4 $space-5;
+    border-top: 1px solid $border;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    width: 100%;
+    height: 42px;
+    border-radius: $radius;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: $transition;
+
+    &--primary {
+      background: $primary-subtle;
+      border: 1px solid rgba(124,111,255,0.25);
+      color: $primary-light;
+
+      &:hover {
+        background: $primary;
+        border-color: $primary;
+        color: #fff;
+      }
+    }
+
+    &--waitlist {
+      background: transparent;
+      border: 1px solid $border;
+      color: $text-muted;
+
+      &:hover {
+        border-color: $primary;
+        color: $primary-light;
+      }
+    }
+  }
+}
+
+// ── Waitlist modal ───────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8,8,26,0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $space-4;
+}
+
+.modal {
+  position: relative;
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: $space-8;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-4;
+
+  &__close {
+    position: absolute;
+    top: $space-4;
+    right: $space-4;
+    background: transparent;
+    border: none;
+    color: $text-muted;
+    cursor: pointer;
+    padding: $space-1;
+    border-radius: $radius;
+    transition: $transition-fast;
+
+    &:hover { color: $text; }
+  }
+
+  &__icon {
+    color: $primary;
+  }
+
+  &__success-icon {
+    color: $accent;
+  }
+
+  &__title {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.01em;
+  }
+
+  &__subtitle {
+    font-size: $text-sm;
+    color: $text-muted;
+    text-align: center;
+    line-height: 1.6;
+
+    strong { color: $text; }
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    color: $text-muted;
+  }
+
+  &__input {
+    height: 42px;
+    padding: 0 $space-4;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius;
+    color: $text;
+    font-size: $text-sm;
+    transition: $transition-fast;
+
+    &::placeholder { color: $text-subtle; }
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(124,111,255,0.15);
+    }
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $danger;
+    text-align: center;
+  }
+
+  &__submit {
+    width: 100%;
+    justify-content: center;
+
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}
+
+.modal-enter-active,
+.modal-leave-active { transition: all 0.2s ease; }
+.modal-enter-from,
+.modal-leave-to { opacity: 0; }
+.modal-enter-from .modal,
+.modal-leave-to .modal { transform: scale(0.95) translateY(8px); }
 
 // ── Transitions ─────────────────────────
 .fade-slide-enter-active,

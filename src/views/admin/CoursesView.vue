@@ -100,7 +100,7 @@
           <div class="field">
             <label class="field__label">Descripción corta</label>
             <textarea
-              v-model="form.excerpt"
+              v-model="form.description"
               class="field__input field__input--textarea"
               rows="3"
               placeholder="Breve descripción visible en la home y listados"
@@ -234,7 +234,7 @@ const totalPages = computed(() => Math.max(1, Math.ceil(total.value / limit)))
 const defaultForm = () => ({
   title: '',
   content: '',
-  excerpt: '',
+  description: '',
   thumbnail_url: '',
   price: null,
   start_date: '',
@@ -271,7 +271,7 @@ function openEdit(course) {
   form.value = {
     title:         course.title,
     content:       course.content ?? '',
-    excerpt:       course.excerpt ?? '',
+    description:   course.description ?? '',
     thumbnail_url: course.thumbnail_url ?? '',
     price:         course.price ?? null,
     start_date:    course.start_date ? course.start_date.slice(0, 10) : '',

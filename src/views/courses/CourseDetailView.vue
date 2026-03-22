@@ -80,7 +80,6 @@
             <Bell :size="18" />
             Apuntarme a la lista de espera
           </button>
-          </template>
         </div>
 
         <footer class="course-article__footer">

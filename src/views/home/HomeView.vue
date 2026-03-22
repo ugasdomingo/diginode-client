@@ -340,16 +340,14 @@
               </div>
             </div>
             <div class="course-card__footer">
-              <a
+              <RouterLink
                 v-if="course.active"
-                :href="calLink"
-                target="_blank"
-                rel="noopener noreferrer"
+                :to="`/cursos/${course.slug}`"
                 class="course-card__cta course-card__cta--primary"
               >
-                <CalendarCheck :size="15" />
+                <BookOpen :size="15" />
                 Ver curso
-              </a>
+              </RouterLink>
               <button
                 v-else
                 class="course-card__cta course-card__cta--waitlist"
@@ -482,7 +480,7 @@ import {
   AlertTriangle, Users, LayoutGrid, Star, ChevronDown,
   Info, Zap, MessageSquare, Settings, Wrench,
   PenLine, Palette, TrendingUp, Building2,
-  CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X,
+  CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X, BookOpen,
 } from 'lucide-vue-next'
 
 const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK

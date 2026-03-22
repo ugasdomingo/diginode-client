@@ -38,6 +38,11 @@ const routes = [
         name: 'blog.post',
         component: () => import('@/views/blog/BlogPostView.vue'),
       },
+      {
+        path: 'cursos/:slug',
+        name: 'course.detail',
+        component: () => import('@/views/courses/CourseDetailView.vue'),
+      },
     ],
   },
 

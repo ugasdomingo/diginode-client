@@ -9,9 +9,9 @@
         </RouterLink>
 
         <nav class="navbar__nav" aria-label="Navegación principal">
-          <a href="#empleados" class="navbar__link">Empleados</a>
-          <a href="#paquetes" class="navbar__link">Paquetes</a>
-          <a href="#faq" class="navbar__link">FAQ</a>
+          <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__link">Empleados</RouterLink>
+          <RouterLink :to="{ path: '/', hash: '#paquetes' }" class="navbar__link">Paquetes</RouterLink>
+          <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
         </nav>
 
@@ -46,9 +46,9 @@
       <!-- Mobile nav -->
       <Transition name="mobile-nav">
         <div v-if="mobileOpen" class="navbar__mobile">
-          <a href="#empleados" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</a>
-          <a href="#paquetes" class="navbar__mobile-link" @click="mobileOpen = false">Paquetes</a>
-          <a href="#faq" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</a>
+          <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</RouterLink>
+          <RouterLink :to="{ path: '/', hash: '#paquetes' }" class="navbar__mobile-link" @click="mobileOpen = false">Paquetes</RouterLink>
+          <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <div class="navbar__mobile-actions">
             <a

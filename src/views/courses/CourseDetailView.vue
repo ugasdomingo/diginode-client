@@ -41,16 +41,16 @@
 
           <div class="course-article__price-row">
             <span class="course-article__price">{{ course.price }}€</span>
-            <a
-              v-if="course.active"
-              :href="calLink"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-primary"
-            >
-              <CalendarCheck :size="16" />
-              Reservar mi plaza
-            </a>
+            <template v-if="course.active">
+              <button class="btn-primary" :disabled="checkoutLoading" @click="goToCheckout">
+                <CreditCard :size="16" />
+                {{ checkoutLoading ? 'Redirigiendo...' : 'Reservar mi plaza' }}
+              </button>
+              <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-ghost">
+                <MessageCircle :size="16" />
+                ¿Es para mí?
+              </a>
+            </template>
             <button v-else class="btn-waitlist" @click="showWaitlist = true">
               <Bell :size="16" />
               Apuntarme a la lista de espera
@@ -66,20 +66,21 @@
 
         <!-- Bottom CTA -->
         <div class="course-article__cta-bottom">
-          <a
-            v-if="course.active"
-            :href="calLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-primary btn-primary--lg"
-          >
-            <CalendarCheck :size="18" />
-            Reservar mi plaza — {{ course.price }}€
-          </a>
+          <template v-if="course.active">
+            <button class="btn-primary btn-primary--lg" :disabled="checkoutLoading" @click="goToCheckout">
+              <CreditCard :size="18" />
+              {{ checkoutLoading ? 'Redirigiendo...' : `Reservar mi plaza — ${course.price}€` }}
+            </button>
+            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-ghost btn-ghost--lg">
+              <MessageCircle :size="18" />
+              ¿Es para mí? Hablamos
+            </a>
+          </template>
           <button v-else class="btn-waitlist btn-waitlist--lg" @click="showWaitlist = true">
             <Bell :size="18" />
             Apuntarme a la lista de espera
           </button>
+          </template>
         </div>
 
         <footer class="course-article__footer">
@@ -137,13 +138,30 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { ArrowLeft, Calendar, CalendarCheck, Bell, X, CheckCircle } from 'lucide-vue-next'
+import { ArrowLeft, Calendar, CreditCard, MessageCircle, Bell, X, CheckCircle } from 'lucide-vue-next'
 
 const route  = useRoute()
 const course  = ref(null)
 const loading = ref(true)
 
-const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
+const calLink        = import.meta.env.VITE_CAL_BOOKING_LINK
+const checkoutLoading = ref(false)
+
+async function goToCheckout() {
+  checkoutLoading.value = true
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courses/${route.params.slug}/checkout`,
+      { method: 'POST' }
+    ).then(r => r.json())
+
+    if (res.url) {
+      window.location.href = res.url
+    }
+  } catch {
+    checkoutLoading.value = false
+  }
+}
 
 const showWaitlist = ref(false)
 const waitlistSent = ref(false)
@@ -272,7 +290,7 @@ async function submitWaitlist() {
   &__price-row {
     display: flex;
     align-items: center;
-    gap: $space-4;
+    gap: $space-3;
     flex-wrap: wrap;
   }
 
@@ -303,7 +321,10 @@ async function submitWaitlist() {
     border: 1px solid $border;
     border-radius: $radius-xl;
     display: flex;
+    align-items: center;
     justify-content: center;
+    gap: $space-4;
+    flex-wrap: wrap;
   }
 
   &__footer {
@@ -330,6 +351,30 @@ async function submitWaitlist() {
   transition: $transition-fast;
 
   &:hover { background: $primary-light; }
+
+  &--lg {
+    padding: $space-4 $space-8;
+    font-size: $text-base;
+    border-radius: $radius-lg;
+  }
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-6;
+  background: transparent;
+  color: $text-muted;
+  font-weight: $fw-medium;
+  font-size: $text-sm;
+  border-radius: $radius;
+  border: 1px solid $border;
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover { border-color: $border-hover; color: $text; }
 
   &--lg {
     padding: $space-4 $space-8;

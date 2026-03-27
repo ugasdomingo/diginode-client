@@ -90,6 +90,11 @@ const routes = [
         name: 'admin.courses',
         component: () => import('@/views/admin/CoursesView.vue'),
       },
+      {
+        path: 'knowledge',
+        name: 'admin.knowledge',
+        component: () => import('@/views/admin/KnowledgeView.vue'),
+      },
     ],
   },
 

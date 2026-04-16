@@ -43,6 +43,11 @@ const routes = [
         name: 'course.detail',
         component: () => import('@/views/courses/CourseDetailView.vue'),
       },
+      {
+        path: 'bolsa-de-empleo',
+        name: 'bolsa',
+        component: () => import('@/views/home/BolsaEmpleoView.vue'),
+      },
     ],
   },
 

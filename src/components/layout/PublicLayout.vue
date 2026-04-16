@@ -10,9 +10,9 @@
 
         <nav class="navbar__nav" aria-label="Navegación principal">
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__link">Empleados</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#paquetes' }" class="navbar__link">Paquetes</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--highlight">Bolsa de Empleo</RouterLink>
         </nav>
 
         <div class="navbar__actions">
@@ -47,9 +47,9 @@
       <Transition name="mobile-nav">
         <div v-if="mobileOpen" class="navbar__mobile">
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#paquetes' }" class="navbar__mobile-link" @click="mobileOpen = false">Paquetes</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--highlight" @click="mobileOpen = false">Bolsa de Empleo</RouterLink>
           <div class="navbar__mobile-actions">
             <a
               :href="calLink"
@@ -207,6 +207,17 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
       color: $text;
       background: $primary-subtle;
     }
+
+    &--highlight {
+      color: $accent;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.2);
+
+      &:hover {
+        background: rgba(52,211,153,0.14);
+        color: $accent;
+      }
+    }
   }
 
   &__actions {
@@ -310,6 +321,18 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
     transition: $transition-fast;
 
     &:hover { color: $text; background: $primary-subtle; }
+
+    &--highlight {
+      color: $accent;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.2);
+      padding: $space-3 $space-3;
+
+      &:hover {
+        background: rgba(52,211,153,0.14);
+        color: $accent;
+      }
+    }
   }
 
   &__mobile-actions {

@@ -7,7 +7,7 @@
       <div class="container">
         <div class="hero__badge">
           <Sparkles :size="13" />
-          Empleados IA para tu negocio
+          Empleados IA para psicólogos y coaches
         </div>
         <h1 class="hero__title">
           Tu equipo trabaja.<br />
@@ -15,7 +15,7 @@
         </h1>
         <p class="hero__subtitle">
           Incorpora empleados de inteligencia artificial que atienden clientes, gestionan cobros,
-          crean contenido y analizan reuniones — sin horarios, sin bajas, sin nóminas infladas.
+          captan leads y crean contenido — sin horarios, sin bajas, sin nóminas infladas.
         </p>
         <div class="hero__actions">
           <a
@@ -38,29 +38,11 @@
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
-            Setup en 72h
+            Setup en 7 días
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
             Pago por Stripe
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── HOW IT WORKS ───────────────────────────── -->
-    <section class="how">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Cómo funciona</h2>
-          <p class="section-subtitle">De cero a tu equipo IA en tres pasos</p>
-        </div>
-        <div class="how__steps">
-          <div v-for="(step, i) in steps" :key="i" class="how__step">
-            <div class="how__step-num">{{ i + 1 }}</div>
-            <component :is="step.icon" :size="24" class="how__step-icon" />
-            <h3 class="how__step-title">{{ step.title }}</h3>
-            <p class="how__step-desc">{{ step.desc }}</p>
           </div>
         </div>
       </div>
@@ -153,12 +135,15 @@
                   <component :is="emp.icon" :size="22" :style="{ color: emp.color }" />
                 </div>
                 <div class="emp-card__role-badge" :style="{ color: emp.color, borderColor: emp.color + '40' }">
-                  Empleado IA
+                  {{ emp.dept }}
                 </div>
               </div>
 
               <div class="emp-card__body">
-                <h3 class="emp-card__name">{{ emp.name }}</h3>
+                <div>
+                  <h3 class="emp-card__name">{{ emp.name }}</h3>
+                  <p class="emp-card__role">{{ emp.role }}</p>
+                </div>
                 <p class="emp-card__pitch">{{ emp.pitch }}</p>
 
                 <div class="emp-card__pain">
@@ -171,6 +156,29 @@
                   <p>{{ emp.solution }}</p>
                 </div>
               </div>
+
+              <!-- Job profile expandable -->
+              <button
+                class="emp-card__profile-btn"
+                @click="toggleProfile(emp.id)"
+              >
+                <span>Perfil de puesto</span>
+                <ChevronDown
+                  :size="14"
+                  class="emp-card__profile-chevron"
+                  :class="{ 'emp-card__profile-chevron--open': openProfiles.has(emp.id) }"
+                />
+              </button>
+              <Transition name="accordion">
+                <div v-if="openProfiles.has(emp.id)" class="emp-card__profile">
+                  <ul class="emp-card__tasks">
+                    <li v-for="(task, ti) in emp.tasks" :key="ti" class="emp-card__task">
+                      <CheckCircle :size="11" class="emp-card__task-icon" />
+                      {{ task }}
+                    </li>
+                  </ul>
+                </div>
+              </Transition>
 
               <div class="emp-card__footer">
                 <div class="emp-card__price">
@@ -274,36 +282,6 @@
             </div>
             <h3 class="payment__card-title">{{ item.title }}</h3>
             <p class="payment__card-desc">{{ item.desc }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── FAQ ───────────────────────────────────── -->
-    <section id="faq" class="faq">
-      <div class="container faq__inner">
-        <div class="section-header">
-          <h2 class="section-title">Preguntas frecuentes</h2>
-          <p class="section-subtitle">Todo lo que necesitas saber antes de empezar</p>
-        </div>
-
-        <div class="faq__list">
-          <div
-            v-for="(item, i) in faqs"
-            :key="i"
-            class="faq__item"
-            :class="{ 'faq__item--open': openFaq === i }"
-            @click="openFaq = openFaq === i ? null : i"
-          >
-            <div class="faq__question">
-              <span>{{ item.q }}</span>
-              <ChevronDown :size="18" class="faq__chevron" :class="{ 'faq__chevron--open': openFaq === i }" />
-            </div>
-            <Transition name="accordion">
-              <div v-if="openFaq === i" class="faq__answer">
-                <p>{{ item.a }}</p>
-              </div>
-            </Transition>
           </div>
         </div>
       </div>
@@ -439,6 +417,36 @@
       </div>
     </section>
 
+    <!-- ── FAQ ───────────────────────────────────── -->
+    <section id="faq" class="faq">
+      <div class="container faq__inner">
+        <div class="section-header">
+          <h2 class="section-title">Preguntas frecuentes</h2>
+          <p class="section-subtitle">Todo lo que necesitas saber antes de empezar</p>
+        </div>
+
+        <div class="faq__list">
+          <div
+            v-for="(item, i) in faqs"
+            :key="i"
+            class="faq__item"
+            :class="{ 'faq__item--open': openFaq === i }"
+            @click="openFaq = openFaq === i ? null : i"
+          >
+            <div class="faq__question">
+              <span>{{ item.q }}</span>
+              <ChevronDown :size="18" class="faq__chevron" :class="{ 'faq__chevron--open': openFaq === i }" />
+            </div>
+            <Transition name="accordion">
+              <div v-if="openFaq === i" class="faq__answer">
+                <p>{{ item.a }}</p>
+              </div>
+            </Transition>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ── FINAL CTA ──────────────────────────────── -->
     <section class="final-cta">
       <div class="container">
@@ -481,6 +489,7 @@ import {
   Info, Zap, MessageSquare, Settings, Wrench,
   PenLine, Palette, TrendingUp, Building2,
   CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X, BookOpen,
+  FileText,
 } from 'lucide-vue-next'
 
 const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK
@@ -488,6 +497,15 @@ const view      = ref('employees')
 const openFaq   = ref(null)
 const blogPosts = ref([])
 const courses   = ref([])
+
+// ── Job profile toggles ──
+const openProfiles = ref(new Set())
+function toggleProfile(id) {
+  const next = new Set(openProfiles.value)
+  if (next.has(id)) next.delete(id)
+  else next.add(id)
+  openProfiles.value = next
+}
 
 // Waitlist modal state
 const waitlistModal  = ref(null)   // course object or null
@@ -559,7 +577,7 @@ const employeeProcess = [
     bg: 'rgba(124,111,255,0.12)',
     borderColor: 'rgba(124,111,255,0.3)',
     title: 'Lo contratas',
-    desc: 'Elige tu empleado y preparamos todo para incorporarlo a tu negocio.',
+    desc: 'Elige tu empleado o equipo y completa la compra. Preparamos todo para la sesión de onboarding.',
     stat: 'Sin permanencia mínima',
   },
   {
@@ -567,9 +585,9 @@ const employeeProcess = [
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.12)',
     borderColor: 'rgba(245,158,11,0.3)',
-    title: 'Lo personalizamos',
-    desc: 'Configuramos su personalidad, tono y conocimiento de tu empresa. Lo conectamos a tus canales y flujos. Listo en 72 horas.',
-    stat: 'Listo en 72 h',
+    title: 'Lo entrenamos juntos',
+    desc: 'Celebramos una reunión de onboarding donde defines la personalidad, el tono y el conocimiento. A partir de ahí, configuramos todo.',
+    stat: 'Listo en 7 días',
   },
   {
     icon: Zap,
@@ -582,135 +600,197 @@ const employeeProcess = [
   },
 ]
 
-// ── Steps ──
-const steps = [
-  {
-    icon: CalendarCheck,
-    title: 'Agenda una demo',
-    desc: 'Cuéntanos tu negocio en 30 minutos. Sin compromiso, sin letra pequeña.',
-  },
-  {
-    icon: CreditCard,
-    title: 'Setup y pago',
-    desc: 'Abonas el setup único y configuramos toda la infraestructura de tu empleado IA en 72 horas.',
-  },
-  {
-    icon: Zap,
-    title: 'Tu equipo entra en acción',
-    desc: 'Tu empleado empieza a trabajar. Tú supervisas, apruebas y te dedicas a lo que importa.',
-  },
-]
-
 // ── Employees ──
 const employees = [
   {
-    id: 'recepcionista',
-    name: 'La Recepcionista',
+    id: 'sofia',
+    name: 'Sofía',
+    role: 'Asistente Ejecutiva',
+    dept: 'Núcleo Operativo',
     icon: MessageSquare,
     color: '#7c6fff',
     bg: 'rgba(124,111,255,0.12)',
-    pitch: 'Tu embajadora de marca 24/7. Recibe a cada persona con empatía instantánea y la guía hacia tu agenda sin que muevas un dedo.',
-    pain: 'Pierdes clientes por no responder a tiempo y el estrés de ver mensajes acumularse mientras intentas trabajar o descansar.',
-    solution: 'Atención inmediata y cálida. Filtra a los curiosos y solo te entrega en tu calendario a las personas listas para hablar contigo.',
+    pitch: 'Tu primera línea de contacto. Sofía responde, filtra y agenda sin que tengas que estar pendiente del teléfono mientras estás en sesión.',
+    pain: 'Pierdes potenciales clientes porque no puedes responder a tiempo cuando estás en consulta o simplemente necesitas descansar.',
+    solution: 'Sofía atiende al instante en WhatsApp e Instagram, califica si hay intención real y solo te pasa a quienes están listos para contratar.',
     setup: 450,
-    monthly: 249,
+    monthly: 150,
+    tasks: [
+      'Responde mensajes entrantes en WhatsApp e Instagram 24/7',
+      'Cualifica leads y detecta intención de compra o consulta',
+      'Agenda citas directamente en tu calendario sin intervención',
+      'Envía recordatorios de cita y confirmaciones automáticas',
+      'Hace seguimiento post-reunión y solicita feedback al cliente',
+    ],
   },
   {
-    id: 'gestor',
-    name: 'El Gestor',
+    id: 'marcos',
+    name: 'Marcos',
+    role: 'Gestor de Cobros',
+    dept: 'Núcleo Operativo',
     icon: Settings,
     color: '#818cf8',
     bg: 'rgba(129,140,248,0.12)',
-    pitch: 'El guardián de tus procesos. Asegura que la energía de tu negocio —el dinero y los accesos— fluya sin cuellos de botella.',
-    pain: 'La incomodidad de cobrar facturas atrasadas y el trabajo manual y repetitivo de dar altas y bajas en tus plataformas.',
-    solution: 'Flujo de caja automático y sin fricción. Gestiona cobros, accesos y correos con precisión milimétrica.',
+    pitch: 'El guardián de tu flujo de caja. Marcos asegura que cada pago llegue a tiempo y que los accesos se gestionen solos.',
+    pain: 'La incomodidad de perseguir pagos atrasados y el tiempo que pierdes activando o suspendiendo accesos manualmente.',
+    solution: 'Marcos genera facturas, envía recordatorios escalonados y activa o suspende accesos de forma automática según el estado del pago.',
     setup: 450,
-    monthly: 199,
+    monthly: 150,
+    tasks: [
+      'Genera y envía facturas automáticamente al finalizar cada período',
+      'Envía recordatorios de pago escalonados sin que tú lo hagas',
+      'Activa y suspende accesos a plataformas según estado de pago',
+      'Registra cada transacción y actualiza el historial del cliente',
+      'Genera reportes de ingresos mensuales para tu revisión',
+    ],
   },
   {
-    id: 'ingeniero',
-    name: 'El Ingeniero',
-    icon: Wrench,
+    id: 'luna',
+    name: 'Luna',
+    role: 'Especialista en Captación',
+    dept: 'Motor de Adquisición',
+    icon: TrendingUp,
     color: '#34d399',
     bg: 'rgba(52,211,153,0.12)',
-    pitch: 'Tu analista de cabecera. Escucha tus reuniones, extrae el "oro" de la conversación y atiende a tus clientes con precisión técnica.',
-    pain: 'Olvidar detalles clave de reuniones de ventas y saturación por tickets de soporte que consumen tu tiempo creativo.',
-    solution: 'Memoria absoluta. Transforma charlas en propuestas estructuradas y resuelve las dudas técnicas de tus clientes al instante.',
+    pitch: 'Tu especialista en seguimiento. Luna reactiva leads fríos, ejecuta secuencias y te entrega prospectos calientes listos para cerrar.',
+    pain: 'La mayoría de clientes necesitan varios contactos antes de decidir. Tú no tienes tiempo para hacer ese seguimiento manual.',
+    solution: 'Luna ejecuta secuencias personalizadas, identifica quién está listo para comprar y lo deriva a Sofía para agendar la sesión.',
     setup: 450,
-    monthly: 249,
+    monthly: 150,
+    tasks: [
+      'Ejecuta secuencias de seguimiento por email y WhatsApp',
+      'Identifica y reactiva leads fríos con mensajes personalizados',
+      'Detecta patrones de conversión y optimiza los mensajes',
+      'Coordina con Sofía el traspaso de leads calientes',
+      'Genera informes semanales de conversión y estado del pipeline',
+    ],
   },
   {
-    id: 'content',
-    name: 'El Content Manager',
+    id: 'valeria',
+    name: 'Valeria',
+    role: 'Estratega de Contenido',
+    dept: 'Estudio de Contenido',
     icon: PenLine,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.12)',
-    pitch: 'Tu estratega de visibilidad. Se sienta contigo a rebotar ideas y aterriza tu visión en un plan de acción claro y constante.',
-    pain: 'El síndrome de la página en blanco: sabes que tienes que publicar pero no tienes tiempo ni estrategia.',
-    solution: 'Consistencia sin esfuerzo. Traduce tu visión en un calendario semanal magnético con mensajes que resuenan con tu audiencia.',
+    pitch: 'Tu directora creativa. Valeria convierte tu conocimiento en contenido constante que educa, atrae y convierte a tus clientes ideales.',
+    pain: 'Sabes que tienes que publicar pero siempre hay algo más urgente. Tu presencia digital languidece por falta de consistencia.',
+    solution: 'Valeria planifica, redacta y adapta contenido alineado a tu voz y especialidad para que solo tengas que dar el visto bueno.',
     setup: 450,
-    monthly: 199,
+    monthly: 150,
+    tasks: [
+      'Crea calendarios de contenido semanales y mensuales',
+      'Redacta posts, hilos y artículos en tu voz y especialidad',
+      'Investiga tendencias y temas relevantes para tu audiencia',
+      'Adapta cada pieza al canal correcto (Instagram, LinkedIn, blog)',
+      'Coordina con Elena la producción visual de cada pieza',
+    ],
   },
   {
-    id: 'disenador',
-    name: 'El Diseñador',
+    id: 'elena',
+    name: 'Elena',
+    role: 'Diseñadora Visual',
+    dept: 'Estudio de Contenido',
     icon: Palette,
     color: '#ec4899',
     bg: 'rgba(236,72,153,0.12)',
-    pitch: 'El artista residente. Da vida visual a las palabras de tu equipo de marketing en segundos.',
-    pain: 'Depender de bancos de imágenes aburridos o esperar días y pagar de más por diseños gráficos para redes sociales.',
-    solution: 'Identidad visual al instante. Crea imágenes únicas y a medida que capturan la esencia de tu mensaje, listas para publicar.',
+    pitch: 'La artista de tu marca. Elena transforma las ideas de Valeria en imágenes que paran el scroll y refuerzan tu autoridad.',
+    pain: 'Dependes de plantillas genéricas o pagas demasiado por diseños que no siempre representan tu identidad visual.',
+    solution: 'Elena genera imágenes a medida que respetan tu identidad visual, listas para publicar en segundos.',
     setup: 450,
-    monthly: 249,
+    monthly: 150,
+    tasks: [
+      'Diseña imágenes y carruseles para redes sociales',
+      'Crea portadas, miniaturas y banners para blog y YouTube',
+      'Mantiene la coherencia visual de tu marca en cada pieza',
+      'Genera variaciones A/B para testear qué diseño convierte más',
+      'Entrega archivos optimizados para cada plataforma',
+    ],
+  },
+  {
+    id: 'maya',
+    name: 'Maya',
+    role: 'Analista de Reuniones',
+    dept: 'Núcleo Operativo',
+    icon: FileText,
+    color: '#06b6d4',
+    bg: 'rgba(6,182,212,0.12)',
+    pitch: 'Tu memoria perfecta. Maya transcribe tus sesiones de ventas, extrae compromisos y resuelve las dudas técnicas de tus clientes.',
+    pain: 'Olvidás detalles clave de reuniones importantes y los tickets de soporte consumen el tiempo que podrías dedicar a tus clientes.',
+    solution: 'Maya transforma cada reunión en un documento accionable y resuelve dudas de soporte al instante usando tu propia documentación.',
+    setup: 450,
+    monthly: 150,
+    tasks: [
+      'Transcribe y resume reuniones de venta y consultoría',
+      'Extrae tareas y compromisos y los agenda automáticamente',
+      'Responde tickets de soporte con base en tu documentación',
+      'Detecta objeciones recurrentes y propone respuestas optimizadas',
+      'Genera propuestas y follow-ups personalizados post-reunión',
+    ],
   },
 ]
 
 // ── Packages ──
 const packages = [
   {
-    id: 'motor',
-    name: 'El Motor de Ventas',
-    icon: TrendingUp,
+    id: 'nucleo',
+    name: 'Núcleo Operativo',
+    icon: Building2,
     color: '#7c6fff',
     bg: 'rgba(124,111,255,0.15)',
-    agents: ['La Recepcionista', 'El Gestor'],
-    pitch: 'La dupla perfecta para que tu negocio nunca duerma. Uno atrae y agenda, el otro asegura el compromiso y el cobro.',
-    pain: '"Entra gente pero no compran, y los que compran me quitan tiempo administrativo".',
-    solution: 'Un embudo invisible y automático. Desde el primer "Hola" en Instagram hasta el cobro final en Stripe, todo ocurre sin tu intervención.',
-    setup: 500,
-    monthly: 380,
-    saving: 68,
+    agents: ['Sofía', 'Marcos', 'Maya'],
+    pitch: 'Las tres piezas que mantienen tu negocio funcionando aunque tú estés desconectado. Atención, cobros y análisis sin fisuras.',
+    pain: 'Tu negocio depende de que tú estés presente. Si te desconectas, todo para.',
+    solution: 'Sofía, Marcos y Maya cubren la atención, los cobros y el análisis para que el negocio opere sin tu intervención constante.',
+    setup: 750,
+    monthly: 200,
+    saving: 250,
     featured: false,
   },
   {
-    id: 'empresa',
-    name: 'La Empresa Autónoma',
-    icon: Building2,
+    id: 'motor',
+    name: 'Motor de Adquisición',
+    icon: TrendingUp,
     color: '#34d399',
     bg: 'rgba(52,211,153,0.15)',
-    agents: ['Los 5 Agentes'],
-    pitch: 'Tu junta directiva operativa. Entrégales la maquinaria del negocio y recupera tu rol de CEO: pensar, dirigir y disfrutar del proceso.',
-    pain: 'Agotamiento total. Eres el cuello de botella de tu propia empresa porque si tú no empujas, nada se mueve.',
-    solution: 'Delegación total de las áreas operativas. Un ecosistema que funciona de manera autónoma por menos de lo que cuesta un solo empleado en nómina.',
-    setup: 1200,
-    monthly: 760,
-    saving: 435,
-    featured: true,
+    agents: ['Sofía', 'Luna'],
+    pitch: 'La dupla perfecta para llenar tu agenda sin esfuerzo. Sofía atiende, Luna convierte. Un embudo automático de principio a fin.',
+    pain: 'Entra gente, pero la mayoría no convierte porque no hay un seguimiento sistemático.',
+    solution: 'Sofía captura el interés al instante. Luna ejecuta el seguimiento hasta convertir ese lead en cliente.',
+    setup: 750,
+    monthly: 200,
+    saving: 100,
+    featured: false,
   },
   {
-    id: 'marketing',
-    name: 'El Dpto. de Marketing',
+    id: 'estudio',
+    name: 'Estudio de Contenido',
     icon: Sparkles,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.15)',
-    agents: ['Content Manager', 'El Diseñador'],
-    pitch: 'Tu agencia creativa interna. Se comunican entre ellos para que tu marca esté viva, presente y brillante todos los días en internet.',
-    pain: '"Mi competencia publica todos los días y yo me estoy quedando atrás por falta de tiempo".',
-    solution: 'Presencia digital constante y profesional. Ideas, textos e imágenes generadas en armonía para que tú solo tengas que dar el "Ok".',
-    setup: 500,
-    monthly: 380,
-    saving: 68,
+    agents: ['Valeria', 'Elena'],
+    pitch: 'Tu agencia creativa interna. Valeria planifica y Elena diseña. Tu marca presente y profesional todos los días.',
+    pain: 'Tu competencia publica todos los días y tú te quedas atrás por falta de tiempo y recursos creativos.',
+    solution: 'Presencia digital constante y profesional. Ideas, textos e imágenes generadas en armonía para que solo tengas que aprobar.',
+    setup: 750,
+    monthly: 200,
+    saving: 100,
     featured: false,
+  },
+  {
+    id: 'equipo',
+    name: 'Equipo Completo',
+    icon: Star,
+    color: '#34d399',
+    bg: 'rgba(52,211,153,0.15)',
+    agents: ['Los 6 empleados'],
+    pitch: 'Tu empresa operando sola. Atención, captación, cobros, análisis y contenido — todo coordinado, sin que muevas un dedo.',
+    pain: 'Eres el cuello de botella de tu propio negocio. Nada avanza si no empujas tú.',
+    solution: '6 especialistas IA que operan como un equipo coordinado. Por menos de lo que cuesta un solo empleado en nómina.',
+    setup: 1950,
+    monthly: 500,
+    saving: 400,
+    featured: true,
   },
 ]
 
@@ -719,17 +799,17 @@ const paymentItems = [
   {
     icon: CreditCard,
     title: 'Setup único',
-    desc: 'Un pago de configuración inicial que cubre toda la arquitectura técnica de tu empleado. Se puede fraccionar en hasta 3 meses.',
+    desc: 'Un pago de configuración inicial que cubre toda la arquitectura técnica de tu empleado. Se puede fraccionar en hasta 3 cuotas mensuales.',
   },
   {
     icon: RefreshCcw,
     title: 'Suscripción mensual',
-    desc: 'El "salario" de tu empleado IA. Se cobra automáticamente cada mes vía Stripe. Puedes cancelar cuando quieras.',
+    desc: 'El "salario" de tu empleado IA. Se cobra el primer día del mes siguiente a la entrega. Puedes cancelar cuando quieras.',
   },
   {
     icon: ShieldCheck,
     title: 'Pago seguro con Stripe',
-    desc: 'Toda la facturación pasa por Stripe, el estándar de pagos en internet. Tarjeta, transferencia o domiciliación.',
+    desc: 'Toda la facturación pasa por Stripe, el estándar de pagos en internet. Tarjeta de crédito o débito, sin sorpresas.',
   },
 ]
 
@@ -737,15 +817,23 @@ const paymentItems = [
 const faqs = [
   {
     q: '¿En qué plataformas trabajan los empleados IA?',
-    a: 'Nuestros agentes están conectados a WhatsApp Business API, Instagram DMs y LinkedIn. La Recepcionista puede atender en las tres simultáneamente. El resto de agentes trabajan dentro de tu panel de control y se integran con tus herramientas actuales.',
+    a: 'Sofía está conectada a WhatsApp Business API e Instagram DMs. El resto de empleados trabajan dentro de tu panel de control e integran con tus herramientas actuales (Google Calendar, email, Stripe, etc.).',
   },
   {
     q: '¿Cuánto tarda en estar listo mi empleado IA?',
-    a: 'El proceso de configuración e integración suele completarse en 72 horas hábiles desde que se realiza el pago del setup. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
+    a: 'El proceso completo — reunión de onboarding, configuración, entrenamiento e integración — se completa en 7 días desde la sesión inicial. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
   },
   {
     q: '¿Puedo contratar solo un empleado y añadir más después?',
-    a: 'Sí, completamente. Puedes empezar con un único empleado y ampliar tu equipo cuando lo necesites. Los paquetes simplemente ofrecen un precio más ventajoso al contratar varios a la vez.',
+    a: 'Sí, completamente. Puedes empezar con un único empleado y ampliar tu equipo cuando lo necesites. Los departamentos y el equipo completo ofrecen un precio más ventajoso al contratar varios a la vez.',
+  },
+  {
+    q: '¿Puedo fraccionar el pago del setup?',
+    a: 'Sí. El setup se puede dividir en hasta 3 cuotas mensuales cargadas automáticamente por Stripe. Eliges la opción al finalizar la compra en la Bolsa de Empleo.',
+  },
+  {
+    q: '¿Cuándo empieza a cobrarse la mensualidad?',
+    a: 'La primera cuota mensual se cobra el primer día del mes siguiente a la entrega de tus empleados. Por ejemplo, si entregamos el 15 de mayo, la primera mensualidad es el 1 de junio.',
   },
   {
     q: '¿Necesito conocimientos técnicos para usarlo?',
@@ -753,7 +841,7 @@ const faqs = [
   },
   {
     q: '¿Puedo cancelar la suscripción en cualquier momento?',
-    a: 'Sí. No existe permanencia mínima. Si decides cancelar, solo tienes que avisarnos con un mes de antelación. El pago del setup no es reembolsable, ya que cubre trabajo realizado.',
+    a: 'Sí. No existe permanencia mínima. Si decides cancelar, solo tienes que avisarnos con un mes de antelación. El pago del setup no es reembolsable, ya que cubre trabajo ya realizado.',
   },
   {
     q: '¿Qué ocurre con mis datos y los de mis clientes?',
@@ -761,11 +849,7 @@ const faqs = [
   },
   {
     q: '¿Los empleados IA hablan solo español?',
-    a: 'La Recepcionista puede configurarse para atender en varios idiomas, incluyendo español e inglés. El resto de agentes trabajan principalmente en español, aunque podemos adaptarlos a tus necesidades.',
-  },
-  {
-    q: '¿Qué pasa si el empleado IA comete un error?',
-    a: 'Los agentes están configurados para escalar situaciones complejas o dudosas directamente a ti. Tú tienes siempre el control y la última palabra. Además, revisan constantemente su rendimiento para mejorar.',
+    a: 'Pueden configurarse para atender en varios idiomas, incluyendo español e inglés. Por defecto trabajan en español. Podemos adaptarlos a tus necesidades.',
   },
 ]
 </script>
@@ -949,67 +1033,6 @@ const faqs = [
     color: $text-muted;
 
     svg { color: $accent; flex-shrink: 0; }
-  }
-}
-
-// ── How it works ────────────────────────
-.how {
-  padding: $space-16 0;
-  background: $bg-surface;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
-
-  &__steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: $space-6;
-  }
-
-  &__step {
-    text-align: center;
-    padding: $space-6;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $space-3;
-    transition: $transition;
-
-    &:hover {
-      border-color: $border-hover;
-    }
-  }
-
-  &__step-num {
-    width: 32px;
-    height: 32px;
-    border-radius: $radius-full;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $text-sm;
-    font-weight: $fw-bold;
-    color: $primary-light;
-  }
-
-  &__step-icon {
-    color: $primary;
-  }
-
-  &__step-title {
-    font-size: $text-base;
-    font-weight: $fw-semibold;
-    color: $text;
-  }
-
-  &__step-desc {
-    font-size: $text-sm;
-    line-height: 1.6;
-    text-align: center;
   }
 }
 
@@ -1250,6 +1273,7 @@ const faqs = [
     border-radius: $radius-full;
     border: 1px solid;
     letter-spacing: 0.03em;
+    white-space: nowrap;
   }
 
   &__body {
@@ -1264,6 +1288,16 @@ const faqs = [
     font-weight: $fw-bold;
     color: $text;
     letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  &__role {
+    font-size: $text-xs;
+    color: $text-subtle;
+    font-weight: $fw-medium;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: $space-1;
   }
 
   &__pitch {
@@ -1300,6 +1334,68 @@ const faqs = [
     line-height: 1.5;
 
     &-icon { color: $accent; flex-shrink: 0; margin-top: 1px; }
+  }
+
+  // ── Job profile toggle ──
+  &__profile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $space-2 $space-3;
+    background: transparent;
+    border: 1px solid $border;
+    border-radius: $radius;
+    color: $text-muted;
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    cursor: pointer;
+    transition: $transition-fast;
+    letter-spacing: 0.02em;
+
+    &:hover {
+      border-color: $border-hover;
+      color: $text;
+    }
+  }
+
+  &__profile-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+
+    &--open { transform: rotate(180deg); }
+  }
+
+  &__profile {
+    background: rgba(124,111,255,0.04);
+    border: 1px solid rgba(124,111,255,0.15);
+    border-radius: $radius;
+    padding: $space-3;
+    margin-top: -$space-2;
+  }
+
+  &__tasks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__task {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    font-size: $text-xs;
+    color: $text-muted;
+    line-height: 1.5;
+  }
+
+  &__task-icon {
+    color: $primary-light;
+    flex-shrink: 0;
+    margin-top: 1px;
   }
 
   &__footer {

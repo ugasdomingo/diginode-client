@@ -924,7 +924,7 @@ const totalToday = computed(() =>
     &-period {
       font-size: $text-sm;
       color: $text-muted;
-      font-weight: $fw-normal;
+      font-weight: $fw-regular;
     }
   }
 
@@ -1155,7 +1155,7 @@ const totalToday = computed(() =>
 
     &-note {
       font-size: $text-xs;
-      font-weight: $fw-normal;
+      font-weight: $fw-regular;
       color: $text-subtle;
       text-transform: none;
       letter-spacing: 0;

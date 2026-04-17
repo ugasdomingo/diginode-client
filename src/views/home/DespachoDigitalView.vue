@@ -366,7 +366,7 @@ const priceFeatures = [
 
 // ── Hero ─────────────────────────────────────────
 .hero {
-  padding: $space-24 $space-6 $space-16;
+  padding: $space-16 $space-6 $space-16;
   text-align: center;
   position: relative;
   overflow: hidden;

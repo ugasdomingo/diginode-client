@@ -258,17 +258,17 @@
                   </p>
 
                   <!-- CTA -->
-                  <a
-                    :href="calLink"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
                     class="order-box__cta"
+                    :disabled="loading"
+                    @click="goToCheckout"
                   >
-                    <Zap :size="16" />
-                    Contratar ahora
-                  </a>
+                    <AppSpinner v-if="loading" :size="16" />
+                    <Zap v-else :size="16" />
+                    {{ loading ? 'Redirigiendo...' : 'Contratar ahora' }}
+                  </button>
                   <p class="order-box__cta-note">
-                    Agendaremos el pago y onboarding en una llamada de 20 min
+                    Pago seguro con Stripe. Tras el pago agendaremos el onboarding.
                   </p>
 
                 </template>
@@ -314,7 +314,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
@@ -322,9 +322,34 @@ import {
   Clock, TrendingDown, MessageSquare, BarChart2, TrendingUp,
   Share2, BookOpen, Video, Building2, Sparkles,
 } from 'lucide-vue-next'
+import AppSpinner from '@/components/ui/AppSpinner.vue'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
+const API     = import.meta.env.VITE_API_URL
 const route   = useRoute()
+
+const loading = ref(false)
+
+async function goToCheckout() {
+  if (loading.value) return
+  loading.value = true
+  try {
+    const res  = await fetch(`${API}/bolsa/checkout`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        employee_ids: selectedIds.value,
+        installments: installments.value,
+      }),
+    })
+    const data = await res.json()
+    if (!data.success || !data.url) throw new Error(data.message ?? 'Error al iniciar el pago')
+    window.location.href = data.url
+  } catch (err) {
+    console.error('[bolsa checkout]', err)
+    loading.value = false
+  }
+}
 
 // Show success state if redirected from Stripe
 const showSuccess = computed(() => route.query.success === 'true')
@@ -1226,10 +1251,16 @@ const totalToday = computed(() =>
     transition: $transition;
     box-shadow: 0 0 20px $primary-glow;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: $primary-dark;
       transform: translateY(-1px);
       color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
     }
   }
 

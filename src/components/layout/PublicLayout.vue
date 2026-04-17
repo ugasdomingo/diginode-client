@@ -13,6 +13,7 @@
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
           <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--highlight">Bolsa de Empleo</RouterLink>
+          <RouterLink to="/despacho-digital" class="navbar__link navbar__link--despacho">Despacho Digital</RouterLink>
         </nav>
 
         <div class="navbar__actions">
@@ -50,6 +51,7 @@
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--highlight" @click="mobileOpen = false">Bolsa de Empleo</RouterLink>
+          <RouterLink to="/despacho-digital" class="navbar__mobile-link navbar__mobile-link--despacho" @click="mobileOpen = false">Despacho Digital</RouterLink>
           <div class="navbar__mobile-actions">
             <a
               :href="calLink"
@@ -218,6 +220,17 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
         color: $accent;
       }
     }
+
+    &--despacho {
+      color: $primary-light;
+      background: rgba(124,111,255,0.08);
+      border: 1px solid rgba(124,111,255,0.2);
+
+      &:hover {
+        background: rgba(124,111,255,0.14);
+        color: $primary-light;
+      }
+    }
   }
 
   &__actions {
@@ -331,6 +344,18 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
       &:hover {
         background: rgba(52,211,153,0.14);
         color: $accent;
+      }
+    }
+
+    &--despacho {
+      color: $primary-light;
+      background: rgba(124,111,255,0.08);
+      border: 1px solid rgba(124,111,255,0.2);
+      padding: $space-3 $space-3;
+
+      &:hover {
+        background: rgba(124,111,255,0.14);
+        color: $primary-light;
       }
     }
   }

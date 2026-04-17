@@ -13,7 +13,11 @@
       "Bash(npm run build)",
       "Bash(python -c \"import pandas as pd; xl = pd.read_excel\\(r''C:\\\\Users\\\\Usuario\\\\OneDrive\\\\Documentos\\\\Clientes\\\\Digiempresas\\\\drive-download-20260307T174020Z-1-001\\\\Productos.xlsx'', sheet_name=None\\); [print\\(f''\\\\n=== {n} ===\\\\n'', df.to_string\\(\\)\\) for n, df in xl.items\\(\\)]\")",
       "Bash(pip install pandas openpyxl --quiet)",
-      "Bash(python -c \":*)"
+      "Bash(python -c \":*)",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__d4ff1172-c01c-4c77-b68a-7b91be352dd6__connections_list",
+      "WebSearch",
+      "mcp__d4ff1172-c01c-4c77-b68a-7b91be352dd6__hooks_list"
     ]
   }
 }

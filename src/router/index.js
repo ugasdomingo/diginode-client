@@ -48,6 +48,11 @@ const routes = [
         name: 'bolsa',
         component: () => import('@/views/home/BolsaEmpleoView.vue'),
       },
+      {
+        path: 'despacho-digital',
+        name: 'despacho',
+        component: () => import('@/views/home/DespachoDigitalView.vue'),
+      },
     ],
   },
 

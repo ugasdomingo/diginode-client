@@ -53,6 +53,7 @@ import {
   BookOpen,
   GraduationCap,
   Brain,
+  Package,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -72,6 +73,7 @@ const adminNav = [
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
   { to: '/admin/courses',    label: 'Cursos',       icon: GraduationCap },
+  { to: '/admin/packages',   label: 'Paquetes',     icon: Package },
   { to: '/admin/knowledge',  label: 'Conocimiento', icon: Brain },
 ]
 

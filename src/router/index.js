@@ -101,6 +101,11 @@ const routes = [
         component: () => import('@/views/admin/CoursesView.vue'),
       },
       {
+        path: 'packages',
+        name: 'admin.packages',
+        component: () => import('@/views/admin/PackagesView.vue'),
+      },
+      {
         path: 'knowledge',
         name: 'admin.knowledge',
         component: () => import('@/views/admin/KnowledgeView.vue'),

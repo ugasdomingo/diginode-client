@@ -319,8 +319,8 @@ import { useRoute } from 'vue-router'
 import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
   Users, Star, X, Info, Zap, ShieldCheck, RefreshCcw,
-  Clock, TrendingDown, MessageSquare, Settings, TrendingUp,
-  PenLine, Palette, FileText, Building2, Sparkles,
+  Clock, TrendingDown, MessageSquare, BarChart2, TrendingUp,
+  Share2, BookOpen, Video, Building2, Sparkles,
 } from 'lucide-vue-next'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
@@ -334,9 +334,18 @@ const INDIVIDUAL = { setup: 450, monthly: 150 }
 
 const DEPARTMENTS = [
   {
+    id: 'nucleo',
+    name: 'Núcleo Operativo',
+    members: ['sofia', 'marcos'],
+    setup: 750,
+    monthly: 200,
+    color: '#7c6fff',
+    icon: Building2,
+  },
+  {
     id: 'motor',
     name: 'Motor de Adquisición',
-    members: ['sofia', 'luna'],
+    members: ['luna', 'valeria'],
     setup: 750,
     monthly: 200,
     color: '#34d399',
@@ -345,20 +354,11 @@ const DEPARTMENTS = [
   {
     id: 'estudio',
     name: 'Estudio de Contenido',
-    members: ['valeria', 'elena'],
+    members: ['elena', 'maya'],
     setup: 750,
     monthly: 200,
     color: '#f59e0b',
     icon: Sparkles,
-  },
-  {
-    id: 'nucleo',
-    name: 'Núcleo Operativo',
-    members: ['sofia', 'marcos', 'maya'],
-    setup: 750,
-    monthly: 200,
-    color: '#7c6fff',
-    icon: Building2,
   },
 ]
 
@@ -383,16 +383,16 @@ const employees = [
   {
     id: 'marcos',
     name: 'Marcos',
-    role: 'Gestor de Cobros',
+    role: 'Administrador',
     dept: 'Núcleo Operativo',
-    icon: Settings,
+    icon: BarChart2,
     color: '#818cf8',
     bg: 'rgba(129,140,248,0.12)',
   },
   {
     id: 'luna',
     name: 'Luna',
-    role: 'Especialista en Captación',
+    role: 'Captadora',
     dept: 'Motor de Adquisición',
     icon: TrendingUp,
     color: '#34d399',
@@ -401,27 +401,27 @@ const employees = [
   {
     id: 'valeria',
     name: 'Valeria',
-    role: 'Estratega de Contenido',
-    dept: 'Estudio de Contenido',
-    icon: PenLine,
+    role: 'Community Manager',
+    dept: 'Motor de Adquisición',
+    icon: Share2,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.12)',
   },
   {
     id: 'elena',
     name: 'Elena',
-    role: 'Diseñadora Visual',
+    role: 'Investigadora de Contenidos',
     dept: 'Estudio de Contenido',
-    icon: Palette,
+    icon: BookOpen,
     color: '#ec4899',
     bg: 'rgba(236,72,153,0.12)',
   },
   {
     id: 'maya',
     name: 'Maya',
-    role: 'Analista de Reuniones',
-    dept: 'Núcleo Operativo',
-    icon: FileText,
+    role: 'Editora de Vídeo',
+    dept: 'Estudio de Contenido',
+    icon: Video,
     color: '#06b6d4',
     bg: 'rgba(6,182,212,0.12)',
   },

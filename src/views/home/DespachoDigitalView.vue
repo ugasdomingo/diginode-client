@@ -50,6 +50,11 @@
           Todo configurado en 7 días. Tú solo te dedicas a tus pacientes.
         </p>
 
+        <div class="hero__saving">
+          <TrendingDown :size="14" />
+          Ahorras <strong>+1.100€</strong> vs. contratar los servicios por separado
+        </div>
+
         <div class="hero__actions">
           <button class="btn-primary btn-primary--lg" :disabled="loading" @click="goToCheckout">
             <AppSpinner v-if="loading" :size="17" />
@@ -146,6 +151,10 @@
               <span class="price__period">/mes · 6 meses</span>
             </div>
             <p class="price__after">Luego 200€/mes sin permanencia</p>
+            <div class="price__saving">
+              <TrendingDown :size="13" />
+              Ahorras +1.100€ vs. contratar por separado
+            </div>
 
             <ul class="price__features">
               <li v-for="f in priceFeatures" :key="f">
@@ -194,7 +203,7 @@ import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
   MessageSquare, BarChart2, TrendingUp, Share2, BookOpen, Video,
-  CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, Info,
+  CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, Info, TrendingDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
 
@@ -212,7 +221,7 @@ const loading = ref(false)
 const goToCheckout = async () => {
   loading.value = true
   try {
-    const res = await fetch(`${API}/packages/despacho-digital/checkout`, { method: 'POST' })
+    const res = await fetch(`${API}/despacho/checkout`, { method: 'POST' })
     const data = await res.json()
     if (!data.success || !data.url) throw new Error(data.message ?? 'Error al iniciar el pago')
     window.location.href = data.url
@@ -426,6 +435,21 @@ const priceFeatures = [
     gap: $space-4;
     flex-wrap: wrap;
     margin-bottom: $space-5;
+  }
+
+  &__saving {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: $radius-full;
+    font-size: $text-sm;
+    color: $accent;
+
+    strong { font-weight: $fw-bold; }
+    svg { flex-shrink: 0; }
   }
 
   &__fine {
@@ -681,7 +705,23 @@ const priceFeatures = [
   &__after {
     font-size: $text-sm;
     color: $text-subtle;
-    margin-bottom: $space-6;
+    margin-bottom: $space-3;
+  }
+
+  &__saving {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent;
+    margin-bottom: $space-4;
+
+    svg { flex-shrink: 0; }
   }
 
   &__features {

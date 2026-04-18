@@ -120,6 +120,16 @@
             <LayoutGrid :size="16" />
             Departamentos / Paquetes
           </button>
+          <button
+            role="tab"
+            :aria-selected="view === 'despacho'"
+            class="catalog__tab catalog__tab--promo"
+            :class="{ 'catalog__tab--active': view === 'despacho' }"
+            @click="view = 'despacho'"
+          >
+            <Sparkles :size="16" />
+            Oferta Despacho Digital
+          </button>
         </div>
 
         <!-- Employee cards -->
@@ -202,7 +212,7 @@
           </div>
 
           <!-- Package cards -->
-          <div v-else key="packages" class="cards-grid cards-grid--packages">
+          <div v-else-if="view === 'packages'" key="packages" class="cards-grid cards-grid--packages">
             <div
               v-for="pkg in packages"
               :key="pkg.id"
@@ -260,6 +270,58 @@
           </div>
         </Transition>
 
+          <!-- Despacho Digital promo panel -->
+          <div v-else key="despacho" class="despacho-panel">
+            <div class="despacho-panel__glow" aria-hidden="true" />
+
+            <div class="despacho-panel__left">
+              <span class="despacho-panel__badge">
+                <Sparkles :size="12" />
+                Oferta especial · Todo incluido
+              </span>
+              <h3 class="despacho-panel__title">Despacho Digital</h3>
+              <p class="despacho-panel__sub">
+                Web profesional + panel privado para pacientes + 2 empleados IA activos 24/7.
+                Todo configurado en 7 días. Sin instalar nada.
+              </p>
+
+              <div class="despacho-panel__saving">
+                <TrendingDown :size="14" />
+                Ahorras <strong>+1.100€</strong> vs. contratar los servicios por separado
+              </div>
+
+              <ul class="despacho-panel__features">
+                <li v-for="f in despachoFeatures" :key="f">
+                  <CheckCircle :size="13" />
+                  {{ f }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="despacho-panel__right">
+              <div class="despacho-panel__price-box">
+                <div class="despacho-panel__price">
+                  <span class="despacho-panel__price-num">300€</span>
+                  <span class="despacho-panel__price-period">/mes</span>
+                </div>
+                <p class="despacho-panel__price-note">6 meses · luego 200€/mes</p>
+
+                <RouterLink to="/despacho-digital" class="despacho-panel__cta">
+                  <Zap :size="16" />
+                  Ver la oferta completa
+                </RouterLink>
+                <a
+                  :href="calLink"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="despacho-panel__demo"
+                >
+                  Agendar demo gratuita →
+                </a>
+              </div>
+            </div>
+          </div>
+
         <!-- Pricing footnote -->
         <p class="catalog__footnote">
           <Info :size="14" />
@@ -268,20 +330,37 @@
       </div>
     </section>
 
-    <!-- ── PAYMENT SECTION ────────────────────────── -->
-    <section class="payment">
+    <!-- ── DESPACHO DIGITAL PROMO ────────────────── -->
+    <section class="home-despacho">
       <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">¿Cómo se paga?</h2>
-          <p class="section-subtitle">Sin sorpresas, sin letra pequeña</p>
-        </div>
-        <div class="payment__grid">
-          <div class="payment__card" v-for="item in paymentItems" :key="item.title">
-            <div class="payment__card-icon">
-              <component :is="item.icon" :size="20" />
+        <div class="home-despacho__inner">
+          <div class="home-despacho__glow" aria-hidden="true" />
+
+          <div class="home-despacho__text">
+            <span class="home-despacho__badge">
+              <Sparkles :size="12" />
+              Oferta especial · Todo incluido
+            </span>
+            <h2 class="home-despacho__title">Despacho Digital</h2>
+            <p class="home-despacho__sub">
+              Web + panel de gestión + 2 empleados IA. Llave en mano para psicólogos y coaches.
+              Todo funcionando en 7 días.
+            </p>
+            <div class="home-despacho__saving">
+              <TrendingDown :size="14" />
+              Ahorras <strong>+1.100€</strong> vs. contratar por separado
             </div>
-            <h3 class="payment__card-title">{{ item.title }}</h3>
-            <p class="payment__card-desc">{{ item.desc }}</p>
+          </div>
+
+          <div class="home-despacho__action">
+            <div class="home-despacho__price">
+              <span class="home-despacho__price-num">300€</span>
+              <span class="home-despacho__price-period">/mes · 6 meses</span>
+            </div>
+            <RouterLink to="/despacho-digital" class="home-despacho__cta">
+              <Zap :size="16" />
+              Ver la oferta
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -487,7 +566,7 @@ import {
   Sparkles, CalendarCheck, ArrowDown, CheckCircle,
   AlertTriangle, Users, LayoutGrid, Star, ChevronDown,
   Info, Zap, MessageSquare, Wrench, BookOpen,
-  TrendingUp, Building2, Share2, BarChart2, Video,
+  TrendingUp, TrendingDown, Building2, Share2, BarChart2, Video,
   CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X,
 } from 'lucide-vue-next'
 
@@ -793,23 +872,13 @@ const packages = [
   },
 ]
 
-// ── Payment items ──
-const paymentItems = [
-  {
-    icon: CreditCard,
-    title: 'Setup único',
-    desc: 'Un pago de configuración inicial que cubre toda la arquitectura técnica de tu empleado. Se puede fraccionar en hasta 3 cuotas mensuales.',
-  },
-  {
-    icon: RefreshCcw,
-    title: 'Suscripción mensual',
-    desc: 'El "salario" de tu empleado IA. Se cobra el primer día del mes siguiente a la entrega. Puedes cancelar cuando quieras.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Pago seguro con Stripe',
-    desc: 'Toda la facturación pasa por Stripe, el estándar de pagos en internet. Tarjeta de crédito o débito, sin sorpresas.',
-  },
+// ── Despacho Digital features (for promo tab & home banner) ──
+const despachoFeatures = [
+  'Web profesional para tu consulta (SEO local incluido)',
+  'Panel privado de gestión para tus pacientes',
+  '2 empleados IA activos 24/7 (WhatsApp, agenda, contenido…)',
+  'Onboarding y configuración completa en 7 días',
+  'Soporte técnico continuo y actualizaciones incluidas',
 ]
 
 // ── FAQs ──
@@ -1655,53 +1724,338 @@ const faqs = [
   }
 }
 
-// ── Payment ─────────────────────────────
-.payment {
-  padding: $space-16 0;
-  background: $bg-surface;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
+// ── Despacho panel (catalog tab) ─────────
+.despacho-panel {
+  position: relative;
+  background: $bg-card;
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: $radius-xl;
+  padding: $space-10;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: $space-10;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(52,211,153,0.07);
 
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: $space-5;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: $space-6;
+    gap: $space-6;
   }
 
-  &__card {
-    background: $bg-card;
-    border: 1px solid $border;
+  &__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(52,211,153,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-1 $space-3;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent;
+    letter-spacing: 0.03em;
+    margin-bottom: $space-4;
+  }
+
+  &__title {
+    font-size: $text-3xl;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.02em;
+    margin-bottom: $space-3;
+
+    @media (max-width: 640px) {
+      font-size: $text-2xl;
+    }
+  }
+
+  &__sub {
+    font-size: $text-base;
+    color: $text-muted;
+    line-height: 1.6;
+    margin-bottom: $space-4;
+    max-width: 480px;
+  }
+
+  &__saving {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: $radius-full;
+    font-size: $text-sm;
+    color: $accent;
+    margin-bottom: $space-5;
+
+    strong { font-weight: $fw-bold; }
+    svg { flex-shrink: 0; }
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      font-size: $text-sm;
+      color: $text-muted;
+
+      svg { color: $accent; flex-shrink: 0; }
+    }
+  }
+
+  &__right {
+    position: relative;
+  }
+
+  &__price-box {
+    background: $bg-surface;
+    border: 1px solid $border-hover;
     border-radius: $radius-lg;
     padding: $space-6;
     display: flex;
     flex-direction: column;
     gap: $space-3;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+  }
+
+  &__price-num {
+    font-size: 2.5rem;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__price-period {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__price-note {
+    font-size: $text-xs;
+    color: $text-subtle;
+    margin-top: -$space-2;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 48px;
+    background: $accent;
+    border: none;
+    border-radius: $radius;
+    color: $bg;
+    font-size: $text-base;
+    font-weight: $fw-bold;
+    text-decoration: none;
     transition: $transition;
+    box-shadow: 0 0 20px rgba(52,211,153,0.3);
 
-    &:hover { border-color: $border-hover; }
+    &:hover {
+      background: #2ebf86;
+      transform: translateY(-1px);
+      box-shadow: 0 0 28px rgba(52,211,153,0.45);
+      color: $bg;
+    }
+  }
 
-    &-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: $radius;
-      background: $primary-subtle;
-      border: 1px solid rgba(124,111,255,0.2);
-      display: flex;
+  &__demo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $text-sm;
+    color: $text-muted;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover { color: $text; }
+  }
+}
+
+// ── Despacho home banner ─────────────────
+.home-despacho {
+  padding: $space-16 0;
+  background: $bg-surface;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+
+  &__inner {
+    position: relative;
+    background: $bg-card;
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: $radius-xl;
+    padding: $space-10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-8;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(52,211,153,0.07);
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      padding: $space-6;
+      text-align: center;
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 100% at 100% 50%, rgba(52,211,153,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  &__text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-3;
+
+    @media (max-width: 768px) {
       align-items: center;
-      justify-content: center;
-      color: $primary;
     }
+  }
 
-    &-title {
-      font-size: $text-base;
-      font-weight: $fw-semibold;
-      color: $text;
-    }
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-1 $space-3;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent;
+    letter-spacing: 0.03em;
+  }
 
-    &-desc {
-      font-size: $text-sm;
-      line-height: 1.6;
+  &__title {
+    font-size: $text-3xl;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 640px) {
+      font-size: $text-2xl;
     }
+  }
+
+  &__sub {
+    font-size: $text-base;
+    color: $text-muted;
+    line-height: 1.6;
+    max-width: 500px;
+  }
+
+  &__saving {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: $radius-full;
+    font-size: $text-sm;
+    color: $accent;
+
+    strong { font-weight: $fw-bold; }
+    svg { flex-shrink: 0; }
+  }
+
+  &__action {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+  }
+
+  &__price-num {
+    font-size: 2.25rem;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__price-period {
+    font-size: $text-sm;
+    color: $text-muted;
+    white-space: nowrap;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 52px;
+    padding: 0 $space-8;
+    background: $accent;
+    border: none;
+    border-radius: $radius;
+    color: $bg;
+    font-size: $text-base;
+    font-weight: $fw-bold;
+    text-decoration: none;
+    transition: $transition;
+    box-shadow: 0 0 24px rgba(52,211,153,0.3);
+    white-space: nowrap;
+
+    &:hover {
+      background: #2ebf86;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(52,211,153,0.45);
+      color: $bg;
+    }
+  }
+}
+
+// ── Promo tab style ──────────────────────
+.catalog__tab--promo {
+  &.catalog__tab--active {
+    background: $accent !important;
+    color: $bg !important;
+    box-shadow: 0 0 16px rgba(52,211,153,0.35) !important;
+  }
+
+  &:not(.catalog__tab--active):hover {
+    color: $accent;
   }
 }
 

@@ -268,7 +268,6 @@
               </div>
             </div>
           </div>
-        </Transition>
 
           <!-- Despacho Digital promo panel -->
           <div v-else key="despacho" class="despacho-panel">
@@ -321,6 +320,7 @@
               </div>
             </div>
           </div>
+        </Transition>
 
         <!-- Pricing footnote -->
         <p class="catalog__footnote">

@@ -371,7 +371,7 @@
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">Aprende a trabajar con IA</h2>
-          <p class="section-subtitle">Aprende a integrar la IA en tu consulta, ahorra horas a la semana y ofrece una experiencia más profesional a tus pacientes</p>
+          <p class="section-subtitle">Menos tareas, más pacientes.</p>
         </div>
         <div class="course-grid">
           <div

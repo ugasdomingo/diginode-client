@@ -98,13 +98,33 @@
     <!-- ── EMPLEADOS ──────────────────────────────── -->
     <section class="employees">
       <div class="container">
-        <h2 class="section-title">Elige 2 empleados en el onboarding</h2>
+        <h2 class="section-title">Tu equipo de 2 empleados IA</h2>
         <p class="section-sub">
-          Los 6 están disponibles. Decides quiénes te convienen más cuando nos sentamos juntos.
+          Sofía siempre viene contigo. En el onboarding decides quién es tu segundo empleado.
+        </p>
+
+        <!-- Sofía: siempre incluida -->
+        <div class="employees__featured">
+          <div class="employees__featured-badge">
+            <CheckCircle :size="12" />
+            Siempre incluida
+          </div>
+          <div class="employees__avatar employees__avatar--lg" :style="{ background: '#7c6fff20', color: '#7c6fff' }">
+            <MessageSquare :size="22" />
+          </div>
+          <div class="employees__info">
+            <strong>Sofía — Asistente Ejecutiva</strong>
+            <span>Agenda, recordatorios, atención a pacientes en WhatsApp · activa 24/7</span>
+          </div>
+        </div>
+
+        <!-- Elige 1 más -->
+        <p class="employees__label">
+          <span>+ Elige 1 más en el onboarding:</span>
         </p>
 
         <div class="employees__grid">
-          <div v-for="emp in employees" :key="emp.id" class="employees__card">
+          <div v-for="emp in optionalEmployees" :key="emp.id" class="employees__card">
             <div class="employees__avatar" :style="{ background: emp.color + '20', color: emp.color }">
               <component :is="emp.icon" :size="18" />
             </div>
@@ -114,11 +134,6 @@
             </div>
           </div>
         </div>
-
-        <p class="employees__note">
-          <Info :size="13" />
-          Con 2 empleados del mismo departamento se aplica precio de departamento — 200€/mes tras el periodo inicial.
-        </p>
       </div>
     </section>
 
@@ -134,6 +149,33 @@
               <h3>{{ step.title }}</h3>
               <p>{{ step.desc }}</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ──────────────────────────────────────── -->
+    <section class="faq">
+      <div class="container">
+        <h2 class="section-title">Preguntas frecuentes</h2>
+
+        <div class="faq__list">
+          <div
+            v-for="(item, i) in faqs"
+            :key="i"
+            class="faq__item"
+            :class="{ 'faq__item--open': openFaq === i }"
+            @click="openFaq = openFaq === i ? null : i"
+          >
+            <div class="faq__question">
+              <span>{{ item.q }}</span>
+              <ChevronDown :size="18" class="faq__chevron" :class="{ 'faq__chevron--open': openFaq === i }" />
+            </div>
+            <Transition name="accordion">
+              <div v-if="openFaq === i" class="faq__answer">
+                <p>{{ item.a }}</p>
+              </div>
+            </Transition>
           </div>
         </div>
       </div>
@@ -203,12 +245,13 @@ import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
   MessageSquare, BarChart2, TrendingUp, Share2, BookOpen, Video,
-  CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, Info, TrendingDown,
+  CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, TrendingDown, ChevronDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
 
 // ── Route / success state ─────────────────────────
-const route = useRoute()
+const route  = useRoute()
+const openFaq = ref(null)
 const showSuccess = computed(() => route.query.success === 'true')
 
 // ── Env ──────────────────────────────────────────
@@ -259,13 +302,13 @@ const includes = [
   },
 ]
 
-const employees = [
-  { id: 'sofia',   name: 'Sofía',   role: 'Asistente Ejecutiva',          icon: MessageSquare, color: '#7c6fff' },
-  { id: 'marcos',  name: 'Marcos',  role: 'Administrador',                 icon: BarChart2,     color: '#818cf8' },
-  { id: 'luna',    name: 'Luna',    role: 'Captadora',                     icon: TrendingUp,    color: '#34d399' },
-  { id: 'valeria', name: 'Valeria', role: 'Community Manager',             icon: Share2,        color: '#f59e0b' },
-  { id: 'elena',   name: 'Elena',   role: 'Investigadora de Contenidos',   icon: BookOpen,      color: '#ec4899' },
-  { id: 'maya',    name: 'Maya',    role: 'Editora de Vídeo',              icon: Video,         color: '#06b6d4' },
+// Sofía siempre incluida; el cliente elige 1 de los otros 5 en el onboarding
+const optionalEmployees = [
+  { id: 'marcos',  name: 'Marcos',  role: 'Administrador',               icon: BarChart2,  color: '#818cf8' },
+  { id: 'luna',    name: 'Luna',    role: 'Captadora',                   icon: TrendingUp, color: '#34d399' },
+  { id: 'valeria', name: 'Valeria', role: 'Community Manager',           icon: Share2,     color: '#f59e0b' },
+  { id: 'elena',   name: 'Elena',   role: 'Investigadora de Contenidos', icon: BookOpen,   color: '#ec4899' },
+  { id: 'maya',    name: 'Maya',    role: 'Editora de Vídeo',            icon: Video,      color: '#06b6d4' },
 ]
 
 const steps = [
@@ -286,10 +329,41 @@ const steps = [
 const priceFeatures = [
   'Web profesional personalizada',
   'Panel privado para tus pacientes',
-  '2 empleados IA activos 24/7',
+  'Sofía + 1 empleado IA activos 24/7',
   'Onboarding y configuración completa',
   'Soporte técnico continuo',
   'Actualizaciones incluidas',
+]
+
+const faqs = [
+  {
+    q: '¿Por qué Sofía siempre está incluida?',
+    a: 'Sofía es la Asistente Ejecutiva: gestiona tu agenda, atiende mensajes de pacientes en WhatsApp y envía recordatorios automáticos. Es el pilar operativo de cualquier consulta y la pieza que más impacto inmediato genera, por eso forma parte de todos los paquetes Despacho Digital.',
+  },
+  {
+    q: '¿Cuándo elijo mi segundo empleado?',
+    a: 'Durante la sesión de onboarding. Te presentamos a los 5 candidatos, vemos qué es lo que más necesitas en tu consulta en este momento y decidimos juntos. Puedes cambiar de opinión hasta que empiece la configuración.',
+  },
+  {
+    q: '¿Puedo cambiar de segundo empleado más adelante?',
+    a: 'Sí. Pasado el periodo inicial de 6 meses puedes solicitar un cambio de empleado. Se aplica una pequeña tarifa de reconfiguración según la complejidad del nuevo empleado.',
+  },
+  {
+    q: '¿Hay coste de setup o entrada?',
+    a: 'No. El Despacho Digital no tiene coste de setup separado. Los 300€/mes del primer período cubren también toda la configuración, el onboarding y la puesta en marcha.',
+  },
+  {
+    q: '¿Qué pasa cuando terminan los 6 meses?',
+    a: 'La suscripción pasa a 200€/mes sin permanencia. Puedes cancelar cuando quieras con un mes de antelación. No hay penalización ni cláusulas de permanencia adicionales.',
+  },
+  {
+    q: '¿Puedo ampliar a más empleados después?',
+    a: 'Sí. Puedes incorporar empleados adicionales a través de la Bolsa de Empleo con precios individuales o por departamento. Los empleados se integran con tu infraestructura ya existente.',
+  },
+  {
+    q: '¿Necesito conocimientos técnicos?',
+    a: 'Ninguno. Nosotros nos encargamos de todo: web, conexiones, entrenamiento y mantenimiento. Tú solo participas en la sesión de onboarding de una hora para darnos el contexto de tu consulta.',
+  },
 ]
 </script>
 
@@ -526,11 +600,55 @@ const priceFeatures = [
 
   .section-title { margin-bottom: $space-3; }
 
+  &__featured {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-5 $space-6;
+    background: rgba(124,111,255,0.06);
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: $radius-lg;
+    margin-bottom: $space-6;
+    position: relative;
+
+    @media (max-width: 480px) {
+      flex-wrap: wrap;
+      gap: $space-3;
+    }
+  }
+
+  &__featured-badge {
+    position: absolute;
+    top: -11px;
+    left: $space-5;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 2px $space-3;
+    background: $primary;
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    color: #fff;
+    letter-spacing: 0.02em;
+
+    svg { color: #fff; }
+  }
+
+  &__label {
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    color: $text-muted;
+    margin-bottom: $space-3;
+    letter-spacing: 0.02em;
+
+    span { border-bottom: 1px dashed $border-hover; padding-bottom: 1px; }
+  }
+
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: $space-3;
-    margin-bottom: $space-6;
   }
 
   &__card {
@@ -541,6 +659,9 @@ const priceFeatures = [
     background: $bg-card;
     border: 1px solid $border;
     border-radius: $radius;
+    transition: $transition-fast;
+
+    &:hover { border-color: $border-hover; }
   }
 
   &__avatar {
@@ -551,12 +672,18 @@ const priceFeatures = [
     height: 38px;
     border-radius: $radius;
     flex-shrink: 0;
+
+    &--lg {
+      width: 48px;
+      height: 48px;
+    }
   }
 
   &__info {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
 
     strong {
       font-size: $text-sm;
@@ -567,21 +694,78 @@ const priceFeatures = [
     span {
       font-size: $text-xs;
       color: $text-muted;
+      line-height: 1.4;
     }
   }
+}
 
-  &__note {
+// ── FAQ ──────────────────────────────────────────
+.faq {
+  padding: $space-16 $space-6;
+
+  .section-title { margin-bottom: $space-10; }
+
+  &__list {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__item {
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover { border-color: $border-hover; }
+    &--open { border-color: $border-hover; }
+  }
+
+  &__question {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    font-size: $text-xs;
-    color: $text-subtle;
-    text-align: center;
+    justify-content: space-between;
+    gap: $space-4;
+    padding: $space-5 $space-6;
+    font-size: $text-base;
+    font-weight: $fw-medium;
+    color: $text;
+    user-select: none;
+  }
 
-    svg { flex-shrink: 0; color: $text-subtle; }
+  &__chevron {
+    color: $text-muted;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+
+    &--open { transform: rotate(180deg); }
+  }
+
+  &__answer {
+    border-top: 1px solid $border;
+    padding: $space-5 $space-6;
+
+    p {
+      font-size: $text-sm;
+      color: $text-muted;
+      line-height: 1.8;
+    }
   }
 }
+
+.accordion-enter-active,
+.accordion-leave-active {
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.accordion-enter-from,
+.accordion-leave-to  { opacity: 0; max-height: 0; }
+.accordion-enter-to,
+.accordion-leave-from { opacity: 1; max-height: 400px; }
 
 // ── How ──────────────────────────────────────────
 .how {

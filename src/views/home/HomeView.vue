@@ -378,15 +378,15 @@
             v-for="course in courses"
             :key="course._id"
             class="course-card"
-            :class="{ 'course-card--inactive': !course.active }"
+            :class="{ 'course-card--inactive': course.status !== 'active' }"
           >
             <div class="course-card__thumb">
               <img v-if="course.thumbnail_url" :src="course.thumbnail_url" :alt="course.title" />
               <div v-else class="course-card__thumb-empty">
                 <GraduationCap :size="40" />
               </div>
-              <div v-if="!course.active" class="course-card__badge">Próximamente</div>
-              <div v-else class="course-card__badge course-card__badge--active">Disponible</div>
+              <div v-if="course.status === 'active'" class="course-card__badge course-card__badge--active">Disponible</div>
+              <div v-else class="course-card__badge">Próximamente</div>
             </div>
             <div class="course-card__body">
               <h3 class="course-card__title">{{ course.title }}</h3>
@@ -398,7 +398,7 @@
             </div>
             <div class="course-card__footer">
               <RouterLink
-                v-if="course.active"
+                v-if="course.status === 'active'"
                 :to="`/cursos/${course.slug}`"
                 class="course-card__cta course-card__cta--primary"
               >

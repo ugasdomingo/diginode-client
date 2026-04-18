@@ -25,7 +25,7 @@
       <article v-else class="course-article">
         <header class="course-article__header">
           <div class="course-article__badges">
-            <span class="badge badge--active" v-if="course.active">Disponible</span>
+            <span class="badge badge--active" v-if="course.status === 'active'">Disponible</span>
             <span class="badge badge--waitlist" v-else>Lista de espera</span>
             <span v-if="course.start_date" class="badge badge--date">
               <Calendar :size="12" />
@@ -41,7 +41,7 @@
 
           <div class="course-article__price-row">
             <span class="course-article__price">{{ course.price }}€</span>
-            <template v-if="course.active">
+            <template v-if="course.status === 'active'">
               <button class="btn-primary" :disabled="checkoutLoading" @click="goToCheckout">
                 <CreditCard :size="16" />
                 {{ checkoutLoading ? 'Redirigiendo...' : 'Reservar mi plaza' }}
@@ -66,7 +66,7 @@
 
         <!-- Bottom CTA -->
         <div class="course-article__cta-bottom">
-          <template v-if="course.active">
+          <template v-if="course.status === 'active'">
             <button class="btn-primary btn-primary--lg" :disabled="checkoutLoading" @click="goToCheckout">
               <CreditCard :size="18" />
               {{ checkoutLoading ? 'Redirigiendo...' : `Reservar mi plaza — ${course.price}€` }}

@@ -43,8 +43,8 @@
           </div>
 
           <div class="course-row__right">
-            <AppBadge :variant="c.active ? 'success' : 'warning'">
-              {{ c.active ? 'Activo' : 'Preventa' }}
+            <AppBadge :variant="{ active: 'success', inactive: 'warning', draft: 'neutral' }[c.status] ?? 'neutral'">
+              {{ { active: 'Activo', inactive: 'Preventa', draft: 'Borrador' }[c.status] ?? 'Borrador' }}
             </AppBadge>
 
             <AppButton variant="ghost" size="sm" @click="openEdit(c)">
@@ -123,9 +123,10 @@
 
             <div class="field">
               <label class="field__label">Estado</label>
-              <select v-model="form.active" class="field__input">
-                <option :value="true">Activo</option>
-                <option :value="false">Preventa / Waitlist</option>
+              <select v-model="form.status" class="field__input">
+                <option value="draft">Borrador (solo admin)</option>
+                <option value="inactive">Preventa / Waitlist</option>
+                <option value="active">Activo (público)</option>
               </select>
             </div>
           </div>
@@ -238,7 +239,7 @@ const defaultForm = () => ({
   thumbnail_url: '',
   price: null,
   start_date: '',
-  active: false,
+  status: 'draft',
 })
 const form = ref(defaultForm())
 
@@ -275,7 +276,7 @@ function openEdit(course) {
     thumbnail_url: course.thumbnail_url ?? '',
     price:         course.price ?? null,
     start_date:    course.start_date ? course.start_date.slice(0, 10) : '',
-    active:        course.active ?? false,
+    status:        course.status ?? 'draft',
   }
   editing.value = true
 }

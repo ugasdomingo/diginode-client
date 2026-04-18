@@ -437,7 +437,7 @@ const priceFeatures = [
 
 // ── Includes ─────────────────────────────────────
 .includes {
-  padding: $space-20 $space-6;
+  padding: $space-16 $space-6;
 
   .section-title { margin-bottom: $space-12; }
 
@@ -497,7 +497,7 @@ const priceFeatures = [
 
 // ── Employees ────────────────────────────────────
 .employees {
-  padding: $space-20 $space-6;
+  padding: $space-16 $space-6;
   background: $bg-surface;
 
   .section-title { margin-bottom: $space-3; }
@@ -561,7 +561,7 @@ const priceFeatures = [
 
 // ── How ──────────────────────────────────────────
 .how {
-  padding: $space-20 $space-6;
+  padding: $space-16 $space-6;
 
   .section-title { margin-bottom: $space-12; }
 
@@ -628,7 +628,7 @@ const priceFeatures = [
 
 // ── Price ────────────────────────────────────────
 .price {
-  padding: $space-20 $space-6;
+  padding: $space-16 $space-6;
   background: $bg-surface;
 
   &__card {

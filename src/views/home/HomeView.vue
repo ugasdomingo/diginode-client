@@ -14,8 +14,9 @@
           <span class="hero__title-accent">Tú diriges.</span>
         </h1>
         <p class="hero__subtitle">
-          Incorpora empleados de inteligencia artificial que atienden clientes, gestionan cobros,
-          captan leads y crean contenido — sin horarios, sin bajas, sin nóminas infladas.
+          Empleados de inteligencia artificial especializados en psicología y coaching.
+          Atienden a tus pacientes, organizan tu agenda y construyen tu presencia —
+          para que tú estés donde importas: en sesión.
         </p>
         <div class="hero__actions">
           <a
@@ -27,9 +28,9 @@
             <CalendarCheck :size="18" />
             Agendar demo gratuita
           </a>
-          <a href="#empleados" class="btn-secondary">
-            Ver empleados <ArrowDown :size="16" />
-          </a>
+          <RouterLink to="/bolsa-de-empleo" class="btn-secondary">
+            Contratar empleados <ArrowDown :size="16" />
+          </RouterLink>
         </div>
         <div class="hero__trust">
           <div class="hero__trust-item">
@@ -38,11 +39,11 @@
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
-            Setup en 7 días
+            Incorporación en 7 días
           </div>
           <div class="hero__trust-item">
             <CheckCircle :size="15" />
-            Pago por Stripe
+            Pago seguro con Stripe
           </div>
         </div>
       </div>
@@ -53,7 +54,7 @@
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">Así trabaja tu empleado IA</h2>
-          <p class="section-subtitle">No es software. Es un miembro más de tu equipo — sin los inconvenientes.</p>
+          <p class="section-subtitle">Tres pasos. Tu consulta organizada, siempre.</p>
         </div>
 
         <div class="ep__phases">
@@ -95,6 +96,10 @@
         <div class="section-header">
           <h2 class="section-title">Elige cómo incorporarlos</h2>
           <p class="section-subtitle">Individualmente o en equipo, siempre a tu ritmo</p>
+          <RouterLink to="/bolsa-de-empleo" class="btn-secondary catalog__hire-btn">
+            <Users :size="15" />
+            Ir a la Bolsa de Empleo
+          </RouterLink>
         </div>
 
         <!-- Toggle -->
@@ -156,39 +161,13 @@
                 </div>
                 <p class="emp-card__pitch">{{ emp.pitch }}</p>
 
-                <div class="emp-card__pain">
-                  <AlertTriangle :size="13" class="emp-card__pain-icon" />
-                  <p>{{ emp.pain }}</p>
-                </div>
-
-                <div class="emp-card__solution">
-                  <CheckCircle :size="13" class="emp-card__sol-icon" />
-                  <p>{{ emp.solution }}</p>
-                </div>
+                <ul class="emp-card__benefits">
+                  <li v-for="(b, bi) in emp.benefits" :key="bi" class="emp-card__benefit">
+                    <CheckCircle :size="11" class="emp-card__benefit-icon" />
+                    {{ b }}
+                  </li>
+                </ul>
               </div>
-
-              <!-- Job profile expandable -->
-              <button
-                class="emp-card__profile-btn"
-                @click="toggleProfile(emp.id)"
-              >
-                <span>Perfil de puesto</span>
-                <ChevronDown
-                  :size="14"
-                  class="emp-card__profile-chevron"
-                  :class="{ 'emp-card__profile-chevron--open': openProfiles.has(emp.id) }"
-                />
-              </button>
-              <Transition name="accordion">
-                <div v-if="openProfiles.has(emp.id)" class="emp-card__profile">
-                  <ul class="emp-card__tasks">
-                    <li v-for="(task, ti) in emp.tasks" :key="ti" class="emp-card__task">
-                      <CheckCircle :size="11" class="emp-card__task-icon" />
-                      {{ task }}
-                    </li>
-                  </ul>
-                </div>
-              </Transition>
 
               <div class="emp-card__footer">
                 <div class="emp-card__price">
@@ -196,7 +175,7 @@
                     <span class="emp-card__price-amount">{{ emp.monthly }}€</span>
                     <span class="emp-card__price-period">/mes</span>
                   </div>
-                  <div class="emp-card__price-setup">Setup: {{ emp.setup }}€ (único)</div>
+                  <div class="emp-card__price-setup">Incorporación: {{ emp.setup }}€ · pago único</div>
                 </div>
                 <a
                   :href="calLink"
@@ -236,15 +215,12 @@
 
               <p class="pkg-card__pitch">{{ pkg.pitch }}</p>
 
-              <div class="pkg-card__pain">
-                <AlertTriangle :size="13" />
-                <p>{{ pkg.pain }}</p>
-              </div>
-
-              <div class="pkg-card__solution">
-                <CheckCircle :size="13" />
-                <p>{{ pkg.solution }}</p>
-              </div>
+              <ul class="pkg-card__benefits">
+                <li v-for="(b, bi) in pkg.benefits" :key="bi" class="pkg-card__benefit">
+                  <CheckCircle :size="11" class="pkg-card__benefit-icon" />
+                  {{ b }}
+                </li>
+              </ul>
 
               <div class="pkg-card__footer">
                 <div class="pkg-card__price">
@@ -253,7 +229,7 @@
                     <span class="pkg-card__price-period">/mes</span>
                     <span v-if="pkg.saving" class="pkg-card__saving">Ahorras {{ pkg.saving }}€/mes</span>
                   </div>
-                  <p class="pkg-card__setup">Setup: {{ pkg.setup }}€ pago único</p>
+                  <p class="pkg-card__setup">Incorporación: {{ pkg.setup }}€ · pago único</p>
                 </div>
                 <a
                   :href="calLink"
@@ -276,7 +252,7 @@
             <div class="despacho-panel__left">
               <span class="despacho-panel__badge">
                 <Sparkles :size="12" />
-                Oferta especial · Todo incluido
+                Oferta especial · Potencia tu práctica
               </span>
               <h3 class="despacho-panel__title">Despacho Digital</h3>
               <p class="despacho-panel__sub">
@@ -325,7 +301,7 @@
         <!-- Pricing footnote -->
         <p class="catalog__footnote">
           <Info :size="14" />
-          El setup es un pago único para la configuración de la infraestructura. El salario mensual es la suscripción recurrente. Sin permanencia mínima.
+          La incorporación es un pago único para la configuración inicial de tu empleado. La mensualidad es la suscripción recurrente. Sin permanencia mínima.
         </p>
       </div>
     </section>
@@ -339,7 +315,7 @@
           <div class="home-despacho__text">
             <span class="home-despacho__badge">
               <Sparkles :size="12" />
-              Oferta especial · Todo incluido
+              Oferta especial · Potencia tu práctica
             </span>
             <h2 class="home-despacho__title">Despacho Digital</h2>
             <p class="home-despacho__sub">
@@ -576,15 +552,6 @@ const openFaq   = ref(null)
 const blogPosts = ref([])
 const courses   = ref([])
 
-// ── Job profile toggles ──
-const openProfiles = ref(new Set())
-function toggleProfile(id) {
-  const next = new Set(openProfiles.value)
-  if (next.has(id)) next.delete(id)
-  else next.add(id)
-  openProfiles.value = next
-}
-
 // Waitlist modal state
 const waitlistModal  = ref(null)   // course object or null
 const waitlistForm   = ref({ name: '', email: '', phone: '' })
@@ -654,8 +621,8 @@ const employeeProcess = [
     color: '#7c6fff',
     bg: 'rgba(124,111,255,0.12)',
     borderColor: 'rgba(124,111,255,0.3)',
-    title: 'Lo contratas',
-    desc: 'Elige tu empleado o equipo y completa la compra. Preparamos todo para la sesión de onboarding.',
+    title: 'Lo incorporas',
+    desc: 'Elige tu empleado en la Bolsa de Empleo y completa la incorporación. En minutos tienes todo preparado para empezar.',
     stat: 'Sin permanencia mínima',
   },
   {
@@ -664,7 +631,7 @@ const employeeProcess = [
     bg: 'rgba(245,158,11,0.12)',
     borderColor: 'rgba(245,158,11,0.3)',
     title: 'Lo entrenamos juntos',
-    desc: 'Celebramos una reunión de onboarding donde defines la personalidad, el tono y el conocimiento. A partir de ahí, configuramos todo.',
+    desc: 'Celebramos una sesión de bienvenida donde defines la personalidad, el tono y el conocimiento de tu empleado. En siete días está activo.',
     stat: 'Listo en 7 días',
   },
   {
@@ -672,8 +639,8 @@ const employeeProcess = [
     color: '#34d399',
     bg: 'rgba(52,211,153,0.12)',
     borderColor: 'rgba(52,211,153,0.3)',
-    title: 'Trabaja sin parar',
-    desc: 'Sin horarios, sin bajas, sin vacaciones. Tu empleado IA produce los 365 días del año, a cualquier hora.',
+    title: 'Trabaja por ti, siempre',
+    desc: 'Tu empleado trabaja de forma constante los 365 días del año. Tú recuperas el tiempo que dedicabas a tareas administrativas.',
     stat: '24/7 · 365 días',
   },
 ]
@@ -688,18 +655,16 @@ const employees = [
     icon: MessageSquare,
     color: '#7c6fff',
     bg: 'rgba(124,111,255,0.12)',
-    pitch: 'Tu secretaria virtual de cabecera. Sofía te envía tu agenda cada mañana, atiende los mensajes de tus pacientes y gestiona tu calendario para que nunca pierdas una cita.',
-    pain: 'Pierdes horas al día en confirmaciones, recordatorios y reschedulings mientras podrías estar en sesión — o simplemente descansando.',
-    solution: 'Sofía responde a tus pacientes 24/7, gestiona cancelaciones y cambios en el acto y te entrega cada mañana un briefing con lo que viene.',
+    pitch: 'Sofía es quien cuida de que tu día empiece organizado. Tu agenda llega cada mañana, tus pacientes siempre tienen respuesta y ninguna cita se pierde.',
+    benefits: [
+      'Tu agenda llega a las 7:30h para que empieces el día con claridad',
+      'Tus pacientes reciben respuesta inmediata, de día o de noche',
+      'Cancelaciones y cambios gestionados en el acto, sin interrumpirte',
+      'Borradores de informes y documentación clínica listos para revisar',
+      'Recordatorios automáticos para que ninguna sesión quede sin confirmar',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Envía briefing matutino con tu agenda del día a las 7:30h',
-      'Responde mensajes de pacientes en WhatsApp y Telegram 24/7',
-      'Gestiona confirmaciones, cancelaciones y cambios de cita',
-      'Envía recordatorios automáticos 24h y 1h antes de cada sesión',
-      'Notifica al instante cuando hay cambios urgentes en la agenda',
-    ],
   },
   {
     id: 'marcos',
@@ -709,18 +674,15 @@ const employees = [
     icon: BarChart2,
     color: '#818cf8',
     bg: 'rgba(129,140,248,0.12)',
-    pitch: 'Tu gestor financiero que trabaja en silencio. Marcos controla tus ingresos, detecta cobros pendientes y te avisa de las obligaciones fiscales antes de que lleguen.',
-    pain: 'Las facturas sin pagar, los plazos del IRPF y el desorden financiero consumen energía mental que deberías dedicar a tus pacientes.',
-    solution: 'Marcos genera resúmenes semanales de ingresos, alerta sobre cobros pendientes y te avisa 15 días antes de cada obligación fiscal.',
+    pitch: 'Marcos lleva las cuentas de tu consulta en silencio y sin errores. Sabes en todo momento cuánto has ingresado, qué está pendiente y cuándo vencen tus obligaciones.',
+    benefits: [
+      'Resumen semanal de ingresos sin que tengas que calcularlo',
+      'Alertas de cobros pendientes antes de que sean un problema',
+      'Informe financiero mensual listo en Google Docs',
+      'Aviso 15 días antes de cada declaración fiscal (IRPF, IVA)',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Genera resumen semanal de sesiones realizadas e ingresos',
-      'Detecta cobros pendientes y notifica al psicólogo con seguimiento',
-      'Elabora informe financiero mensual en Google Docs',
-      'Alerta con 15 días de antelación sobre obligaciones fiscales (IRPF, IVA)',
-      'Registra y categoriza sesiones en Airtable para control interno',
-    ],
   },
   {
     id: 'luna',
@@ -730,39 +692,33 @@ const employees = [
     icon: TrendingUp,
     color: '#34d399',
     bg: 'rgba(52,211,153,0.12)',
-    pitch: 'Tu comercial empática. Luna atiende cada primera consulta, cualifica si hay match con tu perfil y agenda la primera sesión — sin que tú intervengas.',
-    pain: 'Las consultas nuevas llegan cuando estás en sesión o de noche. El 80% se enfría antes de que puedas responder.',
-    solution: 'Luna responde al instante, mantiene una conversación de cualificación natural y solo te cede el caso cuando hay intención real. Los leads fríos los reactiva ella sola.',
+    pitch: 'Luna atiende cada consulta nueva con la misma calidez y criterio que tú. Valora si hay compatibilidad y agenda la primera sesión, incluso mientras duermes.',
+    benefits: [
+      'Ningún contacto nuevo queda sin respuesta, a cualquier hora',
+      'Solo llegan a ti los casos que encajan con tu perfil',
+      'La primera cita se agenda sola, sin que intervengas',
+      'Los contactos que aún no estaban listos reciben seguimiento automático',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Atiende primeras consultas en WhatsApp, Instagram y Telegram',
-      'Mantiene conversación de cualificación multi-turno con memoria de contexto',
-      'Detecta si el perfil del paciente encaja con tu especialidad',
-      'Ofrece link de agenda cuando el lead está cualificado',
-      'Reactiva automáticamente leads fríos en los días 7 y 14',
-    ],
   },
   {
     id: 'valeria',
     name: 'Valeria',
-    role: 'Community Manager',
+    role: 'Gestora de Redes Sociales',
     dept: 'Motor de Adquisición',
     icon: Share2,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.12)',
-    pitch: 'Tu presencia digital constante. Valeria lee tu brief semanal, genera los posts de la semana y los publica en todas tus redes — tú solo tienes que aprobar.',
-    pain: 'Tu Instagram lleva semanas sin publicar mientras tu competencia aparece a diario. Sabes que debes estar, pero nunca tienes tiempo.',
-    solution: 'Valeria genera y programa tus posts en Instagram, LinkedIn y TikTok, responde comentarios básicos y mantiene tu comunidad activa sin tu intervención diaria.',
+    pitch: 'Valeria mantiene tu presencia en redes activa y coherente cada semana. Tu comunidad crece y te ve como referente, aunque no abras Instagram en todo el día.',
+    benefits: [
+      'Publicaciones semanales en Instagram, LinkedIn y TikTok sin esfuerzo',
+      'Cada publicación adaptada a tu tono y especialidad',
+      'Comentarios respondidos para mantener tu comunidad activa',
+      'Propuesta de calendario mensual con contenido de tendencia',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Lee tu brief semanal en Google Docs y genera un batch de posts',
-      'Publica automáticamente en Instagram, LinkedIn y TikTok',
-      'Adapta el copy al tono y especialidad de cada profesional',
-      'Responde comentarios simples para mantener el engagement',
-      'Propone calendario mensual de contenido basado en tendencias',
-    ],
   },
   {
     id: 'elena',
@@ -772,18 +728,15 @@ const employees = [
     icon: BookOpen,
     color: '#ec4899',
     bg: 'rgba(236,72,153,0.12)',
-    pitch: 'Tu motor de autoridad online. Elena investiga tendencias, escribe artículos de blog, redacta newsletters y crea recursos descargables que te posicionan como referente.',
-    pain: 'Crear contenido de valor (artículos, guías, newsletters) lleva horas que no tienes. Sin eso, no hay posicionamiento ni audiencia que crezca.',
-    solution: 'Elena investiga semanalmente, escribe 4 artículos al mes con SEO, redacta newsletters para tus pacientes y crea guías descargables — publicando directo en tu blog.',
+    pitch: 'Elena construye tu autoridad artículo a artículo. Investiga, escribe y publica en tu blog para que te encuentren quienes más te necesitan.',
+    benefits: [
+      '4 artículos al mes con posicionamiento web, sin escribir una línea',
+      '2 boletines mensuales para mantener el vínculo con tus pacientes',
+      'Guías y recursos descargables que aportan valor a tu comunidad',
+      'Publicación directa en tu blog, sin intermediarios',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Investiga tendencias semanales en psicología y coaching',
-      'Redacta 4 artículos de blog mensuales (1.200 palabras c/u) con SEO',
-      'Escribe 2 newsletters mensuales para tu lista de pacientes',
-      'Crea recursos descargables para pacientes (guías, ejercicios, plantillas)',
-      'Publica directamente en tu WordPress vía REST API',
-    ],
   },
   {
     id: 'maya',
@@ -793,18 +746,15 @@ const employees = [
     icon: Video,
     color: '#06b6d4',
     bg: 'rgba(6,182,212,0.12)',
-    pitch: 'Tu productora digital. Maya toma tu vídeo bruto, lo edita, lo subtitula, genera el SEO y lo publica en YouTube y TikTok — lista en minutos, no en horas.',
-    pain: 'Grabar es la parte fácil. Editar, subtitular, escribir la descripción y subir a cada plataforma te consume las pocas horas libres que te quedan.',
-    solution: 'Subes el vídeo a Drive. Maya elimina silencios, genera subtítulos con Whisper, crea el título SEO y la descripción, y publica en YouTube y TikTok automáticamente.',
+    pitch: 'Maya convierte cada vídeo que grabas en contenido profesional y listo para publicar. Subes el archivo a Drive y ella se encarga del resto.',
+    benefits: [
+      'Edición automática: silencios eliminados y ritmo cuidado',
+      'Subtítulos generados y archivo de transcripción incluido',
+      'Título, descripción y etiquetas optimizados para que te encuentren',
+      'Publicación automática en YouTube y TikTok',
+    ],
     setup: 450,
     monthly: 150,
-    tasks: [
-      'Detecta vídeos nuevos en tu Google Drive y los procesa automáticamente',
-      'Elimina silencios y fragmentos sin audio con procesamiento inteligente',
-      'Transcribe el audio con Whisper y genera archivo de subtítulos .SRT',
-      'Genera título SEO, descripción, hashtags y marcas de tiempo para YouTube',
-      'Publica en YouTube y TikTok con metadata optimizada para cada plataforma',
-    ],
   },
 ]
 
@@ -817,9 +767,13 @@ const packages = [
     color: '#7c6fff',
     bg: 'rgba(124,111,255,0.15)',
     agents: ['Sofía', 'Marcos'],
-    pitch: 'El equipo que mantiene tu consulta funcionando. Sofía gestiona agenda y pacientes, Marcos controla las finanzas — sin que tú muevas un dedo.',
-    pain: 'Tu negocio depende de que tú estés. Si te desconectas, la agenda se desordena y las finanzas se descontrolan.',
-    solution: 'Sofía y Marcos cubren la operativa diaria completa: pacientes, agenda y administración financiera en piloto automático.',
+    pitch: 'Sofía y Marcos mantienen tu consulta en orden cada día. La agenda, los pacientes y las finanzas en piloto automático — sin que tú muevas un dedo.',
+    benefits: [
+      'Agenda y pacientes gestionados las 24 horas',
+      'Las finanzas bajo control, sin hojas de cálculo ni sorpresas',
+      'Borradores de informes clínicos listos para revisar',
+      'Alertas fiscales antes de que venzan los plazos',
+    ],
     setup: 750,
     monthly: 200,
     saving: 100,
@@ -832,9 +786,13 @@ const packages = [
     color: '#34d399',
     bg: 'rgba(52,211,153,0.15)',
     agents: ['Luna', 'Valeria'],
-    pitch: 'El equipo que llena tu agenda de pacientes nuevos. Luna cualifica y cierra, Valeria mantiene tu visibilidad online. El embudo completo funcionando solo.',
-    pain: 'Los pacientes nuevos no llegan solos. Necesitas ser visible y responder rápido — dos cosas para las que nunca hay tiempo.',
-    solution: 'Luna atiende y convierte cada consulta entrante. Valeria mantiene tu presencia activa en redes. Un embudo de captación automático de principio a fin.',
+    pitch: 'Luna llena tu agenda de pacientes nuevos mientras Valeria mantiene tu presencia activa en redes. El circuito completo de captación funcionando solo.',
+    benefits: [
+      'Cada consulta nueva recibe respuesta inmediata, a cualquier hora',
+      'Solo llegan a ti los casos que encajan con tu perfil',
+      'Publicaciones semanales en Instagram, LinkedIn y TikTok',
+      'Tu comunidad crece y te percibe como referente',
+    ],
     setup: 750,
     monthly: 200,
     saving: 100,
@@ -847,9 +805,13 @@ const packages = [
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.15)',
     agents: ['Elena', 'Maya'],
-    pitch: 'El equipo que construye tu autoridad online. Elena escribe y posiciona, Maya produce y distribuye vídeo. Tu marca en todos los canales, sin esfuerzo.',
-    pain: 'Crear contenido de calidad (artículos, vídeos, newsletters) es lo que más impacto tiene pero lo que más tiempo cuesta.',
-    solution: 'Elena investiga y escribe, Maya edita y publica. Contenido escrito y audiovisual de forma constante sin que dediques una sola hora a producirlo.',
+    pitch: 'Elena construye tu autoridad con artículos y boletines mientras Maya produce y publica tus vídeos. Contenido escrito y audiovisual, sin dedicarle ni una hora.',
+    benefits: [
+      '4 artículos al mes con posicionamiento web publicados en tu blog',
+      'Boletines mensuales para mantener el vínculo con tus pacientes',
+      'Vídeos editados, subtitulados y publicados en YouTube y TikTok',
+      'Guías descargables que aportan valor a tu comunidad',
+    ],
     setup: 750,
     monthly: 200,
     saving: 100,
@@ -862,9 +824,13 @@ const packages = [
     color: '#34d399',
     bg: 'rgba(52,211,153,0.15)',
     agents: ['Los 6 empleados'],
-    pitch: 'Tu consulta operando sola. Agenda, finanzas, captación, redes, artículos y vídeo — todo coordinado, sin que muevas un dedo.',
-    pain: 'Eres el cuello de botella de tu propio negocio. Nada avanza si no empujas tú.',
-    solution: '6 especialistas IA que operan como un equipo coordinado. Por menos de lo que cuesta una tarde de trabajo administrativo al mes.',
+    pitch: 'Tu consulta operando sola. Agenda, finanzas, captación, redes, artículos y vídeo — todo coordinado por seis especialistas que nunca paran.',
+    benefits: [
+      'Operativa diaria cubierta: agenda, pacientes y cobros',
+      'Captación y redes activas sin tu intervención',
+      'Contenido escrito y audiovisual publicado cada semana',
+      'Un equipo coordinado, por menos de lo que cuesta un día de gestoría',
+    ],
     setup: 1950,
     monthly: 500,
     saving: 400,
@@ -874,10 +840,10 @@ const packages = [
 
 // ── Despacho Digital features (for promo tab & home banner) ──
 const despachoFeatures = [
-  'Web profesional para tu consulta (SEO local incluido)',
+  'Web profesional para tu consulta (posicionamiento local incluido)',
   'Panel privado de gestión para tus pacientes',
   '2 empleados IA activos 24/7 (WhatsApp, agenda, contenido…)',
-  'Onboarding y configuración completa en 7 días',
+  'Incorporación y configuración completa en 7 días',
   'Soporte técnico continuo y actualizaciones incluidas',
 ]
 
@@ -889,15 +855,15 @@ const faqs = [
   },
   {
     q: '¿Cuánto tarda en estar listo mi empleado IA?',
-    a: 'El proceso completo — reunión de onboarding, configuración, entrenamiento e integración — se completa en 7 días desde la sesión inicial. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
+    a: 'El proceso completo — sesión de bienvenida, configuración, entrenamiento e integración — se completa en 7 días desde el inicio. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
   },
   {
     q: '¿Puedo contratar solo un empleado y añadir más después?',
     a: 'Sí, completamente. Puedes empezar con un único empleado y ampliar tu equipo cuando lo necesites. Los departamentos y el equipo completo ofrecen un precio más ventajoso al contratar varios a la vez.',
   },
   {
-    q: '¿Puedo fraccionar el pago del setup?',
-    a: 'Sí. El setup se puede dividir en hasta 3 cuotas mensuales cargadas automáticamente por Stripe. Eliges la opción al finalizar la compra en la Bolsa de Empleo.',
+    q: '¿Puedo fraccionar el pago de la incorporación?',
+    a: 'Sí. El coste de incorporación se puede dividir en hasta 3 cuotas mensuales cargadas automáticamente. Eliges la opción al finalizar la contratación en la Bolsa de Empleo.',
   },
   {
     q: '¿Cuándo empieza a cobrarse la mensualidad?',
@@ -909,7 +875,7 @@ const faqs = [
   },
   {
     q: '¿Puedo cancelar la suscripción en cualquier momento?',
-    a: 'Sí. No existe permanencia mínima. Si decides cancelar, solo tienes que avisarnos con un mes de antelación. El pago del setup no es reembolsable, ya que cubre trabajo ya realizado.',
+    a: 'Sí. No existe permanencia mínima. Si decides cancelar, solo tienes que avisarnos con un mes de antelación. El pago de incorporación no es reembolsable, ya que cubre trabajo ya realizado.',
   },
   {
     q: '¿Qué ocurre con mis datos y los de mis clientes?',
@@ -1242,11 +1208,17 @@ const faqs = [
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      width: 100%;
+    }
   }
 
   &__tab {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: $space-2;
     height: 40px;
     padding: 0 $space-5;
@@ -1269,20 +1241,28 @@ const faqs = [
     }
   }
 
+  &__hire-btn {
+    margin-top: $space-4;
+  }
+
   &__footnote {
     display: flex;
     align-items: flex-start;
     gap: $space-2;
     justify-content: center;
     margin-top: $space-8;
+    padding: $space-3 $space-5;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius;
     font-size: $text-sm;
-    color: $text-subtle;
+    color: $text-muted;
     text-align: center;
-    max-width: 600px;
+    max-width: 620px;
     margin-left: auto;
     margin-right: auto;
 
-    svg { flex-shrink: 0; margin-top: 2px; }
+    svg { flex-shrink: 0; margin-top: 2px; color: $primary-light; }
   }
 }
 
@@ -1502,7 +1482,32 @@ const faqs = [
 
   &__price-setup {
     font-size: $text-xs;
-    color: $text-subtle;
+    font-weight: $fw-medium;
+    color: $text-muted;
+  }
+
+  &__benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    font-size: $text-sm;
+    color: $text-muted;
+    line-height: 1.5;
+  }
+
+  &__benefit-icon {
+    color: $accent;
+    flex-shrink: 0;
+    margin-top: 2px;
   }
 
   &__cta {
@@ -1685,7 +1690,33 @@ const faqs = [
 
   &__setup {
     font-size: $text-xs;
-    color: $text-subtle;
+    font-weight: $fw-medium;
+    color: $text-muted;
+  }
+
+  &__benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    flex: 1;
+  }
+
+  &__benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    font-size: $text-sm;
+    color: $text-muted;
+    line-height: 1.5;
+  }
+
+  &__benefit-icon {
+    color: $accent;
+    flex-shrink: 0;
+    margin-top: 2px;
   }
 
   &__cta {

@@ -41,20 +41,20 @@
 
           <div class="course-article__price-row">
             <span class="course-article__price">{{ course.price }}€</span>
-            <template v-if="course.status === 'active'">
+            <template v-if="course.status === 'active' && !isFull">
               <button class="btn-primary" :disabled="checkoutLoading" @click="goToCheckout">
                 <CreditCard :size="16" />
                 {{ checkoutLoading ? 'Redirigiendo...' : 'Reservar mi plaza' }}
               </button>
-              <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                <MessageCircle :size="16" />
-                ¿Es para mí?
-              </a>
             </template>
             <button v-else class="btn-waitlist" @click="showWaitlist = true">
               <Bell :size="16" />
-              Apuntarme a la lista de espera
+              {{ isFull ? 'Lista de espera (curso lleno)' : 'Apuntarme a la lista de espera' }}
             </button>
+            <a v-if="course.is_for_me" href="#es-para-mi" class="btn-ghost">
+              <HelpCircle :size="16" />
+              ¿Es para mí?
+            </a>
           </div>
         </header>
 
@@ -62,23 +62,40 @@
           <img :src="course.thumbnail_url" :alt="course.title" />
         </div>
 
+        <!-- ¿Es para mí? -->
+        <section v-if="course.is_for_me" id="es-para-mi" class="course-for-me">
+          <h2 class="course-for-me__title">
+            <HelpCircle :size="20" />
+            ¿Es para mí?
+          </h2>
+          <p class="course-for-me__body">{{ course.is_for_me }}</p>
+          <div class="course-for-me__cta">
+            <template v-if="course.status === 'active' && !isFull">
+              <button class="btn-primary btn-primary--lg" :disabled="checkoutLoading" @click="goToCheckout">
+                <CreditCard :size="18" />
+                {{ checkoutLoading ? 'Redirigiendo...' : `Reservar mi plaza — ${course.price}€` }}
+              </button>
+            </template>
+            <button v-else class="btn-waitlist btn-waitlist--lg" @click="showWaitlist = true">
+              <Bell :size="18" />
+              {{ isFull ? 'Apuntarme — el curso está lleno' : 'Apuntarme a la lista de espera' }}
+            </button>
+          </div>
+        </section>
+
         <div v-if="course.content" class="course-article__content prose" v-html="course.content" />
 
         <!-- Bottom CTA -->
         <div class="course-article__cta-bottom">
-          <template v-if="course.status === 'active'">
+          <template v-if="course.status === 'active' && !isFull">
             <button class="btn-primary btn-primary--lg" :disabled="checkoutLoading" @click="goToCheckout">
               <CreditCard :size="18" />
               {{ checkoutLoading ? 'Redirigiendo...' : `Reservar mi plaza — ${course.price}€` }}
             </button>
-            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-ghost btn-ghost--lg">
-              <MessageCircle :size="18" />
-              ¿Es para mí? Hablamos
-            </a>
           </template>
           <button v-else class="btn-waitlist btn-waitlist--lg" @click="showWaitlist = true">
             <Bell :size="18" />
-            Apuntarme a la lista de espera
+            {{ isFull ? 'Apuntarme — el curso está lleno' : 'Apuntarme a la lista de espera' }}
           </button>
         </div>
 
@@ -135,16 +152,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { ArrowLeft, Calendar, CreditCard, MessageCircle, Bell, X, CheckCircle } from 'lucide-vue-next'
+import { ArrowLeft, Calendar, CreditCard, HelpCircle, Bell, X, CheckCircle } from 'lucide-vue-next'
 
-const route  = useRoute()
+const route   = useRoute()
 const course  = ref(null)
 const loading = ref(true)
 
-const calLink        = import.meta.env.VITE_CAL_BOOKING_LINK
 const checkoutLoading = ref(false)
+
+// Curso lleno: tiene plazas limitadas y están todas ocupadas
+const isFull = computed(() =>
+  course.value?.max_spots != null &&
+  course.value?.spots_taken >= course.value?.max_spots
+)
 
 async function goToCheckout() {
   checkoutLoading.value = true
@@ -402,6 +424,43 @@ async function submitWaitlist() {
     padding: $space-4 $space-8;
     font-size: $text-base;
     border-radius: $radius-lg;
+  }
+}
+
+// Sección ¿Es para mí?
+.course-for-me {
+  margin: $space-10 0;
+  padding: $space-8;
+  background: rgba(124,111,255,0.05);
+  border: 1px solid rgba(124,111,255,0.2);
+  border-radius: $radius-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  scroll-margin-top: 80px; // offset para la barra de navegación fija
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+
+    svg { color: $primary-light; flex-shrink: 0; }
+  }
+
+  &__body {
+    font-size: $text-base;
+    color: $text-muted;
+    line-height: 1.8;
+    white-space: pre-wrap; // respeta saltos de línea del textarea
+  }
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
   }
 }
 

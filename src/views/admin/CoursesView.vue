@@ -108,6 +108,19 @@
           </div>
 
           <div class="field">
+            <label class="field__label">
+              ¿Es para mí?
+              <span class="field__required">Obligatorio</span>
+            </label>
+            <textarea
+              v-model="form.is_for_me"
+              class="field__input field__input--textarea"
+              rows="5"
+              placeholder="Describe a quién va dirigido este curso. El alumno lee esto antes de decidir si compra. Sé concreto: situaciones, perfiles, objetivos."
+            />
+          </div>
+
+          <div class="field">
             <label class="field__label">Contenido</label>
             <Editor
               :api-key="tinymceKey"
@@ -152,6 +165,28 @@
                 v-model="form.start_date"
                 type="date"
                 class="field__input"
+              />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Plazas máximas</label>
+              <input
+                v-model.number="form.max_spots"
+                type="number"
+                min="1"
+                class="field__input"
+                placeholder="Vacío = ilimitadas"
+              />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Plazas ocupadas</label>
+              <input
+                v-model.number="form.spots_taken"
+                type="number"
+                min="0"
+                class="field__input"
+                placeholder="0"
               />
             </div>
 
@@ -236,10 +271,13 @@ const defaultForm = () => ({
   title: '',
   content: '',
   description: '',
+  is_for_me: '',
   thumbnail_url: '',
   price: null,
   start_date: '',
   status: 'draft',
+  max_spots: null,
+  spots_taken: 0,
 })
 const form = ref(defaultForm())
 
@@ -273,10 +311,13 @@ function openEdit(course) {
     title:         course.title,
     content:       course.content ?? '',
     description:   course.description ?? '',
+    is_for_me:     course.is_for_me ?? '',
     thumbnail_url: course.thumbnail_url ?? '',
     price:         course.price ?? null,
     start_date:    course.start_date ? course.start_date.slice(0, 10) : '',
     status:        course.status ?? 'draft',
+    max_spots:     course.max_spots ?? null,
+    spots_taken:   course.spots_taken ?? 0,
   }
   editing.value = true
 }
@@ -289,6 +330,10 @@ function cancelEdit() {
 async function saveCourse() {
   if (!form.value.title.trim()) {
     toast.warning('El título es obligatorio')
+    return
+  }
+  if (!form.value.is_for_me.trim()) {
+    toast.warning('El texto "¿Es para mí?" es obligatorio')
     return
   }
   saving.value = true
@@ -501,6 +546,19 @@ onMounted(fetchCourses)
     font-size: $text-sm;
     font-weight: $fw-medium;
     color: $text-muted;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__required {
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $primary-light;
+    background: $primary-subtle;
+    padding: 1px 6px;
+    border-radius: $radius-full;
+    border: 1px solid rgba(124,111,255,0.25);
   }
 
   &__input {

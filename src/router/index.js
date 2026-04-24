@@ -113,6 +113,11 @@ const routes = [
         component: () => import('@/views/admin/PackagesView.vue'),
       },
       {
+        path: 'clients',
+        name: 'admin.clients',
+        component: () => import('@/views/admin/ClientsView.vue'),
+      },
+      {
         path: 'knowledge',
         name: 'admin.knowledge',
         component: () => import('@/views/admin/KnowledgeView.vue'),

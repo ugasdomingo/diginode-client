@@ -55,6 +55,7 @@ import {
   Brain,
   Package,
   CreditCard,
+  MessageCircle,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useClientStore } from '@/stores/client'
@@ -77,8 +78,9 @@ const adminNav = [
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
   { to: '/admin/courses',    label: 'Cursos',       icon: GraduationCap },
   { to: '/admin/packages',   label: 'Paquetes',     icon: Package },
-  { to: '/admin/clients',    label: 'Clientes',     icon: CreditCard },
-  { to: '/admin/knowledge',  label: 'Conocimiento', icon: Brain },
+  { to: '/admin/clients',         label: 'Clientes',        icon: CreditCard },
+  { to: '/admin/knowledge',       label: 'Conocimiento',    icon: Brain },
+  { to: '/admin/conversaciones',  label: 'Conversaciones',  icon: MessageCircle },
 ]
 
 const clientNav = [

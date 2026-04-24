@@ -12,8 +12,7 @@
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__link">Empleados</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
-          <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--highlight">Bolsa de Empleo</RouterLink>
-          <RouterLink to="/despacho-digital" class="navbar__link navbar__link--despacho">Despacho Digital</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--cta">Contratar empleados IA</RouterLink>
         </nav>
 
         <div class="navbar__actions">
@@ -50,8 +49,7 @@
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
-          <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--highlight" @click="mobileOpen = false">Bolsa de Empleo</RouterLink>
-          <RouterLink to="/despacho-digital" class="navbar__mobile-link navbar__mobile-link--despacho" @click="mobileOpen = false">Despacho Digital</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--cta" @click="mobileOpen = false">Contratar empleados IA</RouterLink>
           <div class="navbar__mobile-actions">
             <a
               :href="calLink"
@@ -210,18 +208,7 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
       background: $primary-subtle;
     }
 
-    &--highlight {
-      color: $accent;
-      background: rgba(52,211,153,0.08);
-      border: 1px solid rgba(52,211,153,0.2);
-
-      &:hover {
-        background: rgba(52,211,153,0.14);
-        color: $accent;
-      }
-    }
-
-    &--despacho {
+    &--cta {
       color: $primary-light;
       background: rgba(124,111,255,0.08);
       border: 1px solid rgba(124,111,255,0.2);
@@ -335,19 +322,7 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
 
     &:hover { color: $text; background: $primary-subtle; }
 
-    &--highlight {
-      color: $accent;
-      background: rgba(52,211,153,0.08);
-      border: 1px solid rgba(52,211,153,0.2);
-      padding: $space-3 $space-3;
-
-      &:hover {
-        background: rgba(52,211,153,0.14);
-        color: $accent;
-      }
-    }
-
-    &--despacho {
+    &--cta {
       color: $primary-light;
       background: rgba(124,111,255,0.08);
       border: 1px solid rgba(124,111,255,0.2);

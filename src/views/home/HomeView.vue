@@ -29,7 +29,7 @@
             Agendar demo gratuita
           </a>
           <RouterLink to="/bolsa-de-empleo" class="btn-secondary">
-            Contratar empleados <ArrowDown :size="16" />
+            Ver planes <ArrowDown :size="16" />
           </RouterLink>
         </div>
         <div class="hero__trust">
@@ -97,8 +97,8 @@
           <h2 class="section-title">Elige cómo incorporarlos</h2>
           <p class="section-subtitle">Individualmente o en equipo, siempre a tu ritmo</p>
           <RouterLink to="/bolsa-de-empleo" class="btn-secondary catalog__hire-btn">
-            <Users :size="15" />
-            Ir a la Bolsa de Empleo
+            <Zap :size="15" />
+            Contratar empleados IA
           </RouterLink>
         </div>
 
@@ -112,39 +112,26 @@
             @click="view = 'employees'"
           >
             <Users :size="16" />
-            Empleados individuales
+            Empleados IA
           </button>
           <button
-            id="paquetes"
             role="tab"
-            :aria-selected="view === 'packages'"
+            :aria-selected="view === 'plans'"
             class="catalog__tab"
-            :class="{ 'catalog__tab--active': view === 'packages' }"
-            @click="view = 'packages'"
-          >
-            <LayoutGrid :size="16" />
-            Departamentos / Paquetes
-          </button>
-          <button
-            role="tab"
-            :aria-selected="view === 'despacho'"
-            class="catalog__tab catalog__tab--promo"
-            :class="{ 'catalog__tab--active': view === 'despacho' }"
-            @click="view = 'despacho'"
+            :class="{ 'catalog__tab--active': view === 'plans' }"
+            @click="view = 'plans'"
           >
             <Sparkles :size="16" />
-            Oferta Despacho Digital
+            Nuestros Planes
           </button>
         </div>
 
-        <!-- Employee cards -->
+        <!-- Catalog content -->
         <Transition name="fade-slide" mode="out-in">
+
+          <!-- Employee cards -->
           <div v-if="view === 'employees'" key="employees" class="cards-grid">
-            <div
-              v-for="emp in employees"
-              :key="emp.id"
-              class="emp-card"
-            >
+            <div v-for="emp in employees" :key="emp.id" class="emp-card">
               <div class="emp-card__top">
                 <div class="emp-card__icon" :style="{ background: emp.bg }">
                   <component :is="emp.icon" :size="22" :style="{ color: emp.color }" />
@@ -153,14 +140,12 @@
                   {{ emp.dept }}
                 </div>
               </div>
-
               <div class="emp-card__body">
                 <div>
                   <h3 class="emp-card__name">{{ emp.name }}</h3>
                   <p class="emp-card__role">{{ emp.role }}</p>
                 </div>
                 <p class="emp-card__pitch">{{ emp.pitch }}</p>
-
                 <ul class="emp-card__benefits">
                   <li v-for="(b, bi) in emp.benefits" :key="bi" class="emp-card__benefit">
                     <CheckCircle :size="11" class="emp-card__benefit-icon" />
@@ -168,21 +153,14 @@
                   </li>
                 </ul>
               </div>
-
               <div class="emp-card__footer">
                 <div class="emp-card__price">
                   <div class="emp-card__price-monthly">
-                    <span class="emp-card__price-amount">{{ emp.monthly }}€</span>
-                    <span class="emp-card__price-period">/mes</span>
+                    <span class="emp-card__price-amount">Incluido</span>
                   </div>
-                  <div class="emp-card__price-setup">Incorporación: {{ emp.setup }}€ · pago único</div>
+                  <div class="emp-card__price-setup">en Despacho Digital y Clínica Digital</div>
                 </div>
-                <a
-                  :href="calLink"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="emp-card__cta"
-                >
+                <a :href="calLink" target="_blank" rel="noopener noreferrer" class="emp-card__cta">
                   <CalendarCheck :size="15" />
                   Agendar demo
                 </a>
@@ -190,152 +168,92 @@
             </div>
           </div>
 
-          <!-- Package cards -->
-          <div v-else-if="view === 'packages'" key="packages" class="cards-grid cards-grid--packages">
+          <!-- Plans view -->
+          <div v-else key="plans" class="plans-grid">
             <div
-              v-for="pkg in packages"
-              :key="pkg.id"
-              class="pkg-card"
-              :class="{ 'pkg-card--featured': pkg.featured }"
+              v-for="plan in plans"
+              :key="plan.id"
+              class="plan-card"
+              :class="{ 'plan-card--featured': plan.featured }"
             >
-              <div v-if="pkg.featured" class="pkg-card__ribbon">
-                <Star :size="12" />
-                Más popular
+              <div v-if="plan.featured" class="plan-card__ribbon">
+                <Star :size="11" />
+                Más completo
               </div>
-
-              <div class="pkg-card__header">
-                <div class="pkg-card__icon" :style="{ background: pkg.bg }">
-                  <component :is="pkg.icon" :size="24" :style="{ color: pkg.color }" />
+              <div class="plan-card__header">
+                <div class="plan-card__icon" :style="{ background: plan.bg }">
+                  <component :is="plan.icon" :size="22" :style="{ color: plan.color }" />
                 </div>
                 <div>
-                  <h3 class="pkg-card__name">{{ pkg.name }}</h3>
-                  <p class="pkg-card__includes">Incluye: {{ pkg.agents.join(' · ') }}</p>
+                  <h3 class="plan-card__name">{{ plan.name }}</h3>
+                  <p class="plan-card__target">{{ plan.target }}</p>
                 </div>
               </div>
-
-              <p class="pkg-card__pitch">{{ pkg.pitch }}</p>
-
-              <ul class="pkg-card__benefits">
-                <li v-for="(b, bi) in pkg.benefits" :key="bi" class="pkg-card__benefit">
-                  <CheckCircle :size="11" class="pkg-card__benefit-icon" />
-                  {{ b }}
-                </li>
-              </ul>
-
-              <div class="pkg-card__footer">
-                <div class="pkg-card__price">
-                  <div class="pkg-card__price-row">
-                    <span class="pkg-card__price-amount">{{ pkg.monthly }}€</span>
-                    <span class="pkg-card__price-period">/mes</span>
-                    <span v-if="pkg.saving" class="pkg-card__saving">Ahorras {{ pkg.saving }}€/mes</span>
-                  </div>
-                  <p class="pkg-card__setup">Incorporación: {{ pkg.setup }}€ · pago único</p>
-                </div>
-                <a
-                  :href="calLink"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="pkg-card__cta"
-                  :class="{ 'pkg-card__cta--featured': pkg.featured }"
-                >
-                  <CalendarCheck :size="15" />
-                  Agendar demo
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Despacho Digital promo panel -->
-          <div v-else key="despacho" class="despacho-panel">
-            <div class="despacho-panel__glow" aria-hidden="true" />
-
-            <div class="despacho-panel__left">
-              <span class="despacho-panel__badge">
-                <Sparkles :size="12" />
-                Oferta especial · Potencia tu práctica
-              </span>
-              <h3 class="despacho-panel__title">Despacho Digital</h3>
-              <p class="despacho-panel__sub">
-                Web profesional + panel privado para pacientes + 2 empleados IA activos 24/7.
-                Todo configurado en 7 días. Sin instalar nada.
-              </p>
-
-              <div class="despacho-panel__saving">
-                <TrendingDown :size="14" />
-                Ahorras <strong>+1.100€</strong> vs. contratar los servicios por separado
-              </div>
-
-              <ul class="despacho-panel__features">
-                <li v-for="f in despachoFeatures" :key="f">
-                  <CheckCircle :size="13" />
+              <ul class="plan-card__features">
+                <li v-for="f in plan.features" :key="f">
+                  <CheckCircle :size="11" class="plan-card__check" />
                   {{ f }}
                 </li>
               </ul>
-            </div>
-
-            <div class="despacho-panel__right">
-              <div class="despacho-panel__price-box">
-                <div class="despacho-panel__price">
-                  <span class="despacho-panel__price-num">300€</span>
-                  <span class="despacho-panel__price-period">/mes</span>
+              <div class="plan-card__pricing">
+                <div class="plan-card__price-row">
+                  <span class="plan-card__amount">{{ plan.monthly_promo }}€</span>
+                  <span class="plan-card__period">/mes</span>
+                  <span class="plan-card__tag">6 meses</span>
                 </div>
-                <p class="despacho-panel__price-note">6 meses · luego 200€/mes</p>
-
-                <RouterLink to="/despacho-digital" class="despacho-panel__cta">
-                  <Zap :size="16" />
-                  Ver la oferta completa
-                </RouterLink>
-                <a
-                  :href="calLink"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="despacho-panel__demo"
-                >
-                  Agendar demo gratuita →
-                </a>
+                <p class="plan-card__after">Después: <strong>{{ plan.monthly_regular }}€/mes</strong></p>
               </div>
+              <RouterLink to="/bolsa-de-empleo" class="plan-card__cta" :class="{ 'plan-card__cta--featured': plan.featured }">
+                <Zap :size="15" />
+                Ver {{ plan.name }}
+              </RouterLink>
             </div>
           </div>
+
         </Transition>
 
         <!-- Pricing footnote -->
         <p class="catalog__footnote">
           <Info :size="14" />
-          La incorporación es un pago único para la configuración inicial de tu empleado. La mensualidad es la suscripción recurrente. Sin permanencia mínima.
+          El setup (600€) se diluye en los primeros 6 meses del plan elegido. La mensualidad se cobra el 1 del mes siguiente a la entrega. Sin permanencia mínima.
         </p>
       </div>
     </section>
 
-    <!-- ── DESPACHO DIGITAL PROMO ────────────────── -->
-    <section class="home-despacho">
+    <!-- ── PLANES ────────────────────────────────── -->
+    <section class="home-plans">
       <div class="container">
-        <div class="home-despacho__inner">
-          <div class="home-despacho__glow" aria-hidden="true" />
-
-          <div class="home-despacho__text">
-            <span class="home-despacho__badge">
-              <Sparkles :size="12" />
-              Oferta especial · Potencia tu práctica
-            </span>
-            <h2 class="home-despacho__title">Despacho Digital</h2>
-            <p class="home-despacho__sub">
-              Web + panel de gestión + 2 empleados IA. Llave en mano para psicólogos y coaches.
-              Todo funcionando en 7 días.
-            </p>
-            <div class="home-despacho__saving">
-              <TrendingDown :size="14" />
-              Ahorras <strong>+1.100€</strong> vs. contratar por separado
+        <div class="section-header">
+          <h2 class="section-title">Nuestros planes</h2>
+          <p class="section-subtitle">Setup incluido en los primeros 6 meses. Sin permanencia mínima.</p>
+        </div>
+        <div class="home-plans__grid">
+          <div
+            v-for="plan in plans"
+            :key="plan.id"
+            class="home-plan-card"
+            :class="{ 'home-plan-card--featured': plan.featured }"
+          >
+            <div v-if="plan.featured" class="home-plan-card__ribbon">
+              <Star :size="11" /> Más completo
             </div>
-          </div>
-
-          <div class="home-despacho__action">
-            <div class="home-despacho__price">
-              <span class="home-despacho__price-num">300€</span>
-              <span class="home-despacho__price-period">/mes · 6 meses</span>
+            <div class="home-plan-card__top">
+              <div class="home-plan-card__icon" :style="{ background: plan.bg }">
+                <component :is="plan.icon" :size="20" :style="{ color: plan.color }" />
+              </div>
+              <div>
+                <h3 class="home-plan-card__name">{{ plan.name }}</h3>
+                <p class="home-plan-card__target">{{ plan.target }}</p>
+              </div>
             </div>
-            <RouterLink to="/despacho-digital" class="home-despacho__cta">
-              <Zap :size="16" />
-              Ver la oferta
+            <div class="home-plan-card__price">
+              <span class="home-plan-card__amount">{{ plan.monthly_promo }}€</span>
+              <span class="home-plan-card__period">/mes · 6 meses</span>
+            </div>
+            <p class="home-plan-card__after">Luego {{ plan.monthly_regular }}€/mes</p>
+            <RouterLink to="/bolsa-de-empleo" class="home-plan-card__cta" :class="{ 'home-plan-card__cta--featured': plan.featured }">
+              <Zap :size="14" />
+              Empezar con {{ plan.name }}
             </RouterLink>
           </div>
         </div>
@@ -540,10 +458,10 @@
 import { ref, onMounted } from 'vue'
 import {
   Sparkles, CalendarCheck, ArrowDown, CheckCircle,
-  AlertTriangle, Users, LayoutGrid, Star, ChevronDown,
+  Users, LayoutGrid, Star, ChevronDown,
   Info, Zap, MessageSquare, Wrench, BookOpen,
-  TrendingUp, TrendingDown, Building2, Share2, BarChart2, Video,
-  CreditCard, RefreshCcw, ShieldCheck, GraduationCap, X,
+  TrendingUp, TrendingDown, Building2, Share2, BarChart2,
+  CreditCard, GraduationCap, X,
 } from 'lucide-vue-next'
 
 const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK
@@ -645,206 +563,110 @@ const employeeProcess = [
   },
 ]
 
-// ── Employees ──
+// ── Employees ────────────────────────────────────────────────────────────────
 const employees = [
   {
-    id: 'sofia',
-    name: 'Sofía',
-    role: 'Asistente Ejecutiva',
-    dept: 'Núcleo Operativo',
-    icon: MessageSquare,
-    color: '#7c6fff',
-    bg: 'rgba(124,111,255,0.12)',
-    pitch: 'Sofía es quien cuida de que tu día empiece organizado. Tu agenda llega cada mañana, tus pacientes siempre tienen respuesta y ninguna cita se pierde.',
-    benefits: [
-      'Tu agenda llega a las 7:30h para que empieces el día con claridad',
-      'Tus pacientes reciben respuesta inmediata, de día o de noche',
-      'Cancelaciones y cambios gestionados en el acto, sin interrumpirte',
-      'Borradores de informes y documentación clínica listos para revisar',
-      'Recordatorios automáticos para que ninguna sesión quede sin confirmar',
-    ],
-    setup: 450,
-    monthly: 150,
-  },
-  {
-    id: 'marcos',
-    name: 'Marcos',
-    role: 'Administrador',
-    dept: 'Núcleo Operativo',
-    icon: BarChart2,
-    color: '#818cf8',
-    bg: 'rgba(129,140,248,0.12)',
-    pitch: 'Marcos lleva las cuentas de tu consulta en silencio y sin errores. Sabes en todo momento cuánto has ingresado, qué está pendiente y cuándo vencen tus obligaciones.',
-    benefits: [
-      'Resumen semanal de ingresos sin que tengas que calcularlo',
-      'Alertas de cobros pendientes antes de que sean un problema',
-      'Informe financiero mensual listo en Google Docs',
-      'Aviso 15 días antes de cada declaración fiscal (IRPF, IVA)',
-    ],
-    setup: 450,
-    monthly: 150,
-  },
-  {
-    id: 'luna',
-    name: 'Luna',
-    role: 'Captadora',
-    dept: 'Motor de Adquisición',
-    icon: TrendingUp,
+    id:    'luna',
+    name:  'Luna',
+    role:  'Captadora',
+    dept:  'Motor de Adquisición',
+    icon:  TrendingUp,
     color: '#34d399',
-    bg: 'rgba(52,211,153,0.12)',
-    pitch: 'Luna atiende cada consulta nueva con la misma calidez y criterio que tú. Valora si hay compatibilidad y agenda la primera sesión, incluso mientras duermes.',
+    bg:    'rgba(52,211,153,0.12)',
+    pitch: 'Luna atiende cada contacto nuevo con calidez y criterio. Valora compatibilidad y agenda la primera sesión, incluso mientras duermes.',
     benefits: [
       'Ningún contacto nuevo queda sin respuesta, a cualquier hora',
       'Solo llegan a ti los casos que encajan con tu perfil',
       'La primera cita se agenda sola, sin que intervengas',
-      'Los contactos que aún no estaban listos reciben seguimiento automático',
+      'Seguimiento automático a contactos que aún no estaban listos',
     ],
-    setup: 450,
-    monthly: 150,
   },
   {
-    id: 'valeria',
-    name: 'Valeria',
-    role: 'Gestora de Redes Sociales',
-    dept: 'Motor de Adquisición',
-    icon: Share2,
-    color: '#f59e0b',
-    bg: 'rgba(245,158,11,0.12)',
-    pitch: 'Valeria mantiene tu presencia en redes activa y coherente cada semana. Tu comunidad crece y te ve como referente, aunque no abras Instagram en todo el día.',
-    benefits: [
-      'Publicaciones semanales en Instagram, LinkedIn y TikTok sin esfuerzo',
-      'Cada publicación adaptada a tu tono y especialidad',
-      'Comentarios respondidos para mantener tu comunidad activa',
-      'Propuesta de calendario mensual con contenido de tendencia',
-    ],
-    setup: 450,
-    monthly: 150,
-  },
-  {
-    id: 'elena',
-    name: 'Elena',
-    role: 'Investigadora de Contenidos',
-    dept: 'Estudio de Contenido',
-    icon: BookOpen,
-    color: '#ec4899',
-    bg: 'rgba(236,72,153,0.12)',
-    pitch: 'Elena construye tu autoridad artículo a artículo. Investiga, escribe y publica en tu blog para que te encuentren quienes más te necesitan.',
-    benefits: [
-      '4 artículos al mes con posicionamiento web, sin escribir una línea',
-      '2 boletines mensuales para mantener el vínculo con tus pacientes',
-      'Guías y recursos descargables que aportan valor a tu comunidad',
-      'Publicación directa en tu blog, sin intermediarios',
-    ],
-    setup: 450,
-    monthly: 150,
-  },
-  {
-    id: 'maya',
-    name: 'Maya',
-    role: 'Editora de Vídeo',
-    dept: 'Estudio de Contenido',
-    icon: Video,
-    color: '#06b6d4',
-    bg: 'rgba(6,182,212,0.12)',
-    pitch: 'Maya convierte cada vídeo que grabas en contenido profesional y listo para publicar. Subes el archivo a Drive y ella se encarga del resto.',
-    benefits: [
-      'Edición automática: silencios eliminados y ritmo cuidado',
-      'Subtítulos generados y archivo de transcripción incluido',
-      'Título, descripción y etiquetas optimizados para que te encuentren',
-      'Publicación automática en YouTube y TikTok',
-    ],
-    setup: 450,
-    monthly: 150,
-  },
-]
-
-// ── Packages ──
-const packages = [
-  {
-    id: 'nucleo',
-    name: 'Núcleo Operativo',
-    icon: Building2,
+    id:    'sofia',
+    name:  'Sofía',
+    role:  'Asistente',
+    dept:  'Núcleo Operativo',
+    icon:  MessageSquare,
     color: '#7c6fff',
-    bg: 'rgba(124,111,255,0.15)',
-    agents: ['Sofía', 'Marcos'],
-    pitch: 'Sofía y Marcos mantienen tu consulta en orden cada día. La agenda, los pacientes y las finanzas en piloto automático — sin que tú muevas un dedo.',
+    bg:    'rgba(124,111,255,0.12)',
+    pitch: 'Sofía gestiona tu agenda, responde consultas y recuerda citas. Tu operativa diaria en piloto automático.',
     benefits: [
-      'Agenda y pacientes gestionados las 24 horas',
-      'Las finanzas bajo control, sin hojas de cálculo ni sorpresas',
-      'Borradores de informes clínicos listos para revisar',
-      'Alertas fiscales antes de que venzan los plazos',
+      'Tu agenda llega a las 7:30h para empezar el día con claridad',
+      'Tus clientes reciben respuesta inmediata, de día o de noche',
+      'Cancelaciones y cambios gestionados sin interrumpirte',
+      'Recordatorios automáticos para que ninguna sesión quede sin confirmar',
     ],
-    setup: 750,
-    monthly: 200,
-    saving: 100,
-    featured: false,
   },
   {
-    id: 'motor',
-    name: 'Motor de Adquisición',
-    icon: TrendingUp,
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.15)',
-    agents: ['Luna', 'Valeria'],
-    pitch: 'Luna llena tu agenda de pacientes nuevos mientras Valeria mantiene tu presencia activa en redes. El circuito completo de captación funcionando solo.',
-    benefits: [
-      'Cada consulta nueva recibe respuesta inmediata, a cualquier hora',
-      'Solo llegan a ti los casos que encajan con tu perfil',
-      'Publicaciones semanales en Instagram, LinkedIn y TikTok',
-      'Tu comunidad crece y te percibe como referente',
-    ],
-    setup: 750,
-    monthly: 200,
-    saving: 100,
-    featured: false,
-  },
-  {
-    id: 'estudio',
-    name: 'Estudio de Contenido',
-    icon: Sparkles,
+    id:    'valeria',
+    name:  'Valeria',
+    role:  'Contenido',
+    dept:  'Presencia Digital',
+    icon:  Share2,
     color: '#f59e0b',
-    bg: 'rgba(245,158,11,0.15)',
-    agents: ['Elena', 'Maya'],
-    pitch: 'Elena construye tu autoridad con artículos y boletines mientras Maya produce y publica tus vídeos. Contenido escrito y audiovisual, sin dedicarle ni una hora.',
+    bg:    'rgba(245,158,11,0.12)',
+    pitch: 'Valeria mantiene tu presencia digital activa. Publica en redes, redacta artículos y crea materiales que te posicionan como referente.',
     benefits: [
-      '4 artículos al mes con posicionamiento web publicados en tu blog',
-      'Boletines mensuales para mantener el vínculo con tus pacientes',
-      'Vídeos editados, subtitulados y publicados en YouTube y TikTok',
-      'Guías descargables que aportan valor a tu comunidad',
+      'Publicaciones semanales en Instagram, LinkedIn y TikTok',
+      'Artículos de blog con posicionamiento web sin escribir una línea',
+      'Comentarios respondidos para mantener tu comunidad activa',
+      'Calendario mensual de contenido con tendencias',
     ],
-    setup: 750,
-    monthly: 200,
-    saving: 100,
-    featured: false,
   },
   {
-    id: 'equipo',
-    name: 'Equipo Completo',
-    icon: Star,
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.15)',
-    agents: ['Los 6 empleados'],
-    pitch: 'Tu consulta operando sola. Agenda, finanzas, captación, redes, artículos y vídeo — todo coordinado por seis especialistas que nunca paran.',
+    id:    'marcos',
+    name:  'Marcos',
+    role:  'Administrador',
+    dept:  'Núcleo Operativo',
+    icon:  BarChart2,
+    color: '#818cf8',
+    bg:    'rgba(129,140,248,0.12)',
+    pitch: 'Marcos lleva las finanzas de tu negocio sin errores. Informes, alertas de cobro y calendario fiscal siempre al día.',
     benefits: [
-      'Operativa diaria cubierta: agenda, pacientes y cobros',
-      'Captación y redes activas sin tu intervención',
-      'Contenido escrito y audiovisual publicado cada semana',
-      'Un equipo coordinado, por menos de lo que cuesta un día de gestoría',
+      'Resumen semanal de ingresos sin hojas de cálculo',
+      'Alertas de cobros pendientes antes de que sean un problema',
+      'Informe financiero mensual listo en Google Docs',
+      'Aviso 15 días antes de cada declaración fiscal',
     ],
-    setup: 1950,
-    monthly: 500,
-    saving: 400,
-    featured: true,
   },
 ]
 
-// ── Despacho Digital features (for promo tab & home banner) ──
-const despachoFeatures = [
-  'Web profesional para tu consulta (posicionamiento local incluido)',
-  'Panel privado de gestión para tus pacientes',
-  '2 empleados IA activos 24/7 (WhatsApp, agenda, contenido…)',
-  'Incorporación y configuración completa en 7 días',
-  'Soporte técnico continuo y actualizaciones incluidas',
+// ── Plans ─────────────────────────────────────────────────────────────────────
+const plans = [
+  {
+    id:              'despacho',
+    name:            'Despacho Digital',
+    target:          'Para psicólogos, coaches y despachos',
+    icon:            Building2,
+    color:           '#34d399',
+    bg:              'rgba(52,211,153,0.12)',
+    featured:        false,
+    monthly_promo:   300,
+    monthly_regular: 200,
+    features: [
+      'Captación y gestión de contactos 24/7 (Luna)',
+      'Asistente virtual para agenda y consultas (Sofía)',
+      'Web profesional + dashboard de gestión',
+      'Setup completo incluido · Activo en 7 días',
+    ],
+  },
+  {
+    id:              'clinica',
+    name:            'Clínica Digital',
+    target:          'Para clínicas y centros de salud',
+    icon:            Sparkles,
+    color:           '#7c6fff',
+    bg:              'rgba(124,111,255,0.12)',
+    featured:        true,
+    monthly_promo:   500,
+    monthly_regular: 350,
+    features: [
+      'Todo lo de Despacho Digital, más:',
+      'Contenido y redes sociales activos (Valeria)',
+      'Administración financiera y fiscal (Marcos)',
+      'Los 4 empleados IA en paralelo · Panel central',
+    ],
+  },
 ]
 
 // ── FAQs ──
@@ -2077,16 +1899,342 @@ const faqs = [
   }
 }
 
-// ── Promo tab style ──────────────────────
-.catalog__tab--promo {
-  &.catalog__tab--active {
-    background: $accent !important;
-    color: $bg !important;
-    box-shadow: 0 0 16px rgba(52,211,153,0.35) !important;
+// ── Plan card (catalog tab) ──────────────
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: $space-6;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  position: relative;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  padding: $space-7;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  transition: $transition;
+
+  &:hover {
+    border-color: $border-hover;
+    transform: translateY(-3px);
   }
 
-  &:not(.catalog__tab--active):hover {
+  &--featured {
+    border-color: rgba(124,111,255,0.4);
+    background: linear-gradient(145deg, $bg-card, rgba(124,111,255,0.04));
+    box-shadow: 0 0 40px rgba(124,111,255,0.1);
+
+    &:hover {
+      border-color: rgba(124,111,255,0.6);
+      box-shadow: 0 0 56px rgba(124,111,255,0.18);
+    }
+  }
+
+  &__ribbon {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-1 $space-3;
+    background: $primary;
+    color: #fff;
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    box-shadow: 0 0 16px $primary-glow;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.01em;
+  }
+
+  &__target {
+    font-size: $text-xs;
+    color: $text-muted;
+    margin-top: 2px;
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: $space-2;
+      font-size: $text-sm;
+      color: $text-muted;
+      line-height: 1.5;
+    }
+  }
+
+  &__check {
     color: $accent;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__pricing {
+    border-top: 1px solid $border;
+    padding-top: $space-4;
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
+  &__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__amount {
+    font-size: $text-3xl;
+    font-weight: $fw-bold;
+    color: $text;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  &__period {
+    font-size: $text-base;
+    color: $text-muted;
+  }
+
+  &__tag {
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    padding: 2px $space-2;
+    border-radius: $radius-full;
+  }
+
+  &__after {
+    font-size: $text-sm;
+    color: $text-muted;
+
+    strong { color: $text; font-weight: $fw-semibold; }
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 44px;
+    background: $primary-subtle;
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: $radius;
+    color: $primary-light;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    transition: $transition;
+
+    &:hover {
+      background: $primary;
+      border-color: $primary;
+      color: #fff;
+    }
+
+    &--featured {
+      background: $primary;
+      border-color: $primary;
+      color: #fff;
+      box-shadow: 0 0 20px $primary-glow;
+
+      &:hover { background: $primary-dark; }
+    }
+  }
+}
+
+// ── Home plans section ────────────────────
+.home-plans {
+  padding: $space-16 0;
+  background: $bg-surface;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: $space-5;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.home-plan-card {
+  position: relative;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  padding: $space-7;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  transition: $transition;
+
+  &:hover {
+    border-color: $border-hover;
+    transform: translateY(-3px);
+  }
+
+  &--featured {
+    border-color: rgba(124,111,255,0.4);
+    background: linear-gradient(145deg, $bg-card, rgba(124,111,255,0.04));
+    box-shadow: 0 0 40px rgba(124,111,255,0.1);
+
+    &:hover {
+      border-color: rgba(124,111,255,0.6);
+      box-shadow: 0 0 56px rgba(124,111,255,0.18);
+    }
+  }
+
+  &__ribbon {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-1 $space-3;
+    background: $primary;
+    color: #fff;
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    white-space: nowrap;
+    box-shadow: 0 0 16px $primary-glow;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: $radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.01em;
+  }
+
+  &__target {
+    font-size: $text-xs;
+    color: $text-muted;
+    margin-top: 2px;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+  }
+
+  &__amount {
+    font-size: 2.25rem;
+    font-weight: $fw-bold;
+    color: $text;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__period {
+    font-size: $text-sm;
+    color: $text-muted;
+    white-space: nowrap;
+  }
+
+  &__after {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 48px;
+    margin-top: auto;
+    background: $primary-subtle;
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: $radius;
+    color: $primary-light;
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    transition: $transition;
+
+    &:hover {
+      background: $primary;
+      border-color: $primary;
+      color: #fff;
+      box-shadow: 0 0 20px $primary-glow;
+    }
+
+    &--featured {
+      background: $primary;
+      border-color: $primary;
+      color: #fff;
+      box-shadow: 0 0 20px $primary-glow;
+
+      &:hover { background: $primary-dark; }
+    }
   }
 }
 

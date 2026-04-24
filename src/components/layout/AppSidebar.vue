@@ -56,15 +56,17 @@ import {
   Package,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
+import { useClientStore } from '@/stores/client'
 
 defineProps({
   open: { type: Boolean, default: false },
 })
 defineEmits(['close'])
 
-const auth   = useAuthStore()
-const route  = useRoute()
-const router = useRouter()
+const auth        = useAuthStore()
+const clientStore = useClientStore()
+const route       = useRoute()
+const router      = useRouter()
 
 const adminNav = [
   { to: '/admin/dashboard', label: 'Dashboard',  icon: LayoutDashboard },
@@ -78,9 +80,9 @@ const adminNav = [
 ]
 
 const clientNav = [
-  { to: '/portal/dashboard', label: 'Inicio',    icon: LayoutDashboard },
-  { to: '/portal/invoices',  label: 'Facturas',  icon: FileText },
-  { to: '/portal/support',   label: 'Soporte',   icon: LifeBuoy },
+  { to: '/portal/dashboard', label: 'Inicio',   icon: LayoutDashboard },
+  { to: '/portal/invoices',  label: 'Compras',  icon: FileText },
+  { to: '/portal/support',   label: 'Soporte',  icon: LifeBuoy },
 ]
 
 const navItems  = computed(() => auth.isAdmin ? adminNav : clientNav)
@@ -95,6 +97,7 @@ function isActive(path) {
 }
 
 function handleLogout() {
+  clientStore.clear()
   auth.logout()
   router.push('/login')
 }

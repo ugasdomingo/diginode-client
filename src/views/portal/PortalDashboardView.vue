@@ -1,153 +1,266 @@
 <template>
   <div class="portal-dashboard">
+
+    <!-- Header -->
     <div class="page-header">
       <div>
-        <h1 class="page-title">Bienvenido</h1>
-        <p class="page-subtitle">Panel de control de tus empleados IA</p>
+        <h1 class="page-title">
+          {{ clientStore.client ? `Hola, ${firstName}` : 'Mi portal' }}
+        </h1>
+        <p class="page-subtitle">Panel de control de tus servicios Diginode</p>
       </div>
+      <AppBadge v-if="clientStore.client" :variant="statusVariant(clientStore.client.status)">
+        {{ statusLabel(clientStore.client.status) }}
+      </AppBadge>
     </div>
 
-    <!-- Loading -->
-    <div v-if="loading" class="services-grid">
-      <div v-for="i in 3" :key="i" class="service-card service-card--skeleton" />
-    </div>
+    <!-- Skeleton -->
+    <template v-if="isLoading">
+      <div class="stats-row">
+        <div v-for="i in 3" :key="i" class="stat-card stat-card--skeleton" />
+      </div>
+      <div class="skeleton-block" />
+      <div class="skeleton-block skeleton-block--sm" />
+    </template>
 
     <template v-else>
-      <!-- Services -->
-      <section>
-        <h2 class="section-title">Tus servicios activos</h2>
 
-        <div v-if="services.length === 0" class="section-empty">
-          <Zap :size="32" />
-          <p>Sin servicios activos aún</p>
-        </div>
-
-        <div v-else class="services-grid">
-          <div v-for="svc in services" :key="svc.id" class="service-card">
-            <div class="service-card__icon" :style="{ background: svc.bg }">
-              <component :is="svc.icon" :size="22" :style="{ color: svc.color }" />
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__name">{{ svc.name }}</h3>
-              <p class="service-card__desc">{{ svc.description }}</p>
-            </div>
-            <AppBadge variant="success">Activo</AppBadge>
+      <!-- Stats row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--purple">
+            <ShoppingBag :size="18" />
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">{{ clientStore.purchases.length }}</span>
+            <span class="stat-card__label">{{ clientStore.purchases.length === 1 ? 'Compra' : 'Compras' }}</span>
           </div>
         </div>
-      </section>
 
-      <!-- Blog teaser -->
-      <section v-if="blogPosts.length">
-        <div class="blog-header">
-          <h2 class="section-title">Últimas del Blog</h2>
-          <RouterLink to="/blog" class="blog-all-link">Ver todos →</RouterLink>
-        </div>
-        <div class="blog-list">
-          <RouterLink
-            v-for="post in blogPosts"
-            :key="post._id"
-            :to="`/blog/${post.slug}`"
-            class="blog-item"
-          >
-            <div class="blog-item__info">
-              <span class="blog-item__title">{{ post.title }}</span>
-              <span class="blog-item__date">{{ formatBlogDate(post.published_at) }}</span>
-            </div>
-            <span class="blog-item__arrow">→</span>
-          </RouterLink>
-        </div>
-      </section>
-
-      <!-- Plan info -->
-      <AppCard class="plan-card" v-if="clientData">
-        <div class="plan-card__header">
-          <div>
-            <h3 class="plan-card__title">Tu plan</h3>
-            <p class="plan-card__plan">{{ planLabel(clientData.plan) }}</p>
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--green">
+            <CalendarClock :size="18" />
           </div>
-          <AppBadge :variant="statusVariant(clientData.status)">
-            {{ statusLabel(clientData.status) }}
+          <div class="stat-card__body">
+            <span class="stat-card__value">
+              {{ nextBillingText }}
+            </span>
+            <span class="stat-card__label">Próximo cobro</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__icon" :class="clientStore.openTickets > 0 ? 'stat-card__icon--amber' : 'stat-card__icon--muted'">
+            <LifeBuoy :size="18" />
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">{{ clientStore.openTickets }}</span>
+            <span class="stat-card__label">{{ clientStore.openTickets === 1 ? 'Ticket abierto' : 'Tickets abiertos' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscription card -->
+      <section v-if="clientStore.subscription" class="sub-card">
+        <div class="sub-card__header">
+          <div class="sub-card__icon">
+            <Repeat :size="18" />
+          </div>
+          <div class="sub-card__info">
+            <h3 class="sub-card__name">{{ planLabel(clientStore.subscription.package_slug) }}</h3>
+            <p class="sub-card__meta">
+              <span v-if="clientStore.subscription.amount_monthly">
+                {{ formatAmount(clientStore.subscription.amount_monthly) }}/mes
+              </span>
+              <span v-if="clientStore.subscription.minimum_end_date" class="sub-card__commitment">
+                · Compromiso hasta {{ formatDate(clientStore.subscription.minimum_end_date) }}
+              </span>
+            </p>
+          </div>
+          <AppBadge :variant="subStatusVariant(clientStore.subscription.status)">
+            {{ subStatusLabel(clientStore.subscription.status) }}
           </AppBadge>
         </div>
 
-        <div class="plan-card__actions">
-          <RouterLink to="/portal/invoices">
-            <AppButton variant="secondary" size="sm">
-              <FileText :size="14" />
-              Ver facturas
-            </AppButton>
-          </RouterLink>
-          <RouterLink to="/portal/support">
-            <AppButton variant="secondary" size="sm">
-              <LifeBuoy :size="14" />
-              Soporte
-            </AppButton>
+        <div v-if="clientStore.subscription.next_billing_date" class="sub-card__next">
+          <CalendarClock :size="14" />
+          Próximo cobro: <strong>{{ formatDate(clientStore.subscription.next_billing_date) }}</strong>
+          <span v-if="clientStore.subscription.amount_monthly">
+            — {{ formatAmount(clientStore.subscription.amount_monthly) }}
+          </span>
+        </div>
+      </section>
+
+      <!-- Upcoming payments -->
+      <section v-if="clientStore.upcoming.length">
+        <h2 class="section-title">
+          <Bell :size="16" />
+          Próximos pagos
+        </h2>
+        <div class="upcoming-list">
+          <div v-for="(item, i) in clientStore.upcoming" :key="i" class="upcoming-item">
+            <div class="upcoming-item__icon">
+              <component :is="typeIcon(item.type)" :size="16" />
+            </div>
+            <div class="upcoming-item__body">
+              <span class="upcoming-item__label">{{ item.label }}</span>
+              <span v-if="item.due_date" class="upcoming-item__date">
+                {{ formatDate(item.due_date) }}
+              </span>
+              <span v-else class="upcoming-item__pending">Enlace de pago pendiente</span>
+            </div>
+            <span v-if="item.amount" class="upcoming-item__amount">
+              {{ formatAmount(item.amount) }}
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent purchases -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">
+            <ShoppingBag :size="16" />
+            Compras recientes
+          </h2>
+          <RouterLink v-if="clientStore.purchases.length > 3" to="/portal/invoices" class="section-link">
+            Ver todo →
           </RouterLink>
         </div>
-      </AppCard>
+
+        <div v-if="clientStore.purchases.length === 0" class="section-empty">
+          <ShoppingBag :size="32" />
+          <p>Sin compras registradas</p>
+        </div>
+
+        <div v-else class="purchase-list">
+          <div
+            v-for="purchase in recentPurchases"
+            :key="purchase.id"
+            class="purchase-item"
+          >
+            <div class="purchase-item__icon" :class="`purchase-item__icon--${purchase.type}`">
+              <component :is="typeIcon(purchase.type)" :size="16" />
+            </div>
+            <div class="purchase-item__body">
+              <span class="purchase-item__label">{{ purchase.reference_label }}</span>
+              <span class="purchase-item__meta">
+                {{ formatDate(purchase.created_at) }}
+                <template v-if="purchase.installment_total">
+                  · Cuota {{ purchase.installment_number }}/{{ purchase.installment_total }}
+                </template>
+              </span>
+            </div>
+            <div class="purchase-item__right">
+              <span class="purchase-item__amount">{{ formatAmount(purchase.amount) }}</span>
+              <a
+                v-if="purchase.receipt_url"
+                :href="purchase.receipt_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="purchase-item__receipt"
+                title="Ver recibo"
+              >
+                <Receipt :size="14" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick links -->
+      <div class="quick-links">
+        <RouterLink to="/portal/invoices" class="quick-link">
+          <FileText :size="16" />
+          Historial completo
+        </RouterLink>
+        <RouterLink to="/portal/support" class="quick-link">
+          <LifeBuoy :size="16" />
+          Abrir ticket
+        </RouterLink>
+      </div>
+
     </template>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Zap, MessageSquare, LayoutGrid, Wrench, FileText, LifeBuoy } from 'lucide-vue-next'
-import { useApi } from '@/composables/useApi'
+import { computed, onMounted } from 'vue'
+import {
+  ShoppingBag, CalendarClock, LifeBuoy, Repeat, Bell,
+  FileText, Receipt, BookOpen, Users, Wrench, ExternalLink,
+} from 'lucide-vue-next'
+import { useClientStore } from '@/stores/client'
 import { useToastStore } from '@/stores/toast'
-import AppCard   from '@/components/ui/AppCard.vue'
-import AppBadge  from '@/components/ui/AppBadge.vue'
-import AppButton from '@/components/ui/AppButton.vue'
+import AppBadge from '@/components/ui/AppBadge.vue'
 
-const api   = useApi()
-const toast = useToastStore()
+const clientStore = useClientStore()
+const toast       = useToastStore()
 
-const loading    = ref(true)
-const clientData = ref(null)
-const blogPosts  = ref([])
+const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
 
-function formatBlogDate(d) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
-}
-
-const serviceMap = {
-  recepcionista:   { name: 'La Recepcionista', description: 'Cualifica leads en WhatsApp, Instagram y LinkedIn 24/7', icon: MessageSquare, color: '#818cf8', bg: 'rgba(129,140,248,0.1)' },
-  content_manager: { name: 'El Content Manager', description: 'Genera tu grilla de contenido semanal con IA', icon: LayoutGrid, color: '#34d399', bg: 'rgba(52,211,153,0.1)' },
-  ingeniero:       { name: 'El Ingeniero', description: 'Resuelve tickets de soporte técnico automáticamente', icon: Wrench, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-}
-
-const services = computed(() => {
-  if (!clientData.value?.services) return []
-  return clientData.value.services
-    .filter(s => serviceMap[s])
-    .map(s => ({ id: s, ...serviceMap[s] }))
+// Load lazily if user navigated directly (token in localStorage, no login flow)
+onMounted(async () => {
+  if (!clientStore.loaded) {
+    try {
+      await clientStore.load()
+    } catch {
+      toast.error('No se pudo cargar la información del portal')
+    }
+  }
 })
 
-function planLabel(p) {
-  return { latam: 'Plan LATAM — $149/mes', spain: 'Plan España — €249/mes' }[p] ?? p
+const firstName = computed(() => {
+  const name = clientStore.client?.name ?? ''
+  return name.split(' ')[0]
+})
+
+const recentPurchases = computed(() =>
+  clientStore.purchases.slice(0, 4)
+)
+
+const nextBillingText = computed(() => {
+  const sub = clientStore.subscription
+  if (sub?.next_billing_date) return formatDate(sub.next_billing_date)
+  const next = clientStore.upcoming.find(u => u.due_date)
+  if (next) return formatDate(next.due_date)
+  return '—'
+})
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function typeIcon(type) {
+  return { course: BookOpen, bolsa: Users, subscription: Repeat, manual: Receipt }[type] ?? FileText
+}
+
+function formatAmount(amount, currency = 'EUR') {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency', currency, minimumFractionDigits: 0,
+  }).format(amount)
+}
+
+function formatDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
 function statusLabel(s) {
   return { pending: 'Pendiente', active: 'Activo', suspended: 'Suspendido', cancelled: 'Cancelado' }[s] ?? s
 }
-
 function statusVariant(s) {
   return { active: 'success', pending: 'warning', suspended: 'danger', cancelled: 'danger' }[s] ?? 'default'
 }
 
-onMounted(async () => {
-  try {
-    const [svcs, blog] = await Promise.allSettled([
-      api.get('/portal/services'),
-      fetch(`${import.meta.env.VITE_API_URL}/blog?limit=3`).then(r => r.json()),
-    ])
-    if (svcs.status === 'fulfilled') clientData.value = svcs.value.data ?? svcs.value
-    else toast.error('No se pudo cargar la información')
-    if (blog.status === 'fulfilled') blogPosts.value = blog.value?.data ?? []
-  } finally {
-    loading.value = false
-  }
-})
+function subStatusLabel(s) {
+  return { active: 'Activa', past_due: 'Pago pendiente', canceled: 'Cancelada' }[s] ?? s
+}
+function subStatusVariant(s) {
+  return { active: 'success', past_due: 'warning', canceled: 'danger' }[s] ?? 'default'
+}
+
+function planLabel(slug) {
+  return { 'despacho-digital': 'Despacho Digital' }[slug] ?? slug
+}
 </script>
 
 <style lang="scss" scoped>
@@ -157,10 +270,12 @@ onMounted(async () => {
   gap: $space-8;
 }
 
+// ── Header ─────────────────────────────────────────────────────────────────
 .page-header {
   display: flex;
-  flex-direction: column;
-  gap: $space-1;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-4;
 }
 
 .page-title {
@@ -172,13 +287,175 @@ onMounted(async () => {
 .page-subtitle {
   color: $text-muted;
   font-size: $text-sm;
+  margin-top: $space-1;
 }
 
+// ── Skeletons ──────────────────────────────────────────────────────────────
+.skeleton-block {
+  height: 120px;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  animation: shimmer 1.5s infinite;
+
+  &--sm { height: 72px; }
+}
+
+// ── Stats row ──────────────────────────────────────────────────────────────
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-4;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: $space-4 $space-5;
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  transition: $transition;
+
+  &:hover { border-color: $border-hover; }
+
+  &--skeleton {
+    height: 76px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--purple { background: rgba(124, 111, 255, 0.12); color: $primary; }
+    &--green  { background: rgba(52, 211, 153, 0.12);  color: $accent; }
+    &--amber  { background: rgba(245, 158, 11, 0.12);  color: #f59e0b; }
+    &--muted  { background: rgba(139, 138, 168, 0.1);  color: $text-subtle; }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__value {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    line-height: 1.2;
+  }
+
+  &__label {
+    font-size: $text-xs;
+    color: $text-muted;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// ── Subscription card ──────────────────────────────────────────────────────
+.sub-card {
+  background: $bg-card;
+  border: 1px solid rgba(124, 111, 255, 0.2);
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius;
+    background: rgba(124, 111, 255, 0.12);
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__info { flex: 1; min-width: 0; }
+
+  &__name {
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    color: $text;
+    margin-bottom: 2px;
+  }
+
+  &__meta {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__commitment {
+    font-size: $text-xs;
+    color: $text-subtle;
+  }
+
+  &__next {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $text-sm;
+    color: $text-muted;
+    padding: $space-3 $space-4;
+    background: rgba(52, 211, 153, 0.06);
+    border: 1px solid rgba(52, 211, 153, 0.15);
+    border-radius: $radius;
+    color: $accent;
+
+    strong { color: $text; }
+  }
+}
+
+// ── Upcoming payments ──────────────────────────────────────────────────────
 .section-title {
-  font-size: $text-lg;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $text-base;
   font-weight: $fw-semibold;
   color: $text;
-  margin-bottom: $space-4;
+  margin-bottom: $space-3;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-3;
+
+  .section-title { margin-bottom: 0; }
+}
+
+.section-link {
+  font-size: $text-sm;
+  font-weight: $fw-medium;
+  color: $primary-light;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
 }
 
 .section-empty {
@@ -186,47 +463,36 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   gap: $space-3;
-  padding: $space-12;
+  padding: $space-10;
   color: $text-subtle;
   font-size: $text-sm;
   background: $bg-card;
   border: 1px solid $border;
   border-radius: $radius-lg;
+  text-align: center;
 }
 
-// Services grid
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: $space-4;
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
 }
 
-.service-card {
+.upcoming-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
   background: $bg-card;
   border: 1px solid $border;
   border-radius: $radius-lg;
-  padding: $space-5;
-  display: flex;
-  align-items: flex-start;
-  gap: $space-4;
-  transition: $transition;
-
-  &:hover {
-    border-color: $border-hover;
-    box-shadow: $shadow-glow;
-  }
-
-  &--skeleton {
-    height: 96px;
-    background: linear-gradient(90deg, $bg-card 25%, $bg-card-2 50%, $bg-card 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
 
   &__icon {
-    width: 44px;
-    height: 44px;
-    border-radius: $radius;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-sm;
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,130 +501,160 @@ onMounted(async () => {
 
   &__body {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
-  &__name {
-    font-size: $text-base;
+  &__label {
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    color: $text;
+  }
+
+  &__date {
+    font-size: $text-xs;
+    color: $text-muted;
+    font-family: $font-mono;
+  }
+
+  &__pending {
+    font-size: $text-xs;
+    color: #f59e0b;
+    font-style: italic;
+  }
+
+  &__amount {
+    font-size: $text-sm;
     font-weight: $fw-semibold;
     color: $text;
-    margin-bottom: $space-1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
+// ── Purchase list ──────────────────────────────────────────────────────────
+.purchase-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.purchase-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  transition: $transition-fast;
+
+  &:hover { border-color: $border-hover; }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--course       { background: rgba(124, 111, 255, 0.12); color: $primary; }
+    &--bolsa        { background: rgba(52, 211, 153, 0.12);  color: $accent; }
+    &--subscription { background: rgba(99, 102, 241, 0.12);  color: #818cf8; }
+    &--manual       { background: rgba(139, 138, 168, 0.1);  color: $text-muted; }
   }
 
-  &__desc {
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
     font-size: $text-sm;
+    font-weight: $fw-medium;
+    color: $text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    font-size: $text-xs;
     color: $text-muted;
-    line-height: 1.5;
+    font-family: $font-mono;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+
+  &__amount {
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    color: $text;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__receipt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    color: $text-muted;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+      background: $primary-subtle;
+    }
+  }
+}
+
+// ── Quick links ────────────────────────────────────────────────────────────
+.quick-links {
+  display: flex;
+  gap: $space-3;
+  flex-wrap: wrap;
+}
+
+.quick-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  font-size: $text-sm;
+  font-weight: $fw-medium;
+  color: $text-muted;
+  text-decoration: none;
+  transition: $transition-fast;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: $primary-subtle;
   }
 }
 
 @keyframes shimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
-}
-
-// Plan card
-.plan-card {
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-
-  &__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: $space-4;
-  }
-
-  &__title {
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $text-muted;
-    margin-bottom: $space-1;
-  }
-
-  &__plan {
-    font-size: $text-lg;
-    font-weight: $fw-semibold;
-    color: $text;
-  }
-
-  &__actions {
-    display: flex;
-    gap: $space-3;
-    flex-wrap: wrap;
-
-    a {
-      text-decoration: none;
-    }
-  }
-}
-
-// Blog teaser
-.blog-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: $space-4;
-}
-
-.blog-all-link {
-  font-size: $text-sm;
-  font-weight: $fw-medium;
-  color: $primary-light;
-  text-decoration: none;
-
-  &:hover { text-decoration: underline; }
-}
-
-.blog-list {
-  display: flex;
-  flex-direction: column;
-  gap: $space-2;
-}
-
-.blog-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-4;
-  padding: $space-3 $space-4;
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  text-decoration: none;
-  color: $text;
-  transition: $transition;
-
-  &:hover {
-    border-color: $primary;
-    background: $primary-subtle;
-  }
-
-  &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  &__title {
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__date {
-    font-size: $text-xs;
-    color: $text-subtle;
-    font-family: $font-mono;
-  }
-
-  &__arrow {
-    color: $primary-light;
-    font-size: $text-base;
-    flex-shrink: 0;
-  }
 }
 </style>

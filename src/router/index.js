@@ -63,6 +63,13 @@ const routes = [
     meta: { public: true },
   },
 
+  {
+    path: '/cambiar-contrasena',
+    name: 'change-password',
+    component: () => import('@/views/auth/ChangePasswordView.vue'),
+    meta: { requiresAuth: true },
+  },
+
   // ── Admin routes ────────────────────────────
   {
     path: '/admin',
@@ -158,6 +165,11 @@ router.beforeEach((to) => {
   if (to.meta.public) return true
 
   if (!auth.isAuthenticated) return { name: 'login' }
+
+  // Force password change before accessing any protected route (except the change-password page itself)
+  if (auth.mustChangePassword && to.name !== 'change-password') {
+    return { name: 'change-password' }
+  }
 
   if (to.meta.role === 'admin' && !auth.isAdmin) {
     return auth.isClient ? { path: '/portal' } : { name: 'login' }

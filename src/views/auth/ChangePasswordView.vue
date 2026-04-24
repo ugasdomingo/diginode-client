@@ -1,78 +1,76 @@
 <template>
-  <div class="login">
-    <!-- Background grid decoration -->
-    <div class="login__bg" aria-hidden="true" />
+  <div class="change-pwd">
+    <div class="change-pwd__bg" aria-hidden="true" />
 
-    <div class="login__container">
+    <div class="change-pwd__container">
       <!-- Brand -->
-      <RouterLink to="/" class="login__brand">
-        <div class="login__brand-icon">
+      <RouterLink to="/" class="change-pwd__brand">
+        <div class="change-pwd__brand-icon">
           <Zap :size="24" />
         </div>
-        <h1 class="login__brand-name">Diginode</h1>
+        <h1 class="change-pwd__brand-name">Diginode</h1>
       </RouterLink>
 
-      <div class="login__card">
-        <div class="login__header">
-          <h2 class="login__title">Bienvenido</h2>
-          <p class="login__subtitle">Accede a tu panel de control</p>
+      <div class="change-pwd__card">
+        <div class="change-pwd__header">
+          <div class="change-pwd__icon-wrap">
+            <KeyRound :size="22" />
+          </div>
+          <h2 class="change-pwd__title">Crea tu contraseña</h2>
+          <p class="change-pwd__subtitle">
+            Esta es tu primera vez accediendo. Elige una contraseña segura para proteger tu cuenta.
+          </p>
         </div>
 
-        <form class="login__form" @submit.prevent="handleLogin" novalidate>
+        <form class="change-pwd__form" @submit.prevent="handleSubmit" novalidate>
           <div class="field">
-            <label class="field__label" for="email">Correo electrónico</label>
-            <div class="field__wrapper">
-              <Mail :size="16" class="field__icon" />
-              <input
-                id="email"
-                v-model="form.email"
-                type="email"
-                class="field__input"
-                placeholder="hola@tuagencia.com"
-                autocomplete="email"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="field__label" for="password">Contraseña</label>
+            <label class="field__label" for="new-password">Nueva contraseña</label>
             <div class="field__wrapper">
               <Lock :size="16" class="field__icon" />
               <input
-                id="password"
-                v-model="form.password"
-                :type="showPassword ? 'text' : 'password'"
+                id="new-password"
+                v-model="form.newPassword"
+                :type="showNew ? 'text' : 'password'"
                 class="field__input"
-                placeholder="••••••••"
-                autocomplete="current-password"
+                placeholder="Mínimo 8 caracteres"
+                autocomplete="new-password"
                 required
               />
-              <button
-                type="button"
-                class="field__toggle"
-                @click="showPassword = !showPassword"
-                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-              >
-                <component :is="showPassword ? EyeOff : Eye" :size="16" />
+              <button type="button" class="field__toggle" @click="showNew = !showNew">
+                <component :is="showNew ? EyeOff : Eye" :size="16" />
               </button>
             </div>
           </div>
 
-          <p v-if="error" class="login__error" role="alert">
+          <div class="field">
+            <label class="field__label" for="confirm-password">Confirmar contraseña</label>
+            <div class="field__wrapper">
+              <Lock :size="16" class="field__icon" />
+              <input
+                id="confirm-password"
+                v-model="form.confirmPassword"
+                :type="showConfirm ? 'text' : 'password'"
+                class="field__input"
+                placeholder="Repite la contraseña"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="field__toggle" @click="showConfirm = !showConfirm">
+                <component :is="showConfirm ? EyeOff : Eye" :size="16" />
+              </button>
+            </div>
+          </div>
+
+          <p v-if="error" class="change-pwd__error" role="alert">
             <AlertCircle :size="14" />
             {{ error }}
           </p>
 
-          <AppButton type="submit" size="lg" :loading="loading" class="login__submit">
-            Iniciar sesión
+          <AppButton type="submit" size="lg" :loading="loading" class="change-pwd__submit">
+            Guardar y acceder al portal
           </AppButton>
         </form>
       </div>
-
-      <p class="login__footer">
-        Diginode &mdash; Agencia de empleados IA
-      </p>
     </div>
   </div>
 </template>
@@ -80,45 +78,45 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-vue-next'
+import { Zap, Lock, Eye, EyeOff, AlertCircle, KeyRound } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useClientStore } from '@/stores/client'
 import { useApi } from '@/composables/useApi'
 import AppButton from '@/components/ui/AppButton.vue'
 
-const auth         = useAuthStore()
-const clientStore  = useClientStore()
-const router       = useRouter()
-const api          = useApi()
+const auth        = useAuthStore()
+const clientStore = useClientStore()
+const router      = useRouter()
+const api         = useApi()
 
-const form = ref({ email: '', password: '' })
+const form = ref({ newPassword: '', confirmPassword: '' })
 const loading     = ref(false)
 const error       = ref('')
-const showPassword = ref(false)
+const showNew     = ref(false)
+const showConfirm = ref(false)
 
-async function handleLogin() {
-  error.value   = ''
+async function handleSubmit() {
+  error.value = ''
+
+  if (form.value.newPassword.length < 8) {
+    error.value = 'La contraseña debe tener al menos 8 caracteres'
+    return
+  }
+
+  if (form.value.newPassword !== form.value.confirmPassword) {
+    error.value = 'Las contraseñas no coinciden'
+    return
+  }
+
   loading.value = true
 
   try {
-    const data = await api.post('/auth/login', {
-      email:    form.value.email.trim().toLowerCase(),
-      password: form.value.password,
-    })
-
-    auth.setToken(data.token, data.user?.password_change_required ?? false)
-
-    if (auth.mustChangePassword) {
-      router.push('/cambiar-contrasena')
-    } else if (auth.isAdmin) {
-      router.push('/admin/dashboard')
-    } else {
-      // Pre-load all portal data before entering the portal (single request)
-      await clientStore.load()
-      router.push('/portal/dashboard')
-    }
+    await api.post('/auth/change-password', { new_password: form.value.newPassword })
+    auth.clearPasswordChangeFlag()
+    await clientStore.load()
+    router.push('/portal/dashboard')
   } catch (err) {
-    error.value = err.message ?? 'Credenciales incorrectas'
+    error.value = err.message ?? 'No se pudo cambiar la contraseña'
   } finally {
     loading.value = false
   }
@@ -126,7 +124,7 @@ async function handleLogin() {
 </script>
 
 <style lang="scss" scoped>
-.login {
+.change-pwd {
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -201,16 +199,30 @@ async function handleLogin() {
     margin-bottom: $space-8;
   }
 
+  &__icon-wrap {
+    width: 48px;
+    height: 48px;
+    background: rgba(124, 111, 255, 0.12);
+    border: 1px solid rgba(124, 111, 255, 0.25);
+    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary;
+    margin-bottom: $space-4;
+  }
+
   &__title {
     font-size: $text-2xl;
     font-weight: $fw-bold;
     color: $text;
-    margin-bottom: $space-1;
+    margin-bottom: $space-2;
   }
 
   &__subtitle {
     color: $text-muted;
     font-size: $text-sm;
+    line-height: 1.6;
   }
 
   &__form {
@@ -235,14 +247,8 @@ async function handleLogin() {
     width: 100%;
     margin-top: $space-2;
   }
-
-  &__footer {
-    font-size: $text-xs;
-    color: $text-subtle;
-  }
 }
 
-// Form fields
 .field {
   display: flex;
   flex-direction: column;

@@ -713,7 +713,7 @@ function empById(id) {
   background: $bg-card;
   border: 1px solid $border;
   border-radius: $radius-xl;
-  padding: $space-7;
+  padding: $space-8;
   display: flex;
   flex-direction: column;
   gap: $space-5;

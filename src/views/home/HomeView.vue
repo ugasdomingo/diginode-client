@@ -1902,11 +1902,14 @@ const faqs = [
 // ── Plan card (catalog tab) ──────────────
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: $space-6;
+  max-width: 920px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    max-width: 480px;
   }
 }
 
@@ -2096,11 +2099,14 @@ const faqs = [
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: $space-5;
+    max-width: 920px;
+    margin: 0 auto;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
+      max-width: 480px;
     }
   }
 }

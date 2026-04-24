@@ -132,7 +132,31 @@
                 </div>
               </div>
 
-              <div class="plan-card__employees">
+              <!-- Despacho: interactive 2-of-4 picker -->
+              <div v-if="plan.id === 'despacho'" class="plan-card__employees">
+                <span class="plan-card__emp-label">
+                  Elige 2 empleados
+                  <span class="plan-card__emp-count">{{ despachoSelected.length }}/2</span>
+                </span>
+                <div class="plan-card__chips">
+                  <button
+                    v-for="emp in employees"
+                    :key="emp.id"
+                    class="plan-card__chip plan-card__chip--pick"
+                    :class="{ 'plan-card__chip--active': despachoSelected.includes(emp.id) }"
+                    :style="despachoSelected.includes(emp.id)
+                      ? { background: emp.bg, color: emp.color, borderColor: emp.color + '50' }
+                      : {}"
+                    @click="toggleDespachoEmp(emp.id)"
+                  >
+                    <component :is="emp.icon" :size="12" />
+                    {{ emp.name }} — {{ emp.role }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Clínica: all 4 included, no selection needed -->
+              <div v-else class="plan-card__employees">
                 <span class="plan-card__emp-label">Empleados incluidos</span>
                 <div class="plan-card__chips">
                   <span
@@ -216,7 +240,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
@@ -229,6 +253,25 @@ const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
 const route   = useRoute()
 
 const showSuccess = computed(() => route.query.success === 'true')
+
+// ── Despacho employee picker (choose exactly 2 from 4) ──────────────────────
+const despachoSelected = ref(['luna', 'sofia'])
+
+function toggleDespachoEmp(id) {
+  const sel = despachoSelected.value
+  const idx = sel.indexOf(id)
+  if (idx > -1) {
+    // Don't deselect if it would leave fewer than 1
+    if (sel.length > 1) despachoSelected.value = sel.filter(e => e !== id)
+  } else {
+    // Replace oldest when already 2 selected
+    if (sel.length >= 2) {
+      despachoSelected.value = [sel[1], id]
+    } else {
+      despachoSelected.value = [...sel, id]
+    }
+  }
+}
 
 // ── Employees ───────────────────────────────────────────────────────────────
 const employees = [
@@ -699,12 +742,15 @@ function empById(id) {
 // ── Plans grid ────────────────────────────────────────────────────────────────
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: $space-6;
   align-items: start;
+  max-width: 920px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    max-width: 480px;
   }
 }
 
@@ -795,6 +841,21 @@ function empById(id) {
     color: $text-muted;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__emp-count {
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    color: $primary-light;
+    background: $primary-subtle;
+    border: 1px solid rgba(124,111,255,0.25);
+    padding: 1px $space-2;
+    border-radius: $radius-full;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   &__chips {
@@ -810,6 +871,27 @@ function empById(id) {
     border-radius: $radius;
     font-size: $text-xs;
     font-weight: $fw-semibold;
+
+    // Interactive picker variant
+    &--pick {
+      gap: $space-2;
+      background: $bg-surface;
+      border: 1px solid $border;
+      color: $text-muted;
+      cursor: pointer;
+      transition: $transition-fast;
+      text-align: left;
+      width: 100%;
+
+      &:hover {
+        border-color: $border-hover;
+        color: $text;
+      }
+    }
+
+    &--active {
+      border: 1px solid currentColor;
+    }
   }
 
   &__features {

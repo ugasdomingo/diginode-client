@@ -188,16 +188,32 @@
               </div>
 
               <a
-                :href="calLink"
+                :href="plan.stripe_link"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="plan-card__cta"
                 :class="{ 'plan-card__cta--featured': plan.featured }"
               >
-                <CalendarCheck :size="15" />
+                <CreditCard :size="15" />
                 Empezar con {{ plan.name }}
               </a>
             </div>
+          </div>
+
+          <!-- Demo nudge -->
+          <div class="bolsa__demo-nudge">
+            <p class="bolsa__demo-nudge__text">
+              ¿Quieres verlo en acción antes de contratar?
+            </p>
+            <a
+              :href="calLink"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="bolsa__demo-nudge__link"
+            >
+              <CalendarCheck :size="15" />
+              Solicitar una demo gratuita
+            </a>
           </div>
         </div>
       </section>
@@ -246,11 +262,13 @@ import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
   Star, ShieldCheck, RefreshCcw, Clock,
   TrendingUp, MessageSquare, Share2, BarChart2,
-  Building2, Sparkles,
+  Building2, Sparkles, CreditCard,
 } from 'lucide-vue-next'
 
-const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
-const route   = useRoute()
+const calLink          = import.meta.env.VITE_CAL_BOOKING_LINK
+const stripeDespacho   = import.meta.env.VITE_STRIPE_DESPACHO_LINK
+const stripeClinica    = import.meta.env.VITE_STRIPE_CLINICA_LINK
+const route            = useRoute()
 
 const showSuccess = computed(() => route.query.success === 'true')
 
@@ -348,6 +366,7 @@ const plans = [
     bg:               'rgba(52,211,153,0.12)',
     featured:         false,
     employee_ids:     ['luna', 'sofia'],
+    stripe_link:      stripeDespacho,
     monthly_promo:    300,
     monthly_regular:  200,
     features: [
@@ -367,6 +386,7 @@ const plans = [
     bg:               'rgba(124,111,255,0.12)',
     featured:         true,
     employee_ids:     ['luna', 'sofia', 'valeria', 'marcos'],
+    stripe_link:      stripeClinica,
     monthly_promo:    500,
     monthly_regular:  350,
     features: [
@@ -627,6 +647,40 @@ function empById(id) {
     padding: $space-10 0 $space-16;
     background: $bg-surface;
     border-top: 1px solid $border;
+  }
+
+  // ── Demo nudge ──
+  &__demo-nudge {
+    margin-top: $space-8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-3;
+
+    &__text {
+      font-size: $text-sm;
+      color: $text-muted;
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      gap: $space-2;
+      height: 40px;
+      padding: 0 $space-5;
+      border: 1px solid $border;
+      border-radius: $radius;
+      font-size: $text-sm;
+      font-weight: $fw-medium;
+      color: $text-muted;
+      text-decoration: none;
+      transition: $transition-fast;
+
+      &:hover {
+        border-color: $border-hover;
+        color: $text;
+      }
+    }
   }
 
   // ── Trust section ──

@@ -1298,7 +1298,7 @@ function empById(id) {
 
     span {
       font-size: $text-sm;
-      font-weight: $fw-normal;
+      font-weight: $fw-regular;
       color: $text-muted;
     }
   }

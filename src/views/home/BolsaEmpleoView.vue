@@ -74,34 +74,6 @@
         </div>
       </section>
 
-      <!-- Employees showcase -->
-      <section class="bolsa__employees">
-        <div class="container">
-          <h2 class="bolsa__section-title">Los 4 empleados de tu equipo</h2>
-          <p class="bolsa__section-sub">Cada plan incluye empleados especializados según el tamaño de tu negocio</p>
-          <div class="emp-grid">
-            <div v-for="emp in employees" :key="emp.id" class="emp-card">
-              <div class="emp-card__head">
-                <div class="emp-card__icon" :style="{ background: emp.bg }">
-                  <component :is="emp.icon" :size="20" :style="{ color: emp.color }" />
-                </div>
-                <div>
-                  <div class="emp-card__name">{{ emp.name }}</div>
-                  <div class="emp-card__role" :style="{ color: emp.color }">{{ emp.role }}</div>
-                </div>
-              </div>
-              <p class="emp-card__pitch">{{ emp.pitch }}</p>
-              <ul class="emp-card__tasks">
-                <li v-for="t in emp.tasks" :key="t">
-                  <CheckCircle :size="11" class="emp-card__check" />
-                  {{ t }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- Plans -->
       <section class="bolsa__plans">
         <div class="container">
@@ -218,6 +190,103 @@
         </div>
       </section>
 
+      <!-- Individual employees -->
+      <section class="bolsa__individuals">
+        <div class="container">
+          <h2 class="bolsa__section-title">O contrata un empleado individual</h2>
+          <p class="bolsa__section-sub">Empieza con uno y amplía tu equipo cuando quieras · <strong>150€/mes + setup 600€</strong></p>
+          <div class="emp-grid">
+            <button
+              v-for="emp in employees"
+              :key="emp.id"
+              class="emp-card emp-card--pick"
+              :class="{ 'emp-card--selected': selectedEmp === emp.id }"
+              @click="selectedEmp = selectedEmp === emp.id ? null : emp.id"
+            >
+              <div class="emp-card__head">
+                <div class="emp-card__icon" :style="{ background: emp.bg }">
+                  <component :is="emp.icon" :size="20" :style="{ color: emp.color }" />
+                </div>
+                <div class="emp-card__head-info">
+                  <div class="emp-card__name">{{ emp.name }}</div>
+                  <div class="emp-card__role" :style="{ color: emp.color }">{{ emp.role }}</div>
+                </div>
+                <CheckCircle
+                  v-if="selectedEmp === emp.id"
+                  :size="18"
+                  class="emp-card__sel-check"
+                />
+              </div>
+              <p class="emp-card__pitch">{{ emp.pitch }}</p>
+              <ul class="emp-card__tasks">
+                <li v-for="t in emp.tasks" :key="t">
+                  <CheckCircle :size="11" class="emp-card__check" />
+                  {{ t }}
+                </li>
+              </ul>
+              <div class="emp-card__inprice">
+                <span class="emp-card__inprice-amount">150€</span>
+                <span class="emp-card__inprice-period">/mes</span>
+                <span class="emp-card__inprice-sep">·</span>
+                <span class="emp-card__inprice-setup">setup 600€</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Setup payment panel -->
+          <Transition name="fade-slide">
+            <div v-if="selectedEmp" class="setup-panel">
+              <h3 class="setup-panel__title">
+                ¿Cómo prefieres pagar el setup de
+                <span :style="{ color: empById(selectedEmp).color }">{{ empById(selectedEmp).name }}</span>?
+              </h3>
+
+              <div class="setup-panel__opts">
+                <button
+                  class="setup-opt"
+                  :class="{ 'setup-opt--active': setupPlan === 'full' }"
+                  @click="setupPlan = 'full'"
+                >
+                  <div class="setup-opt__top">
+                    <span class="setup-opt__name">Pago único del setup</span>
+                    <span v-if="setupPlan === 'full'" class="setup-opt__check">✓</span>
+                  </div>
+                  <div class="setup-opt__price">600€ <span>al contratar</span></div>
+                  <div class="setup-opt__monthly">+ 150€/mes desde el mes 1</div>
+                </button>
+
+                <button
+                  class="setup-opt"
+                  :class="{ 'setup-opt--active': setupPlan === 'split' }"
+                  @click="setupPlan = 'split'"
+                >
+                  <div class="setup-opt__top">
+                    <span class="setup-opt__name">Setup en 3 plazos</span>
+                    <span v-if="setupPlan === 'split'" class="setup-opt__check">✓</span>
+                  </div>
+                  <div class="setup-opt__price">200€/mes <span>× 3 meses</span></div>
+                  <div class="setup-opt__monthly">+ 150€/mes desde el mes 1</div>
+                  <p class="setup-opt__note">
+                    <Info :size="11" />
+                    El 2.º plazo del setup (mes 1) coincide con tu primera mensualidad — ese mes pagas 350€ en total.
+                  </p>
+                </button>
+              </div>
+
+              <a
+                :href="setupPlan === 'full' ? stripeEmpFull : stripeEmpSplit"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="setup-panel__cta"
+              >
+                <CreditCard :size="16" />
+                Contratar a {{ empById(selectedEmp).name }}
+              </a>
+            </div>
+          </Transition>
+        </div>
+      </section>
+
       <!-- Trust + FAQ teaser -->
       <section class="bolsa__trust">
         <div class="container">
@@ -260,7 +329,7 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
-  Star, ShieldCheck, RefreshCcw, Clock,
+  Star, ShieldCheck, RefreshCcw, Clock, Info,
   TrendingUp, MessageSquare, Share2, BarChart2,
   Building2, Sparkles, CreditCard,
 } from 'lucide-vue-next'
@@ -268,9 +337,15 @@ import {
 const calLink          = import.meta.env.VITE_CAL_BOOKING_LINK
 const stripeDespacho   = import.meta.env.VITE_STRIPE_DESPACHO_LINK
 const stripeClinica    = import.meta.env.VITE_STRIPE_CLINICA_LINK
+const stripeEmpFull    = import.meta.env.VITE_STRIPE_EMP_FULL_LINK
+const stripeEmpSplit   = import.meta.env.VITE_STRIPE_EMP_SPLIT_LINK
 const route            = useRoute()
 
 const showSuccess = computed(() => route.query.success === 'true')
+
+// ── Individual employee selection ────────────────────────────────────────────
+const selectedEmp = ref(null)
+const setupPlan   = ref('full')
 
 // ── Despacho employee picker (choose exactly 2 from 4) ──────────────────────
 const despachoSelected = ref(['luna', 'sofia'])
@@ -636,10 +711,13 @@ function empById(id) {
     margin-bottom: $space-10;
   }
 
-  // ── Employees section ──
-  &__employees {
-    padding: $space-10 0;
+  // ── Individual employees section ──
+  &__individuals {
+    padding: $space-10 0 $space-16;
     border-top: 1px solid $border;
+    background: $bg;
+
+    strong { color: $text; }
   }
 
   // ── Plans section ──
@@ -790,6 +868,66 @@ function empById(id) {
     color: $accent;
     flex-shrink: 0;
     margin-top: 1px;
+  }
+
+  // Selectable variant (individual section)
+  &--pick {
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    padding: $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    transition: $transition;
+
+    &:hover {
+      border-color: $border-hover;
+      transform: translateY(-2px);
+    }
+  }
+
+  &--selected {
+    border-color: rgba(124,111,255,0.6) !important;
+    background: rgba(124,111,255,0.04) !important;
+    box-shadow: 0 0 20px rgba(124,111,255,0.12);
+  }
+
+  &__head-info { flex: 1; }
+
+  &__sel-check {
+    color: $primary-light;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  &__inprice {
+    display: flex;
+    align-items: baseline;
+    gap: $space-1;
+    padding-top: $space-3;
+    border-top: 1px solid $border;
+    margin-top: auto;
+
+    &-amount {
+      font-size: $text-xl;
+      font-weight: $fw-bold;
+      color: $text;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &-period { font-size: $text-sm; color: $text-muted; }
+
+    &-sep {
+      color: $text-subtle;
+      font-size: $text-sm;
+      padding: 0 $space-1;
+    }
+
+    &-setup { font-size: $text-sm; color: $text-muted; }
   }
 }
 
@@ -1055,6 +1193,135 @@ function empById(id) {
         box-shadow: 0 0 28px rgba(124,111,255,0.5);
       }
     }
+  }
+}
+
+// ── Setup payment panel ───────────────────────────────────────────────────────
+.setup-panel {
+  margin-top: $space-8;
+  background: $bg-card;
+  border: 1px solid rgba(124,111,255,0.25);
+  border-radius: $radius-xl;
+  padding: $space-8;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+
+  &__title {
+    font-size: $text-lg;
+    font-weight: $fw-semibold;
+    color: $text;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  &__opts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 52px;
+    background: $primary;
+    border-radius: $radius;
+    color: #fff;
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    transition: $transition;
+    box-shadow: 0 0 24px $primary-glow;
+
+    &:hover {
+      background: $primary-dark;
+      transform: translateY(-1px);
+      box-shadow: 0 0 36px rgba(124,111,255,0.4);
+      color: #fff;
+    }
+  }
+}
+
+.setup-opt {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  text-align: left;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover { border-color: $border-hover; }
+
+  &--active {
+    border-color: rgba(124,111,255,0.5);
+    background: rgba(124,111,255,0.04);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__name {
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    color: $text;
+  }
+
+  &__check {
+    font-size: $text-sm;
+    font-weight: $fw-bold;
+    color: $primary-light;
+  }
+
+  &__price {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+
+    span {
+      font-size: $text-sm;
+      font-weight: $fw-normal;
+      color: $text-muted;
+    }
+  }
+
+  &__monthly {
+    font-size: $text-xs;
+    color: $text-muted;
+  }
+
+  &__note {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    font-size: $text-xs;
+    color: $text-subtle;
+    line-height: 1.5;
+    margin-top: $space-2;
+    padding: $space-2 $space-3;
+    background: rgba(124,111,255,0.06);
+    border: 1px solid rgba(124,111,255,0.15);
+    border-radius: $radius;
+
+    svg { flex-shrink: 0; color: $primary-light; margin-top: 1px; }
   }
 }
 

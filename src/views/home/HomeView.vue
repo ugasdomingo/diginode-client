@@ -156,9 +156,10 @@
               <div class="emp-card__footer">
                 <div class="emp-card__price">
                   <div class="emp-card__price-monthly">
-                    <span class="emp-card__price-amount">Incluido</span>
+                    <span class="emp-card__price-amount">150€</span>
+                    <span class="emp-card__price-period">/mes</span>
                   </div>
-                  <div class="emp-card__price-setup">en Despacho Digital y Clínica Digital</div>
+                  <div class="emp-card__price-setup">+ setup 600€ · incluido en planes</div>
                 </div>
                 <a :href="calLink" target="_blank" rel="noopener noreferrer" class="emp-card__cta">
                   <CalendarCheck :size="15" />
@@ -671,6 +672,10 @@ const plans = [
 
 // ── FAQs ──
 const faqs = [
+  {
+    q: '¿Por qué hay una mensualidad si ya pago el setup?',
+    a: 'La mensualidad cubre el mantenimiento continuo de tu empleado IA: actualizaciones con las últimas tecnologías de inteligencia artificial, soporte técnico ante cualquier incidencia, y reentrenamiento del agente —si es necesario— cada 6 meses para que siga respondiendo con precisión a la realidad de tu negocio. Sin esa inversión continua, el agente quedaría obsoleto en pocas semanas.',
+  },
   {
     q: '¿En qué plataformas trabajan los empleados IA?',
     a: 'Sofía está conectada a WhatsApp Business API e Instagram DMs. El resto de empleados trabajan dentro de tu panel de control e integran con tus herramientas actuales (Google Calendar, email, Stripe, etc.).',
@@ -1295,6 +1300,11 @@ const faqs = [
     font-weight: $fw-bold;
     color: $text;
     font-variant-numeric: tabular-nums;
+  }
+
+  &__price-period {
+    font-size: $text-sm;
+    color: $text-muted;
   }
 
   &__price-period {

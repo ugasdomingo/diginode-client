@@ -159,16 +159,16 @@
                 <p class="plan-card__note">Setup incluido · Sin permanencia</p>
               </div>
 
-              <a
-                :href="plan.stripe_link"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
                 class="plan-card__cta"
                 :class="{ 'plan-card__cta--featured': plan.featured }"
+                :disabled="checkingOut === plan.id"
+                @click="checkoutPlan(plan.id)"
               >
-                <CreditCard :size="15" />
-                Empezar con {{ plan.name }}
-              </a>
+                <CreditCard v-if="checkingOut !== plan.id" :size="15" />
+                <span v-if="checkingOut === plan.id" class="plan-card__cta-spinner" />
+                {{ checkingOut === plan.id ? 'Redirigiendo…' : `Empezar con ${plan.name}` }}
+              </button>
             </div>
           </div>
 
@@ -273,15 +273,16 @@
                 </button>
               </div>
 
-              <a
-                :href="setupPlan === 'full' ? stripeEmpFull : stripeEmpSplit"
-                target="_blank"
-                rel="noopener noreferrer"
+              <p v-if="checkoutErr" class="setup-panel__err">{{ checkoutErr }}</p>
+              <button
                 class="setup-panel__cta"
+                :disabled="checkingOut === 'emp'"
+                @click="checkoutEmployee"
               >
-                <CreditCard :size="16" />
-                Contratar a {{ empById(selectedEmp).name }}
-              </a>
+                <CreditCard v-if="checkingOut !== 'emp'" :size="16" />
+                <span v-if="checkingOut === 'emp'" class="plan-card__cta-spinner" />
+                {{ checkingOut === 'emp' ? 'Redirigiendo…' : `Contratar a ${empById(selectedEmp).name}` }}
+              </button>
             </div>
           </Transition>
         </div>
@@ -334,18 +335,54 @@ import {
   Building2, Sparkles, CreditCard,
 } from 'lucide-vue-next'
 
-const calLink          = import.meta.env.VITE_CAL_BOOKING_LINK
-const stripeDespacho   = import.meta.env.VITE_STRIPE_DESPACHO_LINK
-const stripeClinica    = import.meta.env.VITE_STRIPE_CLINICA_LINK
-const stripeEmpFull    = import.meta.env.VITE_STRIPE_EMP_FULL_LINK
-const stripeEmpSplit   = import.meta.env.VITE_STRIPE_EMP_SPLIT_LINK
-const route            = useRoute()
+const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
+const API     = import.meta.env.VITE_API_URL
+const route   = useRoute()
 
 const showSuccess = computed(() => route.query.success === 'true')
 
 // ── Individual employee selection ────────────────────────────────────────────
-const selectedEmp = ref(null)
-const setupPlan   = ref('full')
+const selectedEmp  = ref(null)
+const setupPlan    = ref('full')
+const checkingOut  = ref('')   // plan id or 'emp' while loading
+const checkoutErr  = ref('')
+
+async function checkoutPlan(planId) {
+  checkingOut.value = planId
+  checkoutErr.value = ''
+  try {
+    const endpoint = planId === 'clinica' ? `${API}/clinica/checkout` : `${API}/despacho/checkout`
+    const res = await fetch(endpoint, { method: 'POST' }).then(r => r.json())
+    if (!res.success || !res.url) throw new Error(res.message ?? 'Error al iniciar el pago')
+    window.location.href = res.url
+  } catch (err) {
+    checkoutErr.value = err.message
+  } finally {
+    checkingOut.value = ''
+  }
+}
+
+async function checkoutEmployee() {
+  if (!selectedEmp.value) return
+  checkingOut.value = 'emp'
+  checkoutErr.value = ''
+  try {
+    const res = await fetch(`${API}/bolsa/checkout`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        employee_ids: [selectedEmp.value],
+        installments: setupPlan.value === 'split' ? 3 : 1,
+      }),
+    }).then(r => r.json())
+    if (!res.success || !res.url) throw new Error(res.message ?? 'Error al iniciar el pago')
+    window.location.href = res.url
+  } catch (err) {
+    checkoutErr.value = err.message
+  } finally {
+    checkingOut.value = ''
+  }
+}
 
 // ── Despacho employee picker (choose exactly 2 from 4) ──────────────────────
 const despachoSelected = ref(['luna', 'sofia'])
@@ -441,7 +478,6 @@ const plans = [
     bg:               'rgba(52,211,153,0.12)',
     featured:         false,
     employee_ids:     ['luna', 'sofia'],
-    stripe_link:      stripeDespacho,
     monthly_promo:    300,
     monthly_regular:  200,
     features: [
@@ -461,7 +497,6 @@ const plans = [
     bg:               'rgba(124,111,255,0.12)',
     featured:         true,
     employee_ids:     ['luna', 'sofia', 'valeria', 'marcos'],
-    stripe_link:      stripeClinica,
     monthly_promo:    500,
     monthly_regular:  350,
     features: [
@@ -1166,21 +1201,24 @@ function empById(id) {
     justify-content: center;
     gap: $space-2;
     height: 48px;
+    width: 100%;
     background: $primary-subtle;
     border: 1px solid rgba(124,111,255,0.25);
     border-radius: $radius;
     color: $primary-light;
     font-size: $text-base;
     font-weight: $fw-semibold;
-    text-decoration: none;
+    cursor: pointer;
     transition: $transition;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: $primary;
       border-color: $primary;
       color: #fff;
       box-shadow: 0 0 20px $primary-glow;
     }
+
+    &:disabled { opacity: 0.7; cursor: not-allowed; }
 
     &--featured {
       background: $primary;
@@ -1188,12 +1226,26 @@ function empById(id) {
       color: #fff;
       box-shadow: 0 0 20px $primary-glow;
 
-      &:hover {
+      &:hover:not(:disabled) {
         background: $primary-dark;
         box-shadow: 0 0 28px rgba(124,111,255,0.5);
       }
     }
   }
+
+  &__cta-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: $radius-full;
+    animation: spin 0.6s linear infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 // ── Setup payment panel ───────────────────────────────────────────────────────
@@ -1228,6 +1280,12 @@ function empById(id) {
     }
   }
 
+  &__err {
+    font-size: $text-sm;
+    color: $danger;
+    text-align: center;
+  }
+
   &__cta {
     display: flex;
     align-items: center;
@@ -1235,20 +1293,22 @@ function empById(id) {
     gap: $space-2;
     height: 52px;
     background: $primary;
+    border: none;
     border-radius: $radius;
     color: #fff;
     font-size: $text-base;
     font-weight: $fw-semibold;
-    text-decoration: none;
+    cursor: pointer;
     transition: $transition;
     box-shadow: 0 0 24px $primary-glow;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: $primary-dark;
       transform: translateY(-1px);
       box-shadow: 0 0 36px rgba(124,111,255,0.4);
-      color: #fff;
     }
+
+    &:disabled { opacity: 0.7; cursor: not-allowed; }
   }
 }
 

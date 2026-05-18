@@ -20,15 +20,14 @@
 
         <section class="legal-section">
           <h2>2. Descripción del servicio</h2>
-          <p>Diginode ofrece un servicio de "empleados de inteligencia artificial" que incluye, sin carácter exhaustivo:</p>
+          <p>Diginode ofrece un servicio de "empleados de inteligencia artificial" dirigido a solopreneurs y autónomos. Incluye, sin carácter exhaustivo, los siguientes empleados IA:</p>
           <ul>
-            <li><strong>La Recepcionista:</strong> agente de IA para la atención y cualificación de clientes potenciales en canales de mensajería (WhatsApp Business, Instagram, LinkedIn).</li>
-            <li><strong>El Gestor:</strong> agente de IA para la automatización de cobros, altas, bajas y comunicaciones de gestión.</li>
-            <li><strong>El Ingeniero:</strong> agente de IA para el análisis de reuniones y la resolución de tickets de soporte técnico.</li>
-            <li><strong>El Content Manager:</strong> agente de IA para la planificación y redacción de contenido en redes sociales.</li>
-            <li><strong>El Diseñador:</strong> agente de IA para la generación de imágenes y recursos visuales.</li>
+            <li><strong>Nora — Recepcionista:</strong> empleado IA para la atención, cualificación y agendado de clientes en canales de mensajería (WhatsApp Business, Telegram, Instagram).</li>
+            <li><strong>Alex — Asistente ejecutivo:</strong> empleado IA para la organización de la operativa diaria, preparación de documentos, recordatorios y seguimiento de prioridades.</li>
+            <li><strong>Valeria — Content creator:</strong> empleado IA para la creación, planificación y publicación de contenido en redes sociales y blog.</li>
+            <li><strong>Marcos — Closer / SDR:</strong> empleado IA para la atención y cualificación de leads de venta, seguimiento comercial y cierre de oportunidades.</li>
           </ul>
-          <p>Los servicios pueden contratarse de manera individual o en paquetes según las tarifas vigentes publicadas en el sitio web.</p>
+          <p>Los servicios pueden contratarse de manera individual o en los paquetes "Operación Solo" (Alex + 1 empleado a elegir + web profesional + panel de gestión) y "Equipo Solopreneur" (los 4 empleados + web + panel), según las tarifas vigentes publicadas en el sitio web.</p>
         </section>
 
         <section class="legal-section">
@@ -50,24 +49,22 @@
               <thead>
                 <tr>
                   <th>Servicio</th>
-                  <th>Setup (único)</th>
+                  <th>Setup</th>
                   <th>Mensual</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td>La Recepcionista</td><td>450 €</td><td>249 €</td></tr>
-                <tr><td>El Gestor</td><td>450 €</td><td>199 €</td></tr>
-                <tr><td>El Ingeniero</td><td>450 €</td><td>249 €</td></tr>
-                <tr><td>El Content Manager</td><td>450 €</td><td>199 €</td></tr>
-                <tr><td>El Diseñador</td><td>450 €</td><td>249 €</td></tr>
-                <tr><td>Paquete El Motor de Ventas</td><td>500 €</td><td>380 €</td></tr>
-                <tr><td>Paquete El Dpto. de Marketing</td><td>500 €</td><td>380 €</td></tr>
-                <tr><td>Paquete La Empresa Autónoma</td><td>1.200 €</td><td>760 €</td></tr>
+                <tr><td>Nora — Recepcionista (individual)</td><td>600 €</td><td>150 €</td></tr>
+                <tr><td>Alex — Asistente ejecutivo (individual)</td><td>600 €</td><td>150 €</td></tr>
+                <tr><td>Valeria — Content creator (individual)</td><td>600 €</td><td>150 €</td></tr>
+                <tr><td>Marcos — Closer / SDR (individual)</td><td>600 €</td><td>150 €</td></tr>
+                <tr><td>Paquete Operación Solo (Alex + 1 + web)</td><td>Incluido</td><td>300 € los 6 primeros meses · 200 € después</td></tr>
+                <tr><td>Paquete Equipo Solopreneur (4 empleados + web)</td><td>Incluido</td><td>500 € los 6 primeros meses · 350 € después</td></tr>
               </tbody>
             </table>
           </div>
           <p>Todos los precios están expresados en euros e incluyen el IVA aplicable según la legislación española vigente. Diginode se reserva el derecho de modificar sus tarifas con un preaviso de 30 días naturales al Cliente.</p>
-          <p>El <em>setup</em> puede fraccionarse en hasta tres (3) mensualidades, según acuerdo previo entre las partes. Las cuotas mensuales se cobran de forma automática a través de Stripe.</p>
+          <p>El <em>setup</em> de los empleados individuales puede fraccionarse en hasta tres (3) mensualidades. En los paquetes Operación Solo y Equipo Solopreneur, el setup está incluido en la cuota mensual promocional de los primeros 6 meses. Las cuotas mensuales se cobran de forma automática a través de Stripe.</p>
         </section>
 
         <section class="legal-section">

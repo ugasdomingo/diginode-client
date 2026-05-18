@@ -59,16 +59,16 @@
           <div class="bolsa__hero">
             <div class="bolsa__hero-badge">
               <Briefcase :size="13" />
-              Empleados IA · Setup incluido
+              Empleados IA · Setup incluido en 6 meses
             </div>
             <h1 class="bolsa__hero-title">
-              Tu equipo de<br />
-              <span class="bolsa__hero-accent">empleados IA</span>
+              Cuatro empleados.<br />
+              <span class="bolsa__hero-accent">Tu negocio por fin operativo sin ti.</span>
             </h1>
             <p class="bolsa__hero-subtitle">
-              Cuatro especialistas que trabajan 24/7 para tu negocio.
-              El setup está incluido en los primeros 6 meses
-              y el equipo está activo en 7 días.
+              Empieza por el rol que más te ahoga o monta el equipo completo.
+              Setup incluido los primeros 6 meses, activo en 7 días,
+              sin permanencia mínima.
             </p>
           </div>
         </div>
@@ -77,10 +77,10 @@
       <!-- Plans -->
       <section class="bolsa__plans">
         <div class="container">
-          <h2 class="bolsa__section-title">Elige tu plan</h2>
+          <h2 class="bolsa__section-title">Elige cómo arrancar</h2>
           <p class="bolsa__section-sub">
             Los primeros 6 meses incluyen el setup completo (600€ diluido).
-            Sin permanencia mínima.
+            Sin permanencia. Cancelas cuando quieras.
           </p>
           <div class="plans-grid">
             <div
@@ -193,8 +193,8 @@
       <!-- Individual employees -->
       <section class="bolsa__individuals">
         <div class="container">
-          <h2 class="bolsa__section-title">O contrata un empleado individual</h2>
-          <p class="bolsa__section-sub">Empieza con uno y amplía tu equipo cuando quieras · <strong>150€/mes + setup 600€</strong></p>
+          <h2 class="bolsa__section-title">O contrata solo el que más necesitas</h2>
+          <p class="bolsa__section-sub">Resuelve primero tu dolor más urgente y amplía el equipo cuando lo necesites · <strong>150€/mes + setup 600€</strong></p>
           <div class="emp-grid">
             <button
               v-for="emp in employees"
@@ -404,75 +404,79 @@ function toggleDespachoEmp(id) {
 }
 
 // ── Employees ───────────────────────────────────────────────────────────────
+// NOTE: `id` se mantiene (luna/sofia/valeria/marcos) por compatibilidad con
+// los endpoints de checkout del API. La UI muestra el nuevo nombre y rol.
 const employees = [
   {
     id:    'luna',
-    name:  'Luna',
-    role:  'Captadora',
-    icon:  TrendingUp,
+    name:  'Nora',
+    role:  'Recepcionista',
+    icon:  MessageSquare,
     color: '#34d399',
     bg:    'rgba(52,211,153,0.12)',
-    pitch: 'Luna atiende a cada persona interesada en tu servicio con calidez y criterio. Valida compatibilidad y agenda la primera cita, incluso mientras duermes.',
+    pitch: 'Nora contesta WhatsApp a cualquier hora con tu tono y tu criterio. Filtra, cualifica y agenda — para que dejes de mirar el móvil los domingos.',
     tasks: [
-      'Responde a cada contacto nuevo al instante, a cualquier hora',
-      'Filtra y cualifica antes de llegar a ti',
-      'Agenda la primera sesión de forma autónoma',
-      'Hace seguimiento a contactos que aún no estaban listos',
+      'Responde a cada mensaje en minutos, 24/7',
+      'Cualifica contactos antes de pasártelos a ti',
+      'Agenda llamadas, demos o citas en tu calendario',
+      'Hace seguimiento a los que no compraron aún',
     ],
   },
   {
     id:    'sofia',
-    name:  'Sofía',
-    role:  'Asistente',
-    icon:  MessageSquare,
+    name:  'Alex',
+    role:  'Asistente ejecutivo',
+    icon:  Briefcase,
     color: '#7c6fff',
     bg:    'rgba(124,111,255,0.12)',
-    pitch: 'Sofía gestiona tu agenda, responde consultas y recuerda citas. Tu operativa diaria en piloto automático para que tú estés donde importas.',
+    pitch: 'Alex convierte tus audios, reuniones y notas en agenda, documentos y seguimiento. Tu cabeza deja de ser tu único sistema operativo.',
     tasks: [
-      'Resumen de agenda cada mañana a las 7:30h',
-      'Respuestas inmediatas a pacientes o clientes 24/7',
-      'Gestión de cancelaciones y cambios sin interrumpirte',
-      'Recordatorios automáticos de confirmación de citas',
+      'Resumen diario de prioridades a primera hora',
+      'Minutas, briefs, propuestas y emails listos para enviar',
+      'Recordatorios y seguimientos sin que tengas que pedirlos',
+      'Aprende tus criterios de decisión cada semana',
     ],
   },
   {
     id:    'valeria',
     name:  'Valeria',
-    role:  'Contenido',
+    role:  'Content creator',
     icon:  Share2,
     color: '#f59e0b',
     bg:    'rgba(245,158,11,0.12)',
-    pitch: 'Valeria mantiene tu presencia digital activa. Publica en redes, redacta artículos y crea materiales que te posicionan como referente en tu sector.',
+    pitch: 'Valeria mantiene tu marca personal viva mientras tú facturas. Convierte audios y conversaciones en posts, guiones y artículos publicables.',
     tasks: [
-      'Publicaciones semanales en Instagram, LinkedIn y TikTok',
-      'Artículos de blog optimizados para posicionamiento web',
-      'Respuesta a comentarios para mantener la comunidad activa',
-      'Calendario mensual de contenido con tendencias',
+      'Posts semanales en LinkedIn, Instagram o TikTok',
+      'Reescribe un audio tuyo en 3 formatos distintos',
+      'Detecta temas desde tus conversaciones con clientes',
+      'Calendario mensual de contenido con ángulos frescos',
     ],
   },
   {
     id:    'marcos',
     name:  'Marcos',
-    role:  'Administrador',
-    icon:  BarChart2,
+    role:  'Closer / SDR',
+    icon:  TrendingUp,
     color: '#818cf8',
     bg:    'rgba(129,140,248,0.12)',
-    pitch: 'Marcos lleva las finanzas de tu negocio sin errores ni sorpresas. Informes, alertas de cobro y calendario fiscal siempre al día.',
+    pitch: 'Marcos cierra ventanas de venta que tú ahora pierdes. Contesta leads al instante, cualifica y hace seguimiento hasta cierre o descarte.',
     tasks: [
-      'Resumen semanal de ingresos sin hojas de cálculo',
-      'Alertas de cobros pendientes antes de que sean un problema',
-      'Informe financiero mensual listo en Google Docs',
-      'Avisos de declaraciones fiscales con 15 días de antelación',
+      'Responde a leads en minutos con tu pitch',
+      'Cualifica con preguntas clave antes de la demo',
+      'Hace seguimiento programado hasta el cierre',
+      'Reporte semanal de pipeline y conversión',
     ],
   },
 ]
 
 // ── Plans ────────────────────────────────────────────────────────────────────
+// NOTE: `id` interno (`despacho`/`clinica`) se mantiene para los endpoints de
+// checkout del API. UI rebautizada a "Operación Solo" / "Equipo Solopreneur".
 const plans = [
   {
     id:               'despacho',
-    name:             'Despacho Digital',
-    target:           'Para psicólogos, coaches y despachos',
+    name:             'Operación Solo',
+    target:           'Recupera tus tardes y tus domingos',
     icon:             Building2,
     color:            '#34d399',
     bg:               'rgba(52,211,153,0.12)',
@@ -481,17 +485,17 @@ const plans = [
     monthly_promo:    300,
     monthly_regular:  200,
     features: [
-      'Captación y gestión de nuevos contactos 24/7',
-      'Asistente virtual para agenda y consultas',
-      'Web profesional + dashboard de gestión',
-      'Configuración completa en 7 días',
-      'Soporte técnico continuo incluido',
+      'Nora atiende WhatsApp y agenda 24/7',
+      'Alex organiza tu día y prepara documentos',
+      'Web profesional + panel de gestión incluidos',
+      'Activo en 7 días, sin migrar de herramienta',
+      'Soporte técnico continuo durante 6 meses',
     ],
   },
   {
     id:               'clinica',
-    name:             'Clínica Digital',
-    target:           'Para clínicas y centros de salud',
+    name:             'Equipo Solopreneur',
+    target:           'Tu negocio entero, sin contratar personal',
     icon:             Sparkles,
     color:            '#7c6fff',
     bg:               'rgba(124,111,255,0.12)',
@@ -500,11 +504,11 @@ const plans = [
     monthly_promo:    500,
     monthly_regular:  350,
     features: [
-      'Todo lo de Despacho Digital, más:',
-      'Contenido y redes sociales activos cada semana',
-      'Administración financiera y fiscal automatizada',
-      'Los 4 empleados IA trabajando en paralelo',
-      'Panel de control centralizado para todo el equipo',
+      'Todo lo de Operación Solo, más:',
+      'Valeria publica contenido cada semana en tu nombre',
+      'Marcos contesta y cierra leads que ahora pierdes',
+      'Los 4 empleados aprendiendo de tus interacciones',
+      'Panel central con trazabilidad de cada acción',
     ],
   },
 ]

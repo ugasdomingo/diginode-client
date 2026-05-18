@@ -49,9 +49,13 @@ const routes = [
         component: () => import('@/views/home/BolsaEmpleoView.vue'),
       },
       {
+        path: 'operacion-solo',
+        name: 'operacion-solo',
+        component: () => import('@/views/home/OperacionSoloView.vue'),
+      },
+      {
         path: 'despacho-digital',
-        name: 'despacho',
-        component: () => import('@/views/home/DespachoDigitalView.vue'),
+        redirect: '/operacion-solo',
       },
     ],
   },

@@ -9,15 +9,16 @@
         <div class="hero__copy">
           <div class="eyebrow">
             <Sparkles :size="14" />
-            Agencia de empleados IA gestionados por WhatsApp y Telegram
+            Empleados IA para solopreneurs y autónomos saturados
           </div>
 
-          <h1>Contrata empleados IA que trabajan como parte de tu equipo.</h1>
+          <h1>Tu negocio no debería depender de que tú estés despierto.</h1>
 
           <p class="hero__lead">
-            No vendemos automatizaciones aisladas. Diseñamos empleados IA con puesto,
-            criterio, memoria y canales de trabajo: asistentes ejecutivos,
-            recepcionistas, content creators y gestores de comunidad.
+            Vendes, atiendes, facturas, creas contenido y contestas mensajes un
+            domingo a las 23:00. Diginode te incorpora cuatro empleados IA con
+            nombre, criterio y memoria — para que vuelvas a hacer solo el
+            trabajo que solo tú puedes hacer.
           </p>
 
           <div class="hero__actions">
@@ -27,14 +28,14 @@
             </a>
             <RouterLink to="/bolsa-de-empleo" class="btn btn--secondary">
               <Users :size="18" />
-              Explorar empleados
+              Conocer a tu equipo
             </RouterLink>
           </div>
 
           <div class="hero__assurance" aria-label="Garantías del servicio">
-            <span><CheckCircle :size="15" /> Onboarding en 7 días</span>
-            <span><CheckCircle :size="15" /> Protocolos aprobados por ti</span>
-            <span><CheckCircle :size="15" /> Supervisión y mejora continua</span>
+            <span><CheckCircle :size="15" /> Sin contratar personal</span>
+            <span><CheckCircle :size="15" /> Activo en 7 días</span>
+            <span><CheckCircle :size="15" /> Tú apruebas antes de que opere</span>
           </div>
         </div>
 
@@ -116,11 +117,12 @@
         <div class="section-heading section-heading--split">
           <div>
             <span class="kicker">La idea clave</span>
-            <h2>No compras un agente. Incorporas un empleado con contexto.</h2>
+            <h2>No es que trabajes poco. Es que estás haciendo trabajo que no es tuyo.</h2>
           </div>
           <p>
-            Un agente ejecuta una tarea. Un empleado IA entiende el puesto, aprende
-            tus preferencias y trabaja dentro de un sistema de protocolos que puedes revisar.
+            Un agente IA ejecuta una tarea. Un empleado IA Diginode entiende el
+            puesto, aprende cómo trabajas y opera bajo protocolos que tú apruebas.
+            La diferencia entre delegar una acción y delegar un rol.
           </p>
         </div>
 
@@ -152,8 +154,8 @@
       <div class="container">
         <div class="section-heading">
           <span class="kicker">Bolsa de empleo IA</span>
-          <h2>Cuatro puestos diseñados para quitar trabajo real de la mesa.</h2>
-          <p>Contrata uno o combina varios. Cada empleado se configura con tus documentos, tono, protocolos y canales.</p>
+          <h2>Cuatro puestos pensados para quitarte de la mesa el trabajo que te ahoga.</h2>
+          <p>Contrata uno, dos o los cuatro. Cada empleado se configura con tus documentos, tu tono y tus protocolos en 7 días.</p>
         </div>
 
         <div class="employee-grid">
@@ -184,11 +186,12 @@
       <div class="container">
         <div class="workflow-shell">
           <div class="section-heading">
-            <span class="kicker">Cómo se siente usarlo</span>
-            <h2>Das instrucciones normales. Recibes trabajo terminado.</h2>
+            <span class="kicker">Cómo se siente delegar en ellos</span>
+            <h2>Hablas como hablarías con un humano. Recibes trabajo terminado.</h2>
             <p>
-              El “wow” no está en hablar con una IA. Está en que vuelva con documentos,
-              respuestas, tareas y aprendizajes listos para aprobar.
+              Sin prompts, sin paneles complicados, sin curva de aprendizaje. Mandas
+              un audio o un mensaje y vuelven con documentos, respuestas y tareas
+              listos para que solo tengas que decir "sí".
             </p>
           </div>
 
@@ -233,12 +236,13 @@
         </div>
 
         <div class="proof__copy">
-          <span class="kicker">Confianza y certeza</span>
-          <h2>Controlas el criterio. El empleado ejecuta.</h2>
+          <span class="kicker">El miedo del solopreneur</span>
+          <h2>Tú decides. Ellos ejecutan. Nunca al revés.</h2>
           <p>
-            Los empleados IA no improvisan a ciegas. Trabajan con protocolos,
-            documentos aprobados, memoria revisable y puntos de confirmación cuando
-            una decisión necesita criterio humano.
+            La pregunta no es si la IA es capaz. Es si va a contestar algo que tú
+            no firmarías. Por eso operan con protocolos que tú apruebas, memoria
+            que tú revisas y puntos de confirmación cuando una decisión necesita
+            tu criterio.
           </p>
           <div class="proof__checks">
             <span><Lock :size="16" /> Límites de actuación definidos</span>
@@ -253,8 +257,8 @@
       <div class="container">
         <div class="section-heading">
           <span class="kicker">Formas de empezar</span>
-          <h2>Empieza con un puesto o monta el equipo completo.</h2>
-          <p>El setup se centra en convertir tu forma de trabajar en protocolos operativos para tus empleados IA.</p>
+          <h2>Empieza por tu dolor más urgente. Crece cuando lo necesites.</h2>
+          <p>El setup convierte tu forma de trabajar en protocolos operativos. Sin permanencia. Sin migrar de herramienta.</p>
         </div>
 
         <div class="plans__grid">
@@ -292,7 +296,7 @@
     <section id="faq" class="faq section">
       <div class="container faq__inner">
         <div class="section-heading">
-          <span class="kicker">Preguntas frecuentes</span>
+          <span class="kicker">Lo que todo solopreneur pregunta</span>
           <h2>Antes de incorporar a tu primer empleado IA.</h2>
         </div>
 
@@ -317,11 +321,12 @@
     <section class="final-cta">
       <div class="container">
         <div class="final-cta__box">
-          <span class="kicker">Demo gratuita</span>
-          <h2>Ve cómo sería dirigir a tu primer empleado IA.</h2>
+          <span class="kicker">Demo gratuita · sin compromiso</span>
+          <h2>Imagina tu próximo lunes sin tener que hacerlo todo tú.</h2>
           <p>
-            En 30 minutos te enseñamos cómo se configura un puesto, qué puede
-            hacer desde WhatsApp o Telegram y qué documentos puede crear o procesar.
+            30 minutos. Te enseñamos cómo configuramos un empleado con tu
+            negocio real, qué hace desde el día 1 y cómo apruebas lo que ejecuta.
+            Si no es para ti, lo sabrás antes de que termine la llamada.
           </p>
           <div class="final-cta__actions">
             <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
@@ -374,23 +379,23 @@ const openFaq = ref(null)
 const confidence = [
   {
     icon: ShieldCheck,
-    title: 'Protocolos antes de operar',
-    text: 'Primero se define qué puede hacer, qué debe preguntar y cuándo escalar.',
+    title: 'Trabajan con tu criterio',
+    text: 'Definimos qué pueden decir, qué deben preguntar y cuándo escalar. Nunca improvisan.',
   },
   {
     icon: Eye,
-    title: 'Supervisión visible',
-    text: 'Tareas, documentos y aprendizajes quedan listos para revisar.',
+    title: 'Tú apruebas, ellos ejecutan',
+    text: 'Cada documento, respuesta y decisión queda trazada y revisable desde tu panel.',
   },
   {
     icon: Brain,
-    title: 'Memoria de negocio',
-    text: 'Aprende tono, preferencias y criterios a partir de interacciones reales.',
+    title: 'Aprenden tu negocio',
+    text: 'Aprenden tu tono, tus precios y tus objeciones frecuentes. Más útiles cada semana.',
   },
   {
     icon: Clock,
-    title: 'Disponible 24/7',
-    text: 'Responde, prepara y organiza aunque tu equipo no esté conectado.',
+    title: 'No paran cuando tú paras',
+    text: 'Si te enfermas, viajas o desconectas, tu negocio sigue facturando.',
   },
 ]
 
@@ -438,17 +443,17 @@ const employees = [
     ],
   },
   {
-    id: 'bruno',
-    initials: 'BR',
-    name: 'Bruno',
-    role: 'Gestor de comunidad',
+    id: 'marcos',
+    initials: 'MA',
+    name: 'Marcos',
+    role: 'Closer / SDR',
     color: '#d7b7ff',
-    pitch: 'Actúa como segundo cerebro: captura aprendizajes, objeciones, preguntas repetidas y oportunidades.',
-    channels: ['WhatsApp', 'Telegram', 'CRM', 'Base de conocimiento'],
+    pitch: 'Contesta leads al instante, los cualifica, agenda demos y mantiene el seguimiento que tú nunca tienes tiempo de hacer.',
+    channels: ['WhatsApp', 'Telegram', 'CRM', 'Email'],
     tasks: [
-      'Resume aprendizajes de comunidad y clientes',
-      'Mantiene una memoria consultable del negocio',
-      'Propone respuestas, documentos y procesos nuevos',
+      'Responde a leads en minutos con tu pitch',
+      'Cualifica con preguntas clave antes de la demo',
+      'Hace seguimiento hasta el cierre o el descarte',
     ],
   },
 ]
@@ -479,68 +484,68 @@ const workflow = [
 const plans = [
   {
     id: 'individual',
-    name: 'Empleado individual',
-    target: 'Para delegar un puesto concreto',
+    name: 'Un empleado',
+    target: 'Empieza por tu dolor más urgente',
     icon: CreditCard,
     price: 150,
     featured: false,
     features: [
-      '1 empleado IA configurado con tu tono',
+      '1 empleado IA configurado con tu tono y criterio',
       'WhatsApp o Telegram como canal principal',
       'Documentos, protocolos y memoria inicial',
-      'Setup disponible desde la Bolsa de Empleo',
+      'Sin permanencia — pausa cuando quieras',
     ],
   },
   {
     id: 'operativo',
-    name: 'Equipo Operativo',
-    target: 'Para dirección, atención y documentos',
+    name: 'Operación Solo',
+    target: 'Recupera tus tardes y tus domingos',
     icon: Building2,
     price: 300,
     featured: false,
     features: [
-      'Asistente ejecutivo y recepcionista IA',
-      'Agenda, documentos y atención conectados',
-      'Protocolos de trabajo y supervisión',
-      'Activo tras onboarding de 7 días',
+      'Nora (recepcionista) + Alex (asistente ejecutivo)',
+      'Atención al cliente y operativa diaria, resueltas',
+      'Web profesional incluida los primeros 6 meses',
+      'Activo en 7 días — sin migrar de herramienta',
     ],
   },
   {
     id: 'completo',
-    name: 'Equipo Completo',
-    target: 'Para operar contenido, comunidad y memoria',
+    name: 'Equipo Solopreneur',
+    target: 'Tu negocio entero, sin contratar',
     icon: Sparkles,
     price: 500,
     featured: true,
     features: [
       'Los 4 empleados IA trabajando en paralelo',
-      'Content creator y segundo cerebro incluidos',
-      'Sistema de aprendizaje por interacciones',
-      'Panel central y mejora continua',
+      'Atención, operativa, contenido y ventas',
+      'Aprenden de tus interacciones cada semana',
+      'Panel central con trazabilidad completa',
     ],
   },
 ]
 
 const faqs = [
   {
-    q: '¿Qué hace que esto sea un empleado IA y no un agente?',
-    a: 'Un agente ejecuta una automatización. Un empleado IA tiene puesto, responsabilidades, memoria, protocolos y canales de comunicación. Se entrena para operar dentro de tu negocio, no solo para resolver una tarea aislada.',
+    q: '¿Esto sustituye contratar a una persona?',
+    a: 'En las tareas repetitivas, sí — y por una fracción del coste. En decisiones complejas, no: ahí decides tú. La idea no es eliminar al humano, es que tú dejes de ser el humano que contesta WhatsApp un domingo. Muchos solopreneurs lo usan como capa antes de poder contratar a alguien.',
   },
   {
-    q: '¿Tengo que aprender una herramienta nueva?',
-    a: 'No como punto de partida. La interacción principal puede ocurrir por WhatsApp o Telegram. El panel sirve para supervisión, configuración y seguimiento cuando lo necesites.',
+    q: '¿Y si contesta algo que yo no firmaría?',
+    a: 'Durante el onboarding definimos exactamente qué puede decir, qué debe preguntar y cuándo escalar. Las decisiones sensibles (presupuestos, casos delicados, devoluciones) siempre pasan por ti antes de salir. Cada mensaje queda trazado y revisable.',
   },
   {
-    q: '¿Puede crear y procesar documentos?',
-    a: 'Sí. Puede crear propuestas, minutas, resúmenes, briefs, respuestas y reportes. También puede leer documentos existentes para extraer información, clasificarla o convertirla en tareas.',
-  },
-  {
-    q: '¿Cómo aprende de mí y de mis clientes?',
-    a: 'Durante el onboarding definimos fuentes, ejemplos y criterios. Después, las interacciones reales sirven para ajustar tono, respuestas, objeciones frecuentes, límites y decisiones que debe escalar.',
+    q: '¿Tengo que aprender una herramienta nueva o ser técnico?',
+    a: 'No. Hablas con tus empleados por WhatsApp o Telegram como hablarías con un humano. Sin prompts, sin configuración compleja. El panel solo lo abres cuando quieres revisar o ajustar algo.',
   },
   {
     q: '¿Cuánto tarda en estar funcionando?',
-    a: 'El onboarding estándar dura 7 días. En ese tiempo definimos el puesto, conectamos canales, cargamos documentos, configuramos protocolos y probamos conversaciones reales.',
+    a: '7 días desde que firmas hasta que tu primer empleado está operando. En ese tiempo definimos su puesto, conectamos canales, cargamos tus documentos y probamos conversaciones reales contigo.',
+  },
+  {
+    q: '¿Y si necesito pausarlo o cambiar algo?',
+    a: 'Sin permanencia. Lo pausas o lo cancelas cuando quieras. Cambiar tono, protocolos o tareas se hace en horas, no en semanas — para eso existe el panel.',
   },
 ]
 </script>

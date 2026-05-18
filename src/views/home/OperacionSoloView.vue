@@ -18,15 +18,15 @@
         <div class="success__steps">
           <div class="success__step">
             <span class="success__step-num">1</span>
-            <div><strong>Onboarding (1 h)</strong><p>Definimos tu web, tu tono y tus empleados</p></div>
+            <div><strong>Onboarding (1 h)</strong><p>Definimos tu web, tu tono y tus dos empleados</p></div>
           </div>
           <div class="success__step">
             <span class="success__step-num">2</span>
-            <div><strong>7 días de configuración</strong><p>Montamos y probamos todo</p></div>
+            <div><strong>7 días de configuración</strong><p>Montamos, conectamos y probamos todo</p></div>
           </div>
           <div class="success__step">
             <span class="success__step-num">3</span>
-            <div><strong>Consulta activa</strong><p>Tu web y empleados entran en acción</p></div>
+            <div><strong>Tu negocio operativo</strong><p>Tu web y tu equipo entran en acción</p></div>
           </div>
         </div>
         <p class="success__note">Recibirás un email de confirmación con los detalles.</p>
@@ -40,19 +40,19 @@
       <div class="container">
         <div class="hero__badge">
           <Sparkles :size="13" />
-          Para psicólogos y coaches · Llave en mano
+          Para solopreneurs y autónomos · Llave en mano
         </div>
 
-        <h1 class="hero__title">Tu consulta,<br><em>lista para crecer.</em></h1>
+        <h1 class="hero__title">Tu negocio,<br><em>operativo sin ti.</em></h1>
 
         <p class="hero__sub">
           Web profesional + panel de gestión + 2 empleados IA.<br>
-          Todo configurado en 7 días. Tú solo te dedicas a tus pacientes.
+          Todo configurado en 7 días. Tú solo haces el trabajo que solo tú puedes hacer.
         </p>
 
         <div class="hero__saving">
           <TrendingDown :size="14" />
-          Ahorras <strong>+1.100€</strong> vs. contratar los servicios por separado
+          Ahorras <strong>+1.100€</strong> vs. montarlo todo por separado
         </div>
 
         <div class="hero__actions">
@@ -67,7 +67,7 @@
         </div>
 
         <p class="hero__fine">
-          Compromiso de 6 meses · Luego 200€/mes · Pago seguro con Stripe
+          6 meses al precio promo · Luego 200€/mes · Sin permanencia · Pago seguro con Stripe
         </p>
       </div>
     </section>
@@ -75,7 +75,7 @@
     <!-- ── QUÉ INCLUYE ────────────────────────────── -->
     <section class="includes">
       <div class="container">
-        <h2 class="section-title">Todo lo que necesitas. Sin instalar nada.</h2>
+        <h2 class="section-title">Todo lo que necesitas para dejar de hacerlo tú.</h2>
 
         <div class="includes__grid">
           <div v-for="item in includes" :key="item.id" class="includes__card">
@@ -100,21 +100,21 @@
       <div class="container">
         <h2 class="section-title">Tu equipo de 2 empleados IA</h2>
         <p class="section-sub">
-          Sofía siempre viene contigo. En el onboarding decides quién es tu segundo empleado.
+          Alex siempre viene contigo. En el onboarding decides quién es tu segundo empleado.
         </p>
 
-        <!-- Sofía: siempre incluida -->
+        <!-- Alex: siempre incluido -->
         <div class="employees__featured">
           <div class="employees__featured-badge">
             <CheckCircle :size="12" />
-            Siempre incluida
+            Siempre incluido
           </div>
           <div class="employees__avatar employees__avatar--lg" :style="{ background: '#7c6fff20', color: '#7c6fff' }">
-            <MessageSquare :size="22" />
+            <Briefcase :size="22" />
           </div>
           <div class="employees__info">
-            <strong>Sofía — Asistente Ejecutiva</strong>
-            <span>Agenda, recordatorios, atención a pacientes en WhatsApp · activa 24/7</span>
+            <strong>Alex — Asistente ejecutivo</strong>
+            <span>Tu cabeza ya no es tu único sistema operativo: prioridades, documentos y recordatorios listos cada día.</span>
           </div>
         </div>
 
@@ -140,7 +140,7 @@
     <!-- ── CÓMO FUNCIONA ──────────────────────────── -->
     <section class="how">
       <div class="container">
-        <h2 class="section-title">De hoy a funcionando en 7 días</h2>
+        <h2 class="section-title">De hoy a operativo en 7 días</h2>
 
         <div class="how__steps">
           <div v-for="(step, i) in steps" :key="i" class="how__step">
@@ -187,7 +187,7 @@
         <div class="price__card">
 
           <div class="price__info">
-            <span class="price__tag">Despacho Digital</span>
+            <span class="price__tag">Operación Solo</span>
             <div class="price__amount">
               <span class="price__num">300€</span>
               <span class="price__period">/mes · 6 meses</span>
@@ -195,7 +195,7 @@
             <p class="price__after">Luego 200€/mes sin permanencia</p>
             <div class="price__saving">
               <TrendingDown :size="13" />
-              Ahorras +1.100€ vs. contratar por separado
+              Ahorras +1.100€ vs. montarlo por separado
             </div>
 
             <ul class="price__features">
@@ -244,7 +244,7 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
-  MessageSquare, BarChart2, TrendingUp, Share2, BookOpen, Video,
+  MessageSquare, Briefcase, TrendingUp, Share2,
   CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, TrendingDown, ChevronDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
@@ -281,7 +281,7 @@ const includes = [
     icon: Globe,
     color: '#7c6fff',
     title: 'Web profesional',
-    desc: 'Diseñada para tu consulta. Transmite confianza, posiciona en Google y convierte visitas en pacientes.',
+    desc: 'Diseñada para tu negocio. Transmite autoridad, posiciona en Google y convierte visitas en clientes.',
     features: ['Diseño a medida', 'SEO local', 'Formulario de contacto', 'Blog incluido'],
   },
   {
@@ -289,26 +289,24 @@ const includes = [
     icon: LayoutDashboard,
     color: '#34d399',
     title: 'Panel de gestión',
-    desc: 'Área privada dentro de tu web. Tus pacientes acceden a su información y tú controlas todo desde un sitio.',
-    features: ['Acceso por paciente', 'Documentos y sesiones', 'Comunicación directa', 'Desde cualquier dispositivo'],
+    desc: 'Área privada dentro de tu web. Tus clientes acceden a su información y tú controlas todo desde un sitio.',
+    features: ['Acceso por cliente', 'Documentos y entregables', 'Comunicación directa', 'Desde cualquier dispositivo'],
   },
   {
     id: 'employees',
     icon: BotMessageSquare,
     color: '#f59e0b',
     title: '2 empleados IA',
-    desc: 'Trabajan mientras tú atiendes. Gestionan agenda, responden mensajes y consiguen nuevos pacientes.',
-    features: ['Activos 24/7', 'WhatsApp y email', 'Configurados para tu consulta', 'Soporte continuo'],
+    desc: 'Trabajan mientras tú facturas. Organizan tu día, contestan mensajes y mantienen el negocio en marcha.',
+    features: ['Activos 24/7', 'WhatsApp y Telegram', 'Configurados con tu tono', 'Soporte continuo'],
   },
 ]
 
-// Sofía siempre incluida; el cliente elige 1 de los otros 5 en el onboarding
+// Alex (id interno 'sofia') siempre incluido; el cliente elige 1 de los otros 3 en el onboarding
 const optionalEmployees = [
-  { id: 'marcos',  name: 'Marcos',  role: 'Administrador',               icon: BarChart2,  color: '#818cf8' },
-  { id: 'luna',    name: 'Luna',    role: 'Captadora',                   icon: TrendingUp, color: '#34d399' },
-  { id: 'valeria', name: 'Valeria', role: 'Community Manager',           icon: Share2,     color: '#f59e0b' },
-  { id: 'elena',   name: 'Elena',   role: 'Investigadora de Contenidos', icon: BookOpen,   color: '#ec4899' },
-  { id: 'maya',    name: 'Maya',    role: 'Editora de Vídeo',            icon: Video,      color: '#06b6d4' },
+  { id: 'luna',    name: 'Nora',    role: 'Recepcionista',   icon: MessageSquare, color: '#34d399' },
+  { id: 'valeria', name: 'Valeria', role: 'Content creator', icon: Share2,        color: '#f59e0b' },
+  { id: 'marcos',  name: 'Marcos',  role: 'Closer / SDR',    icon: TrendingUp,    color: '#818cf8' },
 ]
 
 const steps = [
@@ -318,18 +316,18 @@ const steps = [
   },
   {
     title: 'Sesión de onboarding',
-    desc: 'Una hora contigo. Defines tu web, tus empleados y cómo hablan con tus pacientes.',
+    desc: 'Una hora contigo. Defines tu web, eliges tu segundo empleado y diseñamos cómo hablan con tus clientes.',
   },
   {
-    title: 'Tu consulta, lista',
-    desc: 'En 7 días, web activa y empleados funcionando. Tú solo te presentas.',
+    title: 'Tu negocio operativo',
+    desc: 'En 7 días, web activa y equipo funcionando. Tú vuelves a hacer solo lo importante.',
   },
 ]
 
 const priceFeatures = [
   'Web profesional personalizada',
-  'Panel privado para tus pacientes',
-  'Sofía + 1 empleado IA activos 24/7',
+  'Panel privado para tus clientes',
+  'Alex + 1 empleado IA activos 24/7',
   'Onboarding y configuración completa',
   'Soporte técnico continuo',
   'Actualizaciones incluidas',
@@ -337,12 +335,12 @@ const priceFeatures = [
 
 const faqs = [
   {
-    q: '¿Por qué Sofía siempre está incluida?',
-    a: 'Sofía es la Asistente Ejecutiva: gestiona tu agenda, atiende mensajes de pacientes en WhatsApp y envía recordatorios automáticos. Es el pilar operativo de cualquier consulta y la pieza que más impacto inmediato genera, por eso forma parte de todos los paquetes Despacho Digital.',
+    q: '¿Por qué Alex siempre está incluido?',
+    a: 'Alex es el Asistente Ejecutivo: organiza tu día, prepara documentos, gestiona seguimientos y atiende mensajes en WhatsApp o Telegram. Es la pieza que cualquier solopreneur necesita el día 1 — el resto del equipo se monta a su alrededor según tu segundo dolor más grande.',
   },
   {
     q: '¿Cuándo elijo mi segundo empleado?',
-    a: 'Durante la sesión de onboarding. Te presentamos a los 5 candidatos, vemos qué es lo que más necesitas en tu consulta en este momento y decidimos juntos. Puedes cambiar de opinión hasta que empiece la configuración.',
+    a: 'Durante la sesión de onboarding. Te presentamos a Nora, Valeria y Marcos, vemos qué es lo que más te ahoga ahora mismo y decidimos juntos. Puedes cambiar de opinión hasta que empiece la configuración.',
   },
   {
     q: '¿Puedo cambiar de segundo empleado más adelante?',
@@ -350,7 +348,7 @@ const faqs = [
   },
   {
     q: '¿Hay coste de setup o entrada?',
-    a: 'No. El Despacho Digital no tiene coste de setup separado. Los 300€/mes del primer período cubren también toda la configuración, el onboarding y la puesta en marcha.',
+    a: 'No. Operación Solo no tiene coste de setup separado. Los 300€/mes del primer período cubren también toda la configuración, el onboarding y la puesta en marcha.',
   },
   {
     q: '¿Qué pasa cuando terminan los 6 meses?',
@@ -358,11 +356,11 @@ const faqs = [
   },
   {
     q: '¿Puedo ampliar a más empleados después?',
-    a: 'Sí. Puedes incorporar empleados adicionales a través de la Bolsa de Empleo con precios individuales o por departamento. Los empleados se integran con tu infraestructura ya existente.',
+    a: 'Sí. Puedes incorporar a Valeria o Marcos a través de la Bolsa de Empleo (150€/mes cada uno) o pasar directamente al Equipo Solopreneur completo con los 4 empleados.',
   },
   {
     q: '¿Necesito conocimientos técnicos?',
-    a: 'Ninguno. Nosotros nos encargamos de todo: web, conexiones, entrenamiento y mantenimiento. Tú solo participas en la sesión de onboarding de una hora para darnos el contexto de tu consulta.',
+    a: 'Ninguno. Nosotros nos encargamos de todo: web, conexiones, entrenamiento y mantenimiento. Tú solo participas en la sesión de onboarding de una hora para darnos el contexto de tu negocio.',
   },
 ]
 </script>

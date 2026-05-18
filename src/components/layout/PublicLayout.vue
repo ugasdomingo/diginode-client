@@ -12,7 +12,7 @@
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__link">Empleados</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
-          <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--cta">Contratar empleados IA</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__link navbar__link--cta">Conocer al equipo</RouterLink>
         </nav>
 
         <div class="navbar__actions">
@@ -49,7 +49,7 @@
           <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
-          <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--cta" @click="mobileOpen = false">Contratar empleados IA</RouterLink>
+          <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-link navbar__mobile-link--cta" @click="mobileOpen = false">Conocer al equipo</RouterLink>
           <div class="navbar__mobile-actions">
             <a
               :href="calLink"
@@ -94,7 +94,7 @@
             <img src="/logo.png" alt="Diginode" class="footer__logo-img" />
             <span>Diginode</span>
           </div>
-          <p class="footer__tagline">Tu agencia de empleados IA</p>
+          <p class="footer__tagline">Empleados IA para solopreneurs que ya no dan más de sí</p>
         </div>
 
         <nav class="footer__links" aria-label="Navegación legal">
@@ -109,7 +109,7 @@
 
     <!-- WhatsApp floating button -->
     <a
-      href="https://wa.me/34604822385?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20vuestros%20empleados%20IA"
+      href="https://wa.me/34604822385?text=Hola%2C%20soy%20solopreneur%20y%20quiero%20conocer%20m%C3%A1s%20sobre%20vuestros%20empleados%20IA"
       target="_blank"
       rel="noopener noreferrer"
       class="whatsapp-btn"

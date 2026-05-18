@@ -82,7 +82,7 @@
           <div class="step-header__icon step-header__icon--green"><MessageCircle :size="20" /></div>
           <div>
             <h2 class="step-header__title">WhatsApp Business</h2>
-            <p class="step-header__desc">Tu número de WhatsApp Business es el canal principal de la Recepcionista con los pacientes.</p>
+            <p class="step-header__desc">Tu número de WhatsApp Business es el canal principal de la Recepcionista con los clientes.</p>
           </div>
         </div>
 
@@ -497,7 +497,7 @@ const completedCount = computed(() => steps.value.filter(s => s.done).length)
 
 // ── Bot setup list ────────────────────────────────────────────────
 const botSetups = [
-  { employee: 'recepcionista',    label: 'Recepcionista',     desc: 'Atiende WhatsApp/Telegram de pacientes', color: 'purple', icon: UserRound,        statusKey: 'recepcionista_telegram_connected' },
+  { employee: 'recepcionista',    label: 'Recepcionista',     desc: 'Atiende WhatsApp/Telegram de clientes', color: 'purple', icon: UserRound,        statusKey: 'recepcionista_telegram_connected' },
   { employee: 'asistente',        label: 'Asistente Ejecutivo', desc: 'Tu asistente personal',              color: 'blue',   icon: BriefcaseBusiness, statusKey: 'asistente_telegram_connected' },
   { employee: 'gestor-relaciones', label: 'Gestor de Relaciones', desc: 'Segundo Cerebro clínico',          color: 'teal',   icon: Heart,             statusKey: 'gestor_telegram_connected' },
   { employee: 'content-manager',  label: 'Content Manager',   desc: 'Creación de contenido AI',            color: 'amber',  icon: Clapperboard,      statusKey: 'content_manager_telegram_connected' },

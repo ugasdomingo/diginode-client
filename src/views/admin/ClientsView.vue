@@ -661,7 +661,7 @@ function typeIcon(type) {
     &:hover td   { background: $primary-subtle; }
     &:last-child td { border-bottom: none; }
 
-    &--active td { background: rgba(124, 111, 255, 0.1); }
+    &--active td { background: rgba(156, 255, 203, 0.1); }
   }
 }
 
@@ -674,7 +674,7 @@ function typeIcon(type) {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(124, 111, 255, 0.15);
+    background: rgba(156, 255, 203, 0.15);
     color: $primary;
     font-size: $text-sm;
     font-weight: $fw-bold;
@@ -751,7 +751,7 @@ function typeIcon(type) {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(124, 111, 255, 0.15);
+    background: rgba(156, 255, 203, 0.15);
     color: $primary;
     font-size: $text-lg;
     font-weight: $fw-bold;
@@ -839,7 +839,7 @@ function typeIcon(type) {
     span:first-child { color: $text-muted; display: flex; align-items: center; gap: $space-1; }
 
     &--highlight {
-      background: rgba(52, 211, 153, 0.05);
+      background: rgba(156, 255, 203, 0.05);
       strong { color: $accent; }
     }
   }
@@ -866,8 +866,8 @@ function typeIcon(type) {
   align-items: center;
   justify-content: space-between;
   padding: $space-3 $space-4;
-  background: rgba(124, 111, 255, 0.06);
-  border: 1px solid rgba(124, 111, 255, 0.15);
+  background: rgba(156, 255, 203, 0.06);
+  border: 1px solid rgba(156, 255, 203, 0.15);
   border-radius: $radius-lg;
   font-size: $text-sm;
   color: $text-muted;
@@ -894,9 +894,9 @@ function typeIcon(type) {
     justify-content: center;
     flex-shrink: 0;
 
-    &--course       { background: rgba(124, 111, 255, 0.12); color: $primary; }
-    &--bolsa        { background: rgba(52, 211, 153, 0.12);  color: $accent; }
-    &--subscription { background: rgba(99, 102, 241, 0.12);  color: #818cf8; }
+    &--course       { background: rgba(156, 255, 203, 0.12); color: $primary; }
+    &--bolsa        { background: rgba(156, 255, 203, 0.12);  color: $accent; }
+    &--subscription { background: rgba(99, 102, 241, 0.12);  color: $accent-blue; }
     &--manual       { background: rgba(139, 138, 168, 0.1);  color: $text-muted; }
   }
 
@@ -1000,8 +1000,8 @@ function typeIcon(type) {
   align-items: center;
   gap: $space-2;
   padding: $space-3;
-  background: rgba(52, 211, 153, 0.06);
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  background: rgba(156, 255, 203, 0.06);
+  border: 1px solid rgba(156, 255, 203, 0.2);
   border-radius: $radius-lg;
   margin-top: $space-2;
 
@@ -1020,7 +1020,7 @@ function typeIcon(type) {
     width: 28px;
     height: 28px;
     border-radius: $radius-sm;
-    border: 1px solid rgba(52, 211, 153, 0.3);
+    border: 1px solid rgba(156, 255, 203, 0.3);
     background: none;
     color: $accent;
     cursor: pointer;
@@ -1031,7 +1031,7 @@ function typeIcon(type) {
     flex-shrink: 0;
     transition: $transition-fast;
 
-    &:hover { background: rgba(52, 211, 153, 0.12); }
+    &:hover { background: rgba(156, 255, 203, 0.12); }
   }
 }
 </style>

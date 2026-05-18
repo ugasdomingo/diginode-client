@@ -651,7 +651,7 @@ function goToPortal() {
   font-weight: $fw-semibold;
   color: $primary-light;
   background: $primary-subtle;
-  border: 1px solid rgba(124, 111, 255, 0.2);
+  border: 1px solid rgba(156, 255, 203, 0.2);
   border-radius: $radius-full;
   padding: $space-1 $space-4;
   white-space: nowrap;
@@ -804,9 +804,9 @@ function goToPortal() {
   font-size: $text-sm;
   font-weight: $fw-medium;
 
-  &--success { background: $success-bg;  color: $success; border: 1px solid rgba(52, 211, 153, 0.2); }
-  &--warning { background: $warning-bg;  color: $warning; border: 1px solid rgba(245, 158, 11, 0.2); }
-  &--info    { background: $info-bg;     color: $info;    border: 1px solid rgba(129, 140, 248, 0.2); }
+  &--success { background: $success-bg;  color: $success; border: 1px solid rgba(156, 255, 203, 0.2); }
+  &--warning { background: $warning-bg;  color: $warning; border: 1px solid rgba(255, 211, 138, 0.2); }
+  &--info    { background: $info-bg;     color: $info;    border: 1px solid rgba(143, 179, 255, 0.2); }
 }
 
 // ── Info cards ─────────────────────────────────────────────────────
@@ -819,7 +819,7 @@ function goToPortal() {
   flex-direction: column;
   gap: $space-3;
 
-  &--subtle  { background: rgba(124, 111, 255, 0.04); }
+  &--subtle  { background: rgba(156, 255, 203, 0.04); }
   &--warning { flex-direction: row; gap: $space-3; align-items: flex-start; color: $warning; }
 
   &__title {
@@ -1118,12 +1118,12 @@ code {
   gap: $space-4;
   padding: $space-5;
   background: $success-bg;
-  border: 1px solid rgba(52, 211, 153, 0.25);
+  border: 1px solid rgba(156, 255, 203, 0.25);
   border-radius: $radius;
   color: $success;
 
   strong { display: block; font-size: $text-base; margin-bottom: $space-1; }
-  p      { font-size: $text-sm; color: rgba(52, 211, 153, 0.8); }
+  p      { font-size: $text-sm; color: rgba(156, 255, 203, 0.8); }
 }
 
 // ── Feedback ───────────────────────────────────────────────────────

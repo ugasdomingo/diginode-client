@@ -558,7 +558,7 @@ onMounted(fetchCourses)
     background: $primary-subtle;
     padding: 1px 6px;
     border-radius: $radius-full;
-    border: 1px solid rgba(124,111,255,0.25);
+    border: 1px solid rgba(156, 255, 203,0.25);
   }
 
   &__input {

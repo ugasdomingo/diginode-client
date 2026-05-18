@@ -338,9 +338,9 @@ function planLabel(slug) {
     justify-content: center;
     flex-shrink: 0;
 
-    &--purple { background: rgba(124, 111, 255, 0.12); color: $primary; }
-    &--green  { background: rgba(52, 211, 153, 0.12);  color: $accent; }
-    &--amber  { background: rgba(245, 158, 11, 0.12);  color: #f59e0b; }
+    &--purple { background: rgba(156, 255, 203, 0.12); color: $primary; }
+    &--green  { background: rgba(156, 255, 203, 0.12);  color: $accent; }
+    &--amber  { background: rgba(255, 211, 138, 0.12);  color: $warning; }
     &--muted  { background: rgba(139, 138, 168, 0.1);  color: $text-subtle; }
   }
 
@@ -370,7 +370,7 @@ function planLabel(slug) {
 // ── Subscription card ──────────────────────────────────────────────────────
 .sub-card {
   background: $bg-card;
-  border: 1px solid rgba(124, 111, 255, 0.2);
+  border: 1px solid rgba(156, 255, 203, 0.2);
   border-radius: $radius-lg;
   padding: $space-5;
   display: flex;
@@ -387,7 +387,7 @@ function planLabel(slug) {
     width: 40px;
     height: 40px;
     border-radius: $radius;
-    background: rgba(124, 111, 255, 0.12);
+    background: rgba(156, 255, 203, 0.12);
     color: $primary;
     display: flex;
     align-items: center;
@@ -421,8 +421,8 @@ function planLabel(slug) {
     font-size: $text-sm;
     color: $text-muted;
     padding: $space-3 $space-4;
-    background: rgba(52, 211, 153, 0.06);
-    border: 1px solid rgba(52, 211, 153, 0.15);
+    background: rgba(156, 255, 203, 0.06);
+    border: 1px solid rgba(156, 255, 203, 0.15);
     border-radius: $radius;
     color: $accent;
 
@@ -491,8 +491,8 @@ function planLabel(slug) {
     width: 32px;
     height: 32px;
     border-radius: $radius-sm;
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: rgba(255, 211, 138, 0.1);
+    color: $warning;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -521,7 +521,7 @@ function planLabel(slug) {
 
   &__pending {
     font-size: $text-xs;
-    color: #f59e0b;
+    color: $warning;
     font-style: italic;
   }
 
@@ -562,9 +562,9 @@ function planLabel(slug) {
     justify-content: center;
     flex-shrink: 0;
 
-    &--course       { background: rgba(124, 111, 255, 0.12); color: $primary; }
-    &--bolsa        { background: rgba(52, 211, 153, 0.12);  color: $accent; }
-    &--subscription { background: rgba(99, 102, 241, 0.12);  color: #818cf8; }
+    &--course       { background: rgba(156, 255, 203, 0.12); color: $primary; }
+    &--bolsa        { background: rgba(156, 255, 203, 0.12);  color: $accent; }
+    &--subscription { background: rgba(99, 102, 241, 0.12);  color: $accent-blue; }
     &--manual       { background: rgba(139, 138, 168, 0.1);  color: $text-muted; }
   }
 

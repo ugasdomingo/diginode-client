@@ -31,31 +31,31 @@ defineProps({
   &--primary {
     background: $primary-subtle;
     color: $primary-light;
-    border-color: rgba(124, 111, 255, 0.25);
+    border-color: rgba(156, 255, 203, 0.25);
   }
 
   &--success {
     background: $success-bg;
     color: $accent;
-    border-color: rgba(52, 211, 153, 0.25);
+    border-color: rgba(156, 255, 203, 0.25);
   }
 
   &--warning {
     background: $warning-bg;
     color: $warning;
-    border-color: rgba(245, 158, 11, 0.25);
+    border-color: rgba(255, 211, 138, 0.25);
   }
 
   &--danger {
     background: $danger-bg;
     color: $danger;
-    border-color: rgba(244, 63, 94, 0.25);
+    border-color: rgba(255, 138, 138, 0.25);
   }
 
   &--info {
     background: $info-bg;
     color: $info;
-    border-color: rgba(129, 140, 248, 0.25);
+    border-color: rgba(143, 179, 255, 0.25);
   }
 }
 </style>

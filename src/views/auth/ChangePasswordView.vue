@@ -137,8 +137,8 @@ async function handleSubmit() {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(124, 111, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124, 111, 255, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(156, 255, 203, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(156, 255, 203, 0.04) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
 
@@ -146,7 +146,7 @@ async function handleSubmit() {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(124, 111, 255, 0.12) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(156, 255, 203, 0.12) 0%, transparent 70%);
     }
   }
 
@@ -176,7 +176,7 @@ async function handleSubmit() {
     align-items: center;
     justify-content: center;
     color: #fff;
-    box-shadow: 0 0 32px rgba(124, 111, 255, 0.4);
+    box-shadow: 0 0 32px rgba(156, 255, 203, 0.4);
   }
 
   &__brand-name {
@@ -202,8 +202,8 @@ async function handleSubmit() {
   &__icon-wrap {
     width: 48px;
     height: 48px;
-    background: rgba(124, 111, 255, 0.12);
-    border: 1px solid rgba(124, 111, 255, 0.25);
+    background: rgba(156, 255, 203, 0.12);
+    border: 1px solid rgba(156, 255, 203, 0.25);
     border-radius: $radius-lg;
     display: flex;
     align-items: center;
@@ -238,7 +238,7 @@ async function handleSubmit() {
     color: $danger;
     font-size: $text-sm;
     background: $danger-bg;
-    border: 1px solid rgba(244, 63, 94, 0.2);
+    border: 1px solid rgba(255, 138, 138, 0.2);
     padding: $space-3 $space-4;
     border-radius: $radius;
   }

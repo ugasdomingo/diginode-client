@@ -148,7 +148,7 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8, 8, 26, 0.85);
+  background: rgba(6, 17, 15, 0.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid $border;
 
@@ -210,11 +210,11 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
 
     &--cta {
       color: $primary-light;
-      background: rgba(124,111,255,0.08);
-      border: 1px solid rgba(124,111,255,0.2);
+      background: rgba(156, 255, 203,0.08);
+      border: 1px solid rgba(156, 255, 203,0.2);
 
       &:hover {
-        background: rgba(124,111,255,0.14);
+        background: rgba(156, 255, 203,0.14);
         color: $primary-light;
       }
     }
@@ -237,7 +237,7 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
     height: 36px;
     padding: 0 $space-4;
     background: $primary;
-    color: #fff;
+    color: $text-inverse;
     font-size: $text-sm;
     font-weight: $fw-medium;
     border-radius: $radius;
@@ -248,7 +248,7 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
     &:hover {
       background: $primary-dark;
       transform: translateY(-1px);
-      color: #fff;
+      color: $text-inverse;
     }
 
     &--full { width: 100%; justify-content: center; }
@@ -324,12 +324,12 @@ const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
 
     &--cta {
       color: $primary-light;
-      background: rgba(124,111,255,0.08);
-      border: 1px solid rgba(124,111,255,0.2);
+      background: rgba(156, 255, 203,0.08);
+      border: 1px solid rgba(156, 255, 203,0.2);
       padding: $space-3 $space-3;
 
       &:hover {
-        background: rgba(124,111,255,0.14);
+        background: rgba(156, 255, 203,0.14);
         color: $primary-light;
       }
     }

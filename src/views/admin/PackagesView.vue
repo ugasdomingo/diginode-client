@@ -572,7 +572,7 @@ onMounted(fetchPackages)
     &:focus {
       outline: none;
       border-color: $primary;
-      box-shadow: 0 0 0 3px rgba(124,111,255,0.12);
+      box-shadow: 0 0 0 3px rgba(156, 255, 203,0.12);
     }
 
     &--textarea { resize: vertical; line-height: 1.6; }
@@ -591,7 +591,7 @@ onMounted(fetchPackages)
     font-size: $text-xs;
     color: $danger;
     background: $danger-bg;
-    border: 1px solid rgba(244,63,94,0.2);
+    border: 1px solid rgba(255, 138, 138,0.2);
     border-radius: $radius;
     padding: $space-2 $space-3;
   }

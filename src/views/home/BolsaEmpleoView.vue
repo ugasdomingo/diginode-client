@@ -412,8 +412,8 @@ const employees = [
     name:  'Nora',
     role:  'Recepcionista',
     icon:  MessageSquare,
-    color: '#34d399',
-    bg:    'rgba(52,211,153,0.12)',
+    color: '#9cffcb',
+    bg:    'rgba(156, 255, 203, 0.12)',
     pitch: 'Nora contesta WhatsApp a cualquier hora con tu tono y tu criterio. Filtra, cualifica y agenda — para que dejes de mirar el móvil los domingos.',
     tasks: [
       'Responde a cada mensaje en minutos, 24/7',
@@ -427,8 +427,8 @@ const employees = [
     name:  'Alex',
     role:  'Asistente ejecutivo',
     icon:  Briefcase,
-    color: '#7c6fff',
-    bg:    'rgba(124,111,255,0.12)',
+    color: '#8fb3ff',
+    bg:    'rgba(143, 179, 255, 0.12)',
     pitch: 'Alex convierte tus audios, reuniones y notas en agenda, documentos y seguimiento. Tu cabeza deja de ser tu único sistema operativo.',
     tasks: [
       'Resumen diario de prioridades a primera hora',
@@ -442,8 +442,8 @@ const employees = [
     name:  'Valeria',
     role:  'Content creator',
     icon:  Share2,
-    color: '#f59e0b',
-    bg:    'rgba(245,158,11,0.12)',
+    color: '#ffd38a',
+    bg:    'rgba(255, 211, 138, 0.12)',
     pitch: 'Valeria mantiene tu marca personal viva mientras tú facturas. Convierte audios y conversaciones en posts, guiones y artículos publicables.',
     tasks: [
       'Posts semanales en LinkedIn, Instagram o TikTok',
@@ -457,8 +457,8 @@ const employees = [
     name:  'Marcos',
     role:  'Closer / SDR',
     icon:  TrendingUp,
-    color: '#818cf8',
-    bg:    'rgba(129,140,248,0.12)',
+    color: '#d7b7ff',
+    bg:    'rgba(215, 183, 255, 0.12)',
     pitch: 'Marcos cierra ventanas de venta que tú ahora pierdes. Contesta leads al instante, cualifica y hace seguimiento hasta cierre o descarte.',
     tasks: [
       'Responde a leads en minutos con tu pitch',
@@ -478,8 +478,8 @@ const plans = [
     name:             'Operación Solo',
     target:           'Recupera tus tardes y tus domingos',
     icon:             Building2,
-    color:            '#34d399',
-    bg:               'rgba(52,211,153,0.12)',
+    color:            '#9cffcb',
+    bg:               'rgba(156, 255, 203, 0.12)',
     featured:         false,
     employee_ids:     ['luna', 'sofia'],
     monthly_promo:    300,
@@ -497,8 +497,8 @@ const plans = [
     name:             'Equipo Solopreneur',
     target:           'Tu negocio entero, sin contratar personal',
     icon:             Sparkles,
-    color:            '#7c6fff',
-    bg:               'rgba(124,111,255,0.12)',
+    color:            '#d7b7ff',
+    bg:               'rgba(215, 183, 255, 0.12)',
     featured:         true,
     employee_ids:     ['luna', 'sofia', 'valeria', 'marcos'],
     monthly_promo:    500,
@@ -537,7 +537,7 @@ function empById(id) {
   height: 48px;
   padding: 0 $space-6;
   background: $primary;
-  color: #fff;
+  color: $text-inverse;
   font-size: $text-base;
   font-weight: $fw-semibold;
   border-radius: $radius;
@@ -548,7 +548,7 @@ function empById(id) {
   &:hover {
     background: $primary-dark;
     transform: translateY(-2px);
-    color: #fff;
+    color: $text-inverse;
   }
 
   &--lg {
@@ -569,7 +569,7 @@ function empById(id) {
   &__box {
     position: relative;
     background: $bg-card;
-    border: 1px solid rgba(52,211,153,0.3);
+    border: 1px solid rgba(156, 255, 203,0.3);
     border-radius: $radius-xl;
     padding: $space-16 $space-10;
     text-align: center;
@@ -579,7 +579,7 @@ function empById(id) {
     flex-direction: column;
     align-items: center;
     gap: $space-6;
-    box-shadow: 0 0 60px rgba(52,211,153,0.12);
+    box-shadow: 0 0 60px rgba(156, 255, 203,0.12);
 
     @media (max-width: 640px) {
       padding: $space-10 $space-6;
@@ -589,14 +589,14 @@ function empById(id) {
   &__glow {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(52,211,153,0.12) 0%, transparent 70%);
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(156, 255, 203,0.12) 0%, transparent 70%);
     pointer-events: none;
     border-radius: $radius-xl;
   }
 
   &__icon {
     color: $accent;
-    filter: drop-shadow(0 0 16px rgba(52,211,153,0.5));
+    filter: drop-shadow(0 0 16px rgba(156, 255, 203,0.5));
     position: relative;
   }
 
@@ -656,7 +656,7 @@ function empById(id) {
     height: 28px;
     border-radius: $radius-full;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.3);
+    border: 1px solid rgba(156, 255, 203,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -704,7 +704,7 @@ function empById(id) {
     gap: $space-2;
     padding: $space-2 $space-4;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius-full;
     font-size: $text-sm;
     font-weight: $fw-medium;
@@ -930,9 +930,9 @@ function empById(id) {
   }
 
   &--selected {
-    border-color: rgba(124,111,255,0.6) !important;
-    background: rgba(124,111,255,0.04) !important;
-    box-shadow: 0 0 20px rgba(124,111,255,0.12);
+    border-color: rgba(156, 255, 203,0.6) !important;
+    background: rgba(156, 255, 203,0.04) !important;
+    box-shadow: 0 0 20px rgba(156, 255, 203,0.12);
   }
 
   &__head-info { flex: 1; }
@@ -1002,13 +1002,13 @@ function empById(id) {
   }
 
   &--featured {
-    border-color: rgba(124,111,255,0.4);
-    background: linear-gradient(145deg, $bg-card, rgba(124,111,255,0.04));
-    box-shadow: 0 0 40px rgba(124,111,255,0.1);
+    border-color: rgba(156, 255, 203,0.4);
+    background: linear-gradient(145deg, $bg-card, rgba(156, 255, 203,0.04));
+    box-shadow: 0 0 40px rgba(156, 255, 203,0.1);
 
     &:hover {
-      border-color: rgba(124,111,255,0.6);
-      box-shadow: 0 0 56px rgba(124,111,255,0.18);
+      border-color: rgba(156, 255, 203,0.6);
+      box-shadow: 0 0 56px rgba(156, 255, 203,0.18);
     }
   }
 
@@ -1022,7 +1022,7 @@ function empById(id) {
     gap: $space-1;
     padding: $space-1 $space-3;
     background: $primary;
-    color: #fff;
+    color: $text-inverse;
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $fw-bold;
@@ -1082,7 +1082,7 @@ function empById(id) {
     font-weight: $fw-bold;
     color: $primary-light;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
+    border: 1px solid rgba(156, 255, 203,0.25);
     padding: 1px $space-2;
     border-radius: $radius-full;
     letter-spacing: 0;
@@ -1181,8 +1181,8 @@ function empById(id) {
     font-size: $text-xs;
     font-weight: $fw-semibold;
     color: $accent;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
+    background: rgba(156, 255, 203,0.1);
+    border: 1px solid rgba(156, 255, 203,0.25);
     padding: 2px $space-2;
     border-radius: $radius-full;
   }
@@ -1207,7 +1207,7 @@ function empById(id) {
     height: 48px;
     width: 100%;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius;
     color: $primary-light;
     font-size: $text-base;
@@ -1218,7 +1218,7 @@ function empById(id) {
     &:hover:not(:disabled) {
       background: $primary;
       border-color: $primary;
-      color: #fff;
+      color: $text-inverse;
       box-shadow: 0 0 20px $primary-glow;
     }
 
@@ -1227,12 +1227,12 @@ function empById(id) {
     &--featured {
       background: $primary;
       border-color: $primary;
-      color: #fff;
+      color: $text-inverse;
       box-shadow: 0 0 20px $primary-glow;
 
       &:hover:not(:disabled) {
         background: $primary-dark;
-        box-shadow: 0 0 28px rgba(124,111,255,0.5);
+        box-shadow: 0 0 28px rgba(156, 255, 203,0.5);
       }
     }
   }
@@ -1241,7 +1241,7 @@ function empById(id) {
     width: 14px;
     height: 14px;
     border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
+    border-top-color: $text-inverse;
     border-radius: $radius-full;
     animation: spin 0.6s linear infinite;
     flex-shrink: 0;
@@ -1256,7 +1256,7 @@ function empById(id) {
 .setup-panel {
   margin-top: $space-8;
   background: $bg-card;
-  border: 1px solid rgba(124,111,255,0.25);
+  border: 1px solid rgba(156, 255, 203,0.25);
   border-radius: $radius-xl;
   padding: $space-8;
   display: flex;
@@ -1299,7 +1299,7 @@ function empById(id) {
     background: $primary;
     border: none;
     border-radius: $radius;
-    color: #fff;
+    color: $text-inverse;
     font-size: $text-base;
     font-weight: $fw-semibold;
     cursor: pointer;
@@ -1309,7 +1309,7 @@ function empById(id) {
     &:hover:not(:disabled) {
       background: $primary-dark;
       transform: translateY(-1px);
-      box-shadow: 0 0 36px rgba(124,111,255,0.4);
+      box-shadow: 0 0 36px rgba(156, 255, 203,0.4);
     }
 
     &:disabled { opacity: 0.7; cursor: not-allowed; }
@@ -1331,8 +1331,8 @@ function empById(id) {
   &:hover { border-color: $border-hover; }
 
   &--active {
-    border-color: rgba(124,111,255,0.5);
-    background: rgba(124,111,255,0.04);
+    border-color: rgba(156, 255, 203,0.5);
+    background: rgba(156, 255, 203,0.04);
   }
 
   &__top {
@@ -1381,8 +1381,8 @@ function empById(id) {
     line-height: 1.5;
     margin-top: $space-2;
     padding: $space-2 $space-3;
-    background: rgba(124,111,255,0.06);
-    border: 1px solid rgba(124,111,255,0.15);
+    background: rgba(156, 255, 203,0.06);
+    border: 1px solid rgba(156, 255, 203,0.15);
     border-radius: $radius;
 
     svg { flex-shrink: 0; color: $primary-light; margin-top: 1px; }

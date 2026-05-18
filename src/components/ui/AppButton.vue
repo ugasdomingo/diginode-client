@@ -72,7 +72,7 @@ defineProps({
 
     &:hover:not(:disabled) {
       background: $primary-dark;
-      box-shadow: 0 0 28px rgba(124, 111, 255, 0.35);
+      box-shadow: 0 0 28px rgba(156, 255, 203, 0.35);
       transform: translateY(-1px);
     }
 
@@ -104,7 +104,7 @@ defineProps({
 
   &--danger {
     background: $danger-bg;
-    border-color: rgba(244, 63, 94, 0.3);
+    border-color: rgba(255, 138, 138, 0.3);
     color: $danger;
 
     &:hover:not(:disabled) {

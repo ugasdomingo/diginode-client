@@ -187,7 +187,7 @@ function handleLogout() {
     &--active {
       background: $primary-subtle;
       color: $primary-light;
-      border: 1px solid rgba(124, 111, 255, 0.2);
+      border: 1px solid rgba(156, 255, 203, 0.2);
 
       .sidebar__link-icon {
         color: $primary;
@@ -267,7 +267,7 @@ function handleLogout() {
 
     &:hover {
       color: $danger;
-      border-color: rgba(244, 63, 94, 0.3);
+      border-color: rgba(255, 138, 138, 0.3);
       background: $danger-bg;
     }
   }

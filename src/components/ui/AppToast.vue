@@ -59,22 +59,22 @@ const icons = {
   box-shadow: $shadow-lg;
 
   &--success {
-    border-color: rgba(52, 211, 153, 0.25);
+    border-color: rgba(156, 255, 203, 0.25);
     .toast__icon { color: $accent; }
   }
 
   &--error {
-    border-color: rgba(244, 63, 94, 0.25);
+    border-color: rgba(255, 138, 138, 0.25);
     .toast__icon { color: $danger; }
   }
 
   &--info {
-    border-color: rgba(129, 140, 248, 0.25);
+    border-color: rgba(143, 179, 255, 0.25);
     .toast__icon { color: $info; }
   }
 
   &--warning {
-    border-color: rgba(245, 158, 11, 0.25);
+    border-color: rgba(255, 211, 138, 0.25);
     .toast__icon { color: $warning; }
   }
 

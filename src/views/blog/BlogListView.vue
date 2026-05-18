@@ -145,7 +145,7 @@ onMounted(fetchPosts)
   &:hover {
     border-color: $primary;
     transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(124, 111, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(156, 255, 203, 0.12);
   }
 
   &--skeleton {

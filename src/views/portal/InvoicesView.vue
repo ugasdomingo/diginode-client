@@ -268,16 +268,16 @@ function subStatusVariant(s) {
   align-items: center;
   gap: $space-3;
   padding: $space-3 $space-4;
-  background: rgba(245, 158, 11, 0.05);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(255, 211, 138, 0.05);
+  border: 1px solid rgba(255, 211, 138, 0.2);
   border-radius: $radius-lg;
 
   &__icon {
     width: 32px;
     height: 32px;
     border-radius: $radius-sm;
-    background: rgba(245, 158, 11, 0.12);
-    color: #f59e0b;
+    background: rgba(255, 211, 138, 0.12);
+    color: $warning;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -294,7 +294,7 @@ function subStatusVariant(s) {
 
   &__label  { font-size: $text-sm; font-weight: $fw-medium; color: $text; }
   &__date   { font-size: $text-xs; color: $text-muted; font-family: $font-mono; }
-  &__pending { font-size: $text-xs; color: #f59e0b; font-style: italic; }
+  &__pending { font-size: $text-xs; color: $warning; font-style: italic; }
 
   &__amount {
     font-size: $text-sm;
@@ -313,7 +313,7 @@ function subStatusVariant(s) {
   gap: $space-4;
   padding: $space-4;
   background: $bg-card;
-  border: 1px solid rgba(124, 111, 255, 0.2);
+  border: 1px solid rgba(156, 255, 203, 0.2);
   border-radius: $radius-lg $radius-lg 0 0;
   flex-wrap: wrap;
 
@@ -339,8 +339,8 @@ function subStatusVariant(s) {
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-4;
-    background: rgba(52, 211, 153, 0.06);
-    border: 1px solid rgba(52, 211, 153, 0.15);
+    background: rgba(156, 255, 203, 0.06);
+    border: 1px solid rgba(156, 255, 203, 0.15);
     border-top: none;
     border-radius: 0 0 $radius-lg $radius-lg;
     font-size: $text-xs;
@@ -413,9 +413,9 @@ function subStatusVariant(s) {
     justify-content: center;
     flex-shrink: 0;
 
-    &--course       { background: rgba(124, 111, 255, 0.12); color: $primary; }
-    &--bolsa        { background: rgba(52, 211, 153, 0.12);  color: $accent; }
-    &--subscription { background: rgba(99, 102, 241, 0.12);  color: #818cf8; }
+    &--course       { background: rgba(156, 255, 203, 0.12); color: $primary; }
+    &--bolsa        { background: rgba(156, 255, 203, 0.12);  color: $accent; }
+    &--subscription { background: rgba(99, 102, 241, 0.12);  color: $accent-blue; }
     &--manual       { background: rgba(139, 138, 168, 0.1);  color: $text-muted; }
   }
 
@@ -438,7 +438,7 @@ function subStatusVariant(s) {
   &__badge {
     display: inline-block;
     font-size: $text-xs;
-    color: #f59e0b;
+    color: $warning;
     font-weight: $fw-medium;
   }
 
@@ -477,14 +477,14 @@ function subStatusVariant(s) {
   color: $primary;
   text-decoration: none;
   padding: $space-1 $space-2;
-  border: 1px solid rgba(124, 111, 255, 0.25);
+  border: 1px solid rgba(156, 255, 203, 0.25);
   border-radius: $radius-sm;
   transition: $transition-fast;
   white-space: nowrap;
 
   &:hover {
     background: $primary-subtle;
-    border-color: rgba(124, 111, 255, 0.5);
+    border-color: rgba(156, 255, 203, 0.5);
     color: $primary-light;
   }
 }

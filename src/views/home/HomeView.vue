@@ -552,21 +552,21 @@ const faqs = [
 
 <style lang="scss" scoped>
 .home {
-  --ink: #f8f6ee;
-  --muted: #a8b1aa;
-  --subtle: #65706c;
+  --ink: #{$text};
+  --muted: #{$text-muted};
+  --subtle: #{$text-subtle};
   --panel: rgba(11, 23, 21, 0.86);
-  --panel-strong: #10241f;
-  --line: rgba(198, 255, 219, 0.14);
-  --line-strong: rgba(198, 255, 219, 0.32);
-  --mint: #9cffcb;
-  --blue: #8fb3ff;
-  --amber: #ffd38a;
-  --violet: #d7b7ff;
+  --panel-strong: #{$bg-card};
+  --line: #{$border};
+  --line-strong: #{$border-hover};
+  --mint: #{$primary};
+  --blue: #{$accent-blue};
+  --amber: #{$accent-amber};
+  --violet: #{$accent-violet};
   background:
-    radial-gradient(circle at 18% 4%, rgba(156, 255, 203, 0.12), transparent 28%),
+    radial-gradient(circle at 18% 4%, $primary-glow, transparent 28%),
     radial-gradient(circle at 86% 12%, rgba(143, 179, 255, 0.14), transparent 24%),
-    #06110f;
+    $bg;
   color: var(--ink);
   overflow: hidden;
 }
@@ -652,7 +652,7 @@ const faqs = [
 
   &--primary {
     background: var(--mint);
-    color: #07110f;
+    color: $text-inverse;
     box-shadow: 0 18px 56px rgba(156, 255, 203, 0.22);
   }
 
@@ -946,7 +946,7 @@ const faqs = [
     width: 34px;
     height: 34px;
     border-radius: 12px;
-    color: #06110f;
+    color: $text-inverse;
     font-size: 0.76rem;
     font-weight: 900;
     flex-shrink: 0;
@@ -1146,7 +1146,7 @@ const faqs = [
     width: 52px;
     height: 52px;
     border-radius: 17px;
-    color: #06110f;
+    color: $text-inverse;
     font-weight: 900;
   }
 
@@ -1315,8 +1315,8 @@ const faqs = [
   position: absolute;
   border: 1px solid var(--line-strong);
   border-radius: 24px;
-  background: #f8f6ee;
-  color: #07110f;
+  background: $text;
+  color: $text-inverse;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
 
   &--front {
@@ -1386,7 +1386,7 @@ const faqs = [
     padding: 10px 12px;
     border-radius: 999px;
     background: rgba(6, 17, 15, 0.08);
-    color: #0b3b29;
+    color: $primary-dark;
     font-weight: 900;
     font-size: 0.82rem;
   }
@@ -1432,7 +1432,7 @@ const faqs = [
     padding: 8px 12px;
     border-radius: 999px;
     background: var(--mint);
-    color: #06110f;
+    color: $text-inverse;
     font-size: 0.78rem;
     font-weight: 900;
   }

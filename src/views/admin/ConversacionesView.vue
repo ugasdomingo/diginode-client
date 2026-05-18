@@ -505,9 +505,9 @@ function platformLabel(p) {
   width: 100%;
   transition: $transition-fast;
 
-  &:hover { background: rgba(124,111,255,0.06); border-color: $border; }
+  &:hover { background: rgba(156, 255, 203,0.06); border-color: $border; }
 
-  &--active { background: rgba(124,111,255,0.1); border-color: rgba(124,111,255,0.3); }
+  &--active { background: rgba(156, 255, 203,0.1); border-color: rgba(156, 255, 203,0.3); }
 
   &--skeleton {
     height: 64px;
@@ -520,7 +520,7 @@ function platformLabel(p) {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(124,111,255,0.15);
+    background: rgba(156, 255, 203,0.15);
     color: $primary;
     font-size: $text-sm;
     font-weight: $fw-bold;
@@ -572,11 +572,11 @@ function platformLabel(p) {
   font-size: 10px;
   font-weight: $fw-semibold;
 
-  &--human    { background: rgba(244,63,94,0.15);  color: $danger; }
-  &--nuevo    { background: rgba(99,102,241,0.15); color: #818cf8; }
-  &--activo   { background: rgba(52,211,153,0.15); color: $accent; }
-  &--esperando { background: rgba(245,158,11,0.15); color: #f59e0b; }
-  &--tomado   { background: rgba(244,63,94,0.12);  color: $danger; }
+  &--human    { background: rgba(255, 138, 138,0.15);  color: $danger; }
+  &--nuevo    { background: rgba(99,102,241,0.15); color: $accent-blue; }
+  &--activo   { background: rgba(156, 255, 203,0.15); color: $accent; }
+  &--esperando { background: rgba(255, 211, 138,0.15); color: $warning; }
+  &--tomado   { background: rgba(255, 138, 138,0.12);  color: $danger; }
   &--cerrado  { background: rgba(139,138,168,0.15); color: $text-muted; }
 }
 
@@ -620,7 +620,7 @@ function platformLabel(p) {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(124,111,255,0.15);
+    background: rgba(156, 255, 203,0.15);
     color: $primary;
     font-weight: $fw-bold;
     display: flex;
@@ -681,10 +681,10 @@ function platformLabel(p) {
   &:hover { border-color: $primary; color: $primary; }
 
   &--active {
-    background: rgba(244,63,94,0.1);
-    border-color: rgba(244,63,94,0.3);
+    background: rgba(255, 138, 138,0.1);
+    border-color: rgba(255, 138, 138,0.3);
     color: $danger;
-    &:hover { background: rgba(244,63,94,0.15); }
+    &:hover { background: rgba(255, 138, 138,0.15); }
   }
 }
 
@@ -693,8 +693,8 @@ function platformLabel(p) {
   align-items: center;
   gap: $space-2;
   padding: $space-2 $space-5;
-  background: rgba(244,63,94,0.08);
-  border-bottom: 1px solid rgba(244,63,94,0.2);
+  background: rgba(255, 138, 138,0.08);
+  border-bottom: 1px solid rgba(255, 138, 138,0.2);
   font-size: $text-xs;
   font-weight: $fw-medium;
   color: $danger;
@@ -738,8 +738,8 @@ function platformLabel(p) {
     line-height: 1.5;
 
     .msg--user &  { background: $bg-card; border: 1px solid $border; border-bottom-left-radius: $radius-sm; }
-    .msg--agent & { background: rgba(124,111,255,0.15); border: 1px solid rgba(124,111,255,0.2); border-bottom-right-radius: $radius-sm; }
-    .msg--human & { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.2); border-bottom-right-radius: $radius-sm; }
+    .msg--agent & { background: rgba(156, 255, 203,0.15); border: 1px solid rgba(156, 255, 203,0.2); border-bottom-right-radius: $radius-sm; }
+    .msg--human & { background: rgba(156, 255, 203,0.12); border: 1px solid rgba(156, 255, 203,0.2); border-bottom-right-radius: $radius-sm; }
   }
 
   &__text {
@@ -775,8 +775,8 @@ function platformLabel(p) {
 .notes-input {
   width: 100%;
   padding: $space-2 $space-3;
-  background: rgba(245,158,11,0.05);
-  border: 1px solid rgba(245,158,11,0.2);
+  background: rgba(255, 211, 138,0.05);
+  border: 1px solid rgba(255, 211, 138,0.2);
   border-radius: $radius;
   color: $text-muted;
   font-size: $text-xs;
@@ -785,7 +785,7 @@ function platformLabel(p) {
   font-family: inherit;
   transition: $transition-fast;
   &::placeholder { color: $text-subtle; }
-  &:focus { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
+  &:focus { border-color: rgba(255, 211, 138,0.4); background: rgba(255, 211, 138,0.08); }
 }
 
 // ── Reply box ──────────────────────────────────────────────────────────────
@@ -800,8 +800,8 @@ function platformLabel(p) {
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-3;
-    background: rgba(124,111,255,0.06);
-    border: 1px solid rgba(124,111,255,0.15);
+    background: rgba(156, 255, 203,0.06);
+    border: 1px solid rgba(156, 255, 203,0.15);
     border-radius: $radius;
     font-size: $text-xs;
     color: $text-muted;

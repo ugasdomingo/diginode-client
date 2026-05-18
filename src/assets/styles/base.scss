@@ -93,11 +93,11 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(124, 111, 255, 0.25);
+  background: rgba(156, 255, 203, 0.25);
   border-radius: $radius-full;
 
   &:hover {
-    background: rgba(124, 111, 255, 0.45);
+    background: rgba(156, 255, 203, 0.45);
   }
 }
 

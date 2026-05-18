@@ -344,7 +344,7 @@ onMounted(fetchLeads)
 
     &--active {
       background: $primary-subtle;
-      border-color: rgba(124, 111, 255, 0.3);
+      border-color: rgba(156, 255, 203, 0.3);
       color: $primary-light;
     }
 

@@ -275,8 +275,8 @@ async function submitWaitlist() {
   font-size: $text-xs;
   font-weight: $fw-semibold;
 
-  &--active   { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
-  &--waitlist { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+  &--active   { background: rgba(156, 255, 203,0.12); color: $primary; border: 1px solid rgba(156, 255, 203,0.25); }
+  &--waitlist { background: rgba(255, 211, 138,0.12); color: $warning; border: 1px solid rgba(255, 211, 138,0.25); }
   &--date     { background: $bg-card; color: $text-muted; border: 1px solid $border; }
 }
 
@@ -409,16 +409,16 @@ async function submitWaitlist() {
   align-items: center;
   gap: $space-2;
   padding: $space-3 $space-6;
-  background: rgba(245,158,11,0.1);
-  color: #f59e0b;
+  background: rgba(255, 211, 138,0.1);
+  color: $warning;
   font-weight: $fw-semibold;
   font-size: $text-sm;
   border-radius: $radius;
-  border: 1px solid rgba(245,158,11,0.3);
+  border: 1px solid rgba(255, 211, 138,0.3);
   cursor: pointer;
   transition: $transition-fast;
 
-  &:hover { background: rgba(245,158,11,0.18); }
+  &:hover { background: rgba(255, 211, 138,0.18); }
 
   &--lg {
     padding: $space-4 $space-8;
@@ -431,8 +431,8 @@ async function submitWaitlist() {
 .course-for-me {
   margin: $space-10 0;
   padding: $space-8;
-  background: rgba(124,111,255,0.05);
-  border: 1px solid rgba(124,111,255,0.2);
+  background: rgba(156, 255, 203,0.05);
+  border: 1px solid rgba(156, 255, 203,0.2);
   border-radius: $radius-xl;
   display: flex;
   flex-direction: column;
@@ -612,7 +612,7 @@ async function submitWaitlist() {
     align-items: center;
     gap: $space-3;
     padding: $space-6 0;
-    color: #34d399;
+    color: $primary;
     text-align: center;
     font-size: $text-sm;
     font-weight: $fw-medium;

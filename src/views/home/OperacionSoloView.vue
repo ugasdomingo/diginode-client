@@ -109,7 +109,7 @@
             <CheckCircle :size="12" />
             Siempre incluido
           </div>
-          <div class="employees__avatar employees__avatar--lg" :style="{ background: '#7c6fff20', color: '#7c6fff' }">
+          <div class="employees__avatar employees__avatar--lg" :style="{ background: 'rgba(143, 179, 255, 0.16)', color: '#8fb3ff' }">
             <Briefcase :size="22" />
           </div>
           <div class="employees__info">
@@ -279,7 +279,7 @@ const includes = [
   {
     id: 'web',
     icon: Globe,
-    color: '#7c6fff',
+    color: '#8fb3ff',
     title: 'Web profesional',
     desc: 'Diseñada para tu negocio. Transmite autoridad, posiciona en Google y convierte visitas en clientes.',
     features: ['Diseño a medida', 'SEO local', 'Formulario de contacto', 'Blog incluido'],
@@ -287,7 +287,7 @@ const includes = [
   {
     id: 'dashboard',
     icon: LayoutDashboard,
-    color: '#34d399',
+    color: '#9cffcb',
     title: 'Panel de gestión',
     desc: 'Área privada dentro de tu web. Tus clientes acceden a su información y tú controlas todo desde un sitio.',
     features: ['Acceso por cliente', 'Documentos y entregables', 'Comunicación directa', 'Desde cualquier dispositivo'],
@@ -295,7 +295,7 @@ const includes = [
   {
     id: 'employees',
     icon: BotMessageSquare,
-    color: '#f59e0b',
+    color: '#ffd38a',
     title: '2 empleados IA',
     desc: 'Trabajan mientras tú facturas. Organizan tu día, contestan mensajes y mantienen el negocio en marcha.',
     features: ['Activos 24/7', 'WhatsApp y Telegram', 'Configurados con tu tono', 'Soporte continuo'],
@@ -304,9 +304,9 @@ const includes = [
 
 // Alex (id interno 'sofia') siempre incluido; el cliente elige 1 de los otros 3 en el onboarding
 const optionalEmployees = [
-  { id: 'luna',    name: 'Nora',    role: 'Recepcionista',   icon: MessageSquare, color: '#34d399' },
-  { id: 'valeria', name: 'Valeria', role: 'Content creator', icon: Share2,        color: '#f59e0b' },
-  { id: 'marcos',  name: 'Marcos',  role: 'Closer / SDR',    icon: TrendingUp,    color: '#818cf8' },
+  { id: 'luna',    name: 'Nora',    role: 'Recepcionista',   icon: MessageSquare, color: '#9cffcb' },
+  { id: 'valeria', name: 'Valeria', role: 'Content creator', icon: Share2,        color: '#ffd38a' },
+  { id: 'marcos',  name: 'Marcos',  role: 'Closer / SDR',    icon: TrendingUp,    color: '#d7b7ff' },
 ]
 
 const steps = [
@@ -400,7 +400,7 @@ const faqs = [
   height: 44px;
   padding: 0 $space-6;
   background: $primary;
-  color: #fff;
+  color: $text-inverse;
   font-size: $text-sm;
   font-weight: $fw-semibold;
   border-radius: $radius;
@@ -411,7 +411,7 @@ const faqs = [
   &:hover {
     background: $primary-dark;
     transform: translateY(-1px);
-    color: #fff;
+    color: $text-inverse;
   }
 
   &--lg { height: 52px; padding: 0 $space-8; font-size: $text-base; }
@@ -456,7 +456,7 @@ const faqs = [
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(52,211,153,0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(156, 255, 203,0.08) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -465,8 +465,8 @@ const faqs = [
     align-items: center;
     gap: $space-2;
     padding: $space-1 $space-3;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
+    background: rgba(156, 255, 203,0.1);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $fw-medium;
@@ -485,7 +485,7 @@ const faqs = [
 
     em {
       font-style: normal;
-      background: linear-gradient(135deg, $accent, #22d3ee);
+      background: linear-gradient(135deg, $primary, $accent-blue);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -514,8 +514,8 @@ const faqs = [
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-4;
-    background: rgba(52,211,153,0.08);
-    border: 1px solid rgba(52,211,153,0.25);
+    background: rgba(156, 255, 203,0.08);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius-full;
     font-size: $text-sm;
     color: $accent;
@@ -603,8 +603,8 @@ const faqs = [
     align-items: center;
     gap: $space-4;
     padding: $space-5 $space-6;
-    background: rgba(124,111,255,0.06);
-    border: 1px solid rgba(124,111,255,0.25);
+    background: rgba(156, 255, 203,0.06);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius-lg;
     margin-bottom: $space-6;
     position: relative;
@@ -627,10 +627,10 @@ const faqs = [
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $fw-bold;
-    color: #fff;
+    color: $text-inverse;
     letter-spacing: 0.02em;
 
-    svg { color: #fff; }
+    svg { color: $text-inverse; }
   }
 
   &__label {
@@ -804,7 +804,7 @@ const faqs = [
     height: 48px;
     border-radius: $radius-full;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.3);
+    border: 1px solid rgba(156, 255, 203,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -895,8 +895,8 @@ const faqs = [
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-3;
-    background: rgba(52,211,153,0.08);
-    border: 1px solid rgba(52,211,153,0.25);
+    background: rgba(156, 255, 203,0.08);
+    border: 1px solid rgba(156, 255, 203,0.25);
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $fw-semibold;
@@ -973,7 +973,7 @@ const faqs = [
   &__glow {
     position: absolute;
     inset: -60px;
-    background: radial-gradient(ellipse at center, rgba(52,211,153,0.12) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(156, 255, 203,0.12) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -1036,7 +1036,7 @@ const faqs = [
     height: 28px;
     border-radius: $radius-full;
     background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.3);
+    border: 1px solid rgba(156, 255, 203,0.3);
     display: flex;
     align-items: center;
     justify-content: center;

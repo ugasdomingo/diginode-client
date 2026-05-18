@@ -1,47 +1,53 @@
 // ─────────────────────────────────────────
 // DIGINODE — Design Tokens
+// Paleta mint/verde-oscuro (alineada al Home)
 // ─────────────────────────────────────────
 
 // Colors — Background
-$bg:           #08081a;
-$bg-surface:   #0f0f2a;
-$bg-card:      #13132e;
-$bg-card-2:    #1a1a40;
-$bg-input:     #0f0f2a;
+$bg:           #06110f;
+$bg-surface:   #0b1715;
+$bg-card:      #10241f;
+$bg-card-2:    #0e1d1a;
+$bg-input:     #0b1715;
 
-// Colors — Border
-$border:       rgba(124, 111, 255, 0.12);
-$border-hover: rgba(124, 111, 255, 0.30);
-$border-focus: rgba(124, 111, 255, 0.60);
+// Colors — Border (tinte mint sobre fondo oscuro)
+$border:       rgba(198, 255, 219, 0.14);
+$border-hover: rgba(198, 255, 219, 0.32);
+$border-focus: rgba(198, 255, 219, 0.55);
 
-// Colors — Brand (Purple)
-$primary:        #7c6fff;
-$primary-dark:   #6455f0;
-$primary-light:  #a090ff;
-$primary-glow:   rgba(124, 111, 255, 0.20);
-$primary-subtle: rgba(124, 111, 255, 0.08);
+// Colors — Brand (Mint)
+$primary:        #9cffcb;
+$primary-dark:   #74e8ad;
+$primary-light:  #c6ffdb;
+$primary-glow:   rgba(156, 255, 203, 0.20);
+$primary-subtle: rgba(156, 255, 203, 0.08);
 
-// Colors — Accent (Teal)
-$accent:        #34d399;
-$accent-glow:   rgba(52, 211, 153, 0.15);
+// Colors — Accent (alineado al primary mint, conservado por compatibilidad)
+$accent:        #9cffcb;
+$accent-glow:   rgba(156, 255, 203, 0.18);
+
+// Colors — Accents secundarios (paleta del Home)
+$accent-blue:   #8fb3ff;
+$accent-amber:  #ffd38a;
+$accent-violet: #d7b7ff;
 
 // Colors — Status
-$success:       #34d399;
-$warning:       #f59e0b;
-$danger:        #f43f5e;
-$info:          #818cf8;
+$success:       #9cffcb;
+$warning:       #ffd38a;
+$danger:        #ff8a8a;
+$info:          #8fb3ff;
 
 // Colors — Status subtle
-$success-bg:    rgba(52, 211, 153, 0.10);
-$warning-bg:    rgba(245, 158, 11, 0.10);
-$danger-bg:     rgba(244, 63, 94, 0.10);
-$info-bg:       rgba(129, 140, 248, 0.10);
+$success-bg:    rgba(156, 255, 203, 0.10);
+$warning-bg:    rgba(255, 211, 138, 0.10);
+$danger-bg:     rgba(255, 138, 138, 0.10);
+$info-bg:       rgba(143, 179, 255, 0.10);
 
 // Colors — Text
-$text:         #f0efff;
-$text-muted:   #8b8aa8;
-$text-subtle:  #4d4c6e;
-$text-inverse: #08081a;
+$text:         #f8f6ee;
+$text-muted:   #a8b1aa;
+$text-subtle:  #65706c;
+$text-inverse: #07110f;
 
 // Typography
 $font-sans:  'Inter', system-ui, sans-serif;
@@ -85,7 +91,7 @@ $radius-full: 9999px;
 $shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.5);
 $shadow:     0 4px 16px rgba(0, 0, 0, 0.4);
 $shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.5);
-$shadow-glow: 0 0 32px rgba(124, 111, 255, 0.15);
+$shadow-glow: 0 0 32px rgba(156, 255, 203, 0.18);
 
 // Transitions
 $transition:      all 0.2s ease;

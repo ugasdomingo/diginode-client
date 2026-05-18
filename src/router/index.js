@@ -152,6 +152,11 @@ const routes = [
         name: 'portal.support',
         component: () => import('@/views/portal/SupportView.vue'),
       },
+      {
+        path: 'onboarding',
+        name: 'portal.onboarding',
+        component: () => import('@/views/portal/OnboardingView.vue'),
+      },
     ],
   },
 

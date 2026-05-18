@@ -1,2789 +1,1607 @@
 <template>
   <div class="home">
-
-    <!-- ── HERO ─────────────────────────────────────── -->
     <section class="hero">
-      <div class="hero__bg" aria-hidden="true" />
-      <div class="container">
-        <div class="hero__badge">
-          <Sparkles :size="13" />
-          Empleados IA para psicólogos y coaches
-        </div>
-        <h1 class="hero__title">
-          Tu equipo trabaja.<br />
-          <span class="hero__title-accent">Tú diriges.</span>
-        </h1>
-        <p class="hero__subtitle">
-          Empleados de inteligencia artificial especializados en psicología y coaching.
-          Atienden a tus pacientes, organizan tu agenda y construyen tu presencia —
-          para que tú estés donde importas: en sesión.
-        </p>
-        <div class="hero__actions">
-          <a
-            :href="calLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-primary"
-          >
-            <CalendarCheck :size="18" />
-            Agendar demo gratuita
-          </a>
-          <RouterLink to="/bolsa-de-empleo" class="btn-secondary">
-            Ver planes <ArrowDown :size="16" />
-          </RouterLink>
-        </div>
-        <div class="hero__trust">
-          <div class="hero__trust-item">
-            <CheckCircle :size="15" />
-            Sin permanencia
-          </div>
-          <div class="hero__trust-item">
-            <CheckCircle :size="15" />
-            Incorporación en 7 días
-          </div>
-          <div class="hero__trust-item">
-            <CheckCircle :size="15" />
-            Pago seguro con Stripe
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="hero__grid" aria-hidden="true" />
+      <div class="hero__glow hero__glow--mint" aria-hidden="true" />
+      <div class="hero__glow hero__glow--blue" aria-hidden="true" />
 
-    <!-- ── EMPLOYEE LIFECYCLE ──────────────────────────── -->
-    <section class="ep">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Así trabaja tu empleado IA</h2>
-          <p class="section-subtitle">Tres pasos. Tu consulta organizada, siempre.</p>
-        </div>
-
-        <div class="ep__phases">
-          <div v-for="(phase, i) in employeeProcess" :key="i" class="ep__phase">
-            <div class="ep__icon-wrap" :style="{ background: phase.bg, borderColor: phase.borderColor }">
-              <component :is="phase.icon" :size="26" :style="{ color: phase.color }" />
-            </div>
-            <div class="ep__phase-num">0{{ i + 1 }}</div>
-            <h3 class="ep__phase-title">{{ phase.title }}</h3>
-            <p class="ep__phase-desc">{{ phase.desc }}</p>
-            <div class="ep__stat" :style="{ color: phase.color, borderColor: phase.borderColor }">
-              {{ phase.stat }}
-            </div>
-          </div>
-        </div>
-
-        <div class="ep__footer">
-          <div class="ep__footer-item">
-            <span class="ep__footer-num">0</span>
-            <span>días de baja</span>
-          </div>
-          <div class="ep__footer-sep" aria-hidden="true" />
-          <div class="ep__footer-item">
-            <span class="ep__footer-num">0€</span>
-            <span>seguros sociales</span>
-          </div>
-          <div class="ep__footer-sep" aria-hidden="true" />
-          <div class="ep__footer-item">
-            <span class="ep__footer-num">24/7</span>
-            <span>siempre disponible</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── EMPLOYEES / PACKAGES TOGGLE ───────────────── -->
-    <section id="empleados" class="catalog">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Elige cómo incorporarlos</h2>
-          <p class="section-subtitle">Individualmente o en equipo, siempre a tu ritmo</p>
-          <RouterLink to="/bolsa-de-empleo" class="btn-secondary catalog__hire-btn">
-            <Zap :size="15" />
-            Contratar empleados IA
-          </RouterLink>
-        </div>
-
-        <!-- Toggle -->
-        <div class="catalog__toggle" role="tablist">
-          <button
-            role="tab"
-            :aria-selected="view === 'employees'"
-            class="catalog__tab"
-            :class="{ 'catalog__tab--active': view === 'employees' }"
-            @click="view = 'employees'"
-          >
-            <Users :size="16" />
-            Empleados IA
-          </button>
-          <button
-            role="tab"
-            :aria-selected="view === 'plans'"
-            class="catalog__tab"
-            :class="{ 'catalog__tab--active': view === 'plans' }"
-            @click="view = 'plans'"
-          >
-            <Sparkles :size="16" />
-            Nuestros Planes
-          </button>
-        </div>
-
-        <!-- Catalog content -->
-        <Transition name="fade-slide" mode="out-in">
-
-          <!-- Employee cards -->
-          <div v-if="view === 'employees'" key="employees" class="cards-grid">
-            <div v-for="emp in employees" :key="emp.id" class="emp-card">
-              <div class="emp-card__top">
-                <div class="emp-card__icon" :style="{ background: emp.bg }">
-                  <component :is="emp.icon" :size="22" :style="{ color: emp.color }" />
-                </div>
-                <div class="emp-card__role-badge" :style="{ color: emp.color, borderColor: emp.color + '40' }">
-                  {{ emp.dept }}
-                </div>
-              </div>
-              <div class="emp-card__body">
-                <div>
-                  <h3 class="emp-card__name">{{ emp.name }}</h3>
-                  <p class="emp-card__role">{{ emp.role }}</p>
-                </div>
-                <p class="emp-card__pitch">{{ emp.pitch }}</p>
-                <ul class="emp-card__benefits">
-                  <li v-for="(b, bi) in emp.benefits" :key="bi" class="emp-card__benefit">
-                    <CheckCircle :size="11" class="emp-card__benefit-icon" />
-                    {{ b }}
-                  </li>
-                </ul>
-              </div>
-              <div class="emp-card__footer">
-                <div class="emp-card__price">
-                  <div class="emp-card__price-monthly">
-                    <span class="emp-card__price-amount">150€</span>
-                    <span class="emp-card__price-period">/mes</span>
-                  </div>
-                  <div class="emp-card__price-setup">+ setup 600€ · incluido en planes</div>
-                </div>
-                <a :href="calLink" target="_blank" rel="noopener noreferrer" class="emp-card__cta">
-                  <CalendarCheck :size="15" />
-                  Agendar demo
-                </a>
-              </div>
-            </div>
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <div class="eyebrow">
+            <Sparkles :size="14" />
+            Agencia de empleados IA gestionados por WhatsApp y Telegram
           </div>
 
-          <!-- Plans view -->
-          <div v-else key="plans" class="plans-grid">
-            <div
-              v-for="plan in plans"
-              :key="plan.id"
-              class="plan-card"
-              :class="{ 'plan-card--featured': plan.featured }"
-            >
-              <div v-if="plan.featured" class="plan-card__ribbon">
-                <Star :size="11" />
-                Más completo
-              </div>
-              <div class="plan-card__header">
-                <div class="plan-card__icon" :style="{ background: plan.bg }">
-                  <component :is="plan.icon" :size="22" :style="{ color: plan.color }" />
-                </div>
-                <div>
-                  <h3 class="plan-card__name">{{ plan.name }}</h3>
-                  <p class="plan-card__target">{{ plan.target }}</p>
-                </div>
-              </div>
-              <ul class="plan-card__features">
-                <li v-for="f in plan.features" :key="f">
-                  <CheckCircle :size="11" class="plan-card__check" />
-                  {{ f }}
-                </li>
-              </ul>
-              <div class="plan-card__pricing">
-                <div class="plan-card__price-row">
-                  <span class="plan-card__amount">{{ plan.monthly_promo }}€</span>
-                  <span class="plan-card__period">/mes</span>
-                  <span class="plan-card__tag">6 meses</span>
-                </div>
-                <p class="plan-card__after">Después: <strong>{{ plan.monthly_regular }}€/mes</strong></p>
-              </div>
-              <RouterLink to="/bolsa-de-empleo" class="plan-card__cta" :class="{ 'plan-card__cta--featured': plan.featured }">
-                <Zap :size="15" />
-                Ver {{ plan.name }}
-              </RouterLink>
-            </div>
-          </div>
+          <h1>Contrata empleados IA que trabajan como parte de tu equipo.</h1>
 
-        </Transition>
+          <p class="hero__lead">
+            No vendemos automatizaciones aisladas. Diseñamos empleados IA con puesto,
+            criterio, memoria y canales de trabajo: asistentes ejecutivos,
+            recepcionistas, content creators y gestores de comunidad.
+          </p>
 
-        <!-- Pricing footnote -->
-        <p class="catalog__footnote">
-          <Info :size="14" />
-          El setup (600€) se diluye en los primeros 6 meses del plan elegido. La mensualidad se cobra el 1 del mes siguiente a la entrega. Sin permanencia mínima.
-        </p>
-      </div>
-    </section>
-
-    <!-- ── PLANES ────────────────────────────────── -->
-    <section class="home-plans">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Nuestros planes</h2>
-          <p class="section-subtitle">Setup incluido en los primeros 6 meses. Sin permanencia mínima.</p>
-        </div>
-        <div class="home-plans__grid">
-          <div
-            v-for="plan in plans"
-            :key="plan.id"
-            class="home-plan-card"
-            :class="{ 'home-plan-card--featured': plan.featured }"
-          >
-            <div v-if="plan.featured" class="home-plan-card__ribbon">
-              <Star :size="11" /> Más completo
-            </div>
-            <div class="home-plan-card__top">
-              <div class="home-plan-card__icon" :style="{ background: plan.bg }">
-                <component :is="plan.icon" :size="20" :style="{ color: plan.color }" />
-              </div>
-              <div>
-                <h3 class="home-plan-card__name">{{ plan.name }}</h3>
-                <p class="home-plan-card__target">{{ plan.target }}</p>
-              </div>
-            </div>
-            <div class="home-plan-card__price">
-              <span class="home-plan-card__amount">{{ plan.monthly_promo }}€</span>
-              <span class="home-plan-card__period">/mes · 6 meses</span>
-            </div>
-            <p class="home-plan-card__after">Luego {{ plan.monthly_regular }}€/mes</p>
-            <RouterLink to="/bolsa-de-empleo" class="home-plan-card__cta" :class="{ 'home-plan-card__cta--featured': plan.featured }">
-              <Zap :size="14" />
-              Empezar con {{ plan.name }}
+          <div class="hero__actions">
+            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+              <CalendarCheck :size="18" />
+              Ver una demo guiada
+            </a>
+            <RouterLink to="/bolsa-de-empleo" class="btn btn--secondary">
+              <Users :size="18" />
+              Explorar empleados
             </RouterLink>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- ── COURSES ───────────────────────────────── -->
-    <section v-if="courses.length" id="cursos" class="courses-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Aprende a trabajar con IA</h2>
-          <p class="section-subtitle">Menos tareas, más pacientes.</p>
+          <div class="hero__assurance" aria-label="Garantías del servicio">
+            <span><CheckCircle :size="15" /> Onboarding en 7 días</span>
+            <span><CheckCircle :size="15" /> Protocolos aprobados por ti</span>
+            <span><CheckCircle :size="15" /> Supervisión y mejora continua</span>
+          </div>
         </div>
-        <div class="course-grid">
-          <div
-            v-for="course in courses"
-            :key="course._id"
-            class="course-card"
-            :class="{ 'course-card--inactive': course.status !== 'active' }"
-          >
-            <div class="course-card__thumb">
-              <img v-if="course.thumbnail_url" :src="course.thumbnail_url" :alt="course.title" />
-              <div v-else class="course-card__thumb-empty">
-                <GraduationCap :size="40" />
-              </div>
-              <div v-if="course.status === 'active'" class="course-card__badge course-card__badge--active">Disponible</div>
-              <div v-else class="course-card__badge">Próximamente</div>
+
+        <div class="ops-panel" aria-label="Vista operativa de empleados IA">
+          <div class="ops-panel__topbar">
+            <div>
+              <span class="ops-panel__status" />
+              Diginode Employee OS
             </div>
-            <div class="course-card__body">
-              <h3 class="course-card__title">{{ course.title }}</h3>
-              <p v-if="course.description" class="course-card__desc">{{ course.description }}</p>
-              <div class="course-card__meta">
-                <span class="course-card__date">{{ formatCourseDate(course.start_date) }}</span>
-                <span class="course-card__price">{{ course.price }}€</span>
+            <span>En directo</span>
+          </div>
+
+          <div class="ops-panel__main">
+            <div class="ops-panel__chat">
+              <div class="chat-message chat-message--boss">
+                <span>Jefe</span>
+                <p>Alex, prepara el resumen de la reunión y convierte las decisiones en tareas para esta semana.</p>
+              </div>
+              <div class="chat-message chat-message--employee">
+                <span>Alex · Asistente ejecutivo</span>
+                <p>He creado la minuta, detectado 6 tareas y marcado 2 decisiones que necesitan aprobación.</p>
+              </div>
+              <div class="ops-panel__input">
+                <MessageSquare :size="16" />
+                WhatsApp conectado
               </div>
             </div>
-            <div class="course-card__footer">
-              <RouterLink
-                v-if="course.status === 'active'"
-                :to="`/cursos/${course.slug}`"
-                class="course-card__cta course-card__cta--primary"
-              >
-                <BookOpen :size="15" />
-                Ver curso
-              </RouterLink>
-              <button
-                v-else
-                class="course-card__cta course-card__cta--waitlist"
-                @click="openWaitlist(course)"
-              >
-                Apuntarme a la lista de espera
-              </button>
+
+            <div class="ops-panel__side">
+              <div class="work-card work-card--active">
+                <FileText :size="18" />
+                <div>
+                  <strong>Minuta creada</strong>
+                  <span>Google Docs · listo</span>
+                </div>
+              </div>
+              <div class="work-card">
+                <Brain :size="18" />
+                <div>
+                  <strong>Memoria actualizada</strong>
+                  <span>3 aprendizajes nuevos</span>
+                </div>
+              </div>
+              <div class="work-card">
+                <ClipboardCheck :size="18" />
+                <div>
+                  <strong>Protocolos aplicados</strong>
+                  <span>Atención, tono y límites</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="employee-dock">
+            <div v-for="employee in employees" :key="employee.id" class="employee-pill">
+              <span :style="{ background: employee.color }">{{ employee.initials }}</span>
+              <div>
+                <strong>{{ employee.name }}</strong>
+                <small>{{ employee.role }}</small>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── WAITLIST MODAL ─────────────────────── -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="waitlistModal" class="modal-overlay" @click.self="closeWaitlist">
-          <div class="modal">
-            <button class="modal__close" @click="closeWaitlist" aria-label="Cerrar">
-              <X :size="20" />
-            </button>
-
-            <template v-if="waitlistStatus !== 'success'">
-              <GraduationCap :size="28" class="modal__icon" />
-              <h2 class="modal__title">Lista de espera</h2>
-              <p class="modal__subtitle">
-                Te avisamos cuando <strong>{{ waitlistModal.title }}</strong> esté disponible.
-              </p>
-              <form class="modal__form" @submit.prevent="submitWaitlist">
-                <label class="modal__label">
-                  Nombre
-                  <input v-model="waitlistForm.name" class="modal__input" type="text" placeholder="Tu nombre" required />
-                </label>
-                <label class="modal__label">
-                  Email
-                  <input v-model="waitlistForm.email" class="modal__input" type="email" placeholder="tu@email.com" required />
-                </label>
-                <label class="modal__label">
-                  Teléfono
-                  <input v-model="waitlistForm.phone" class="modal__input" type="tel" placeholder="+34 600 000 000" required />
-                </label>
-                <p v-if="waitlistError" class="modal__error">{{ waitlistError }}</p>
-                <button class="modal__submit btn-primary" type="submit" :disabled="waitlistStatus === 'loading'">
-                  {{ waitlistStatus === 'loading' ? 'Enviando…' : 'Apuntarme' }}
-                </button>
-              </form>
-            </template>
-
-            <template v-else>
-              <CheckCircle :size="40" class="modal__success-icon" />
-              <h2 class="modal__title">¡Apuntado!</h2>
-              <p class="modal__subtitle">Te avisaremos en cuanto el curso esté disponible.</p>
-              <button class="modal__submit btn-primary" @click="closeWaitlist">Cerrar</button>
-            </template>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
-
-    <!-- ── BLOG ──────────────────────────────────── -->
-    <section v-if="blogPosts.length" id="blog" class="blog-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Últimas del Blog</h2>
-          <p class="section-subtitle">Ideas y recursos sobre automatización con IA</p>
-        </div>
-        <div class="blog-grid">
-          <RouterLink
-            v-for="post in blogPosts"
-            :key="post._id"
-            :to="`/blog/${post.slug}`"
-            class="blog-card"
-          >
-            <div class="blog-card__thumb">
-              <img v-if="post.thumbnail_url" :src="post.thumbnail_url" :alt="post.title" />
-              <div v-else class="blog-card__thumb-empty" />
-            </div>
-            <div class="blog-card__body">
-              <span class="blog-card__date">{{ formatBlogDate(post.published_at) }}</span>
-              <h3 class="blog-card__title">{{ post.title }}</h3>
-              <p v-if="post.excerpt" class="blog-card__excerpt">{{ post.excerpt }}</p>
-              <span class="blog-card__cta">Leer →</span>
-            </div>
-          </RouterLink>
-        </div>
-        <div class="blog-more">
-          <RouterLink to="/blog" class="btn-secondary">Ver todos los artículos →</RouterLink>
+    <section class="confidence">
+      <div class="container confidence__grid">
+        <div v-for="item in confidence" :key="item.title" class="confidence__item">
+          <component :is="item.icon" :size="22" />
+          <strong>{{ item.title }}</strong>
+          <span>{{ item.text }}</span>
         </div>
       </div>
     </section>
 
-    <!-- ── FAQ ───────────────────────────────────── -->
-    <section id="faq" class="faq">
+    <section class="difference section">
+      <div class="container">
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="kicker">La idea clave</span>
+            <h2>No compras un agente. Incorporas un empleado con contexto.</h2>
+          </div>
+          <p>
+            Un agente ejecuta una tarea. Un empleado IA entiende el puesto, aprende
+            tus preferencias y trabaja dentro de un sistema de protocolos que puedes revisar.
+          </p>
+        </div>
+
+        <div class="comparison">
+          <div class="comparison__card comparison__card--muted">
+            <div class="comparison__label">Agente IA clásico</div>
+            <ul>
+              <li>Automatiza una acción puntual</li>
+              <li>Depende de prompts y ajustes técnicos</li>
+              <li>Suele vivir dentro de una herramienta</li>
+              <li>No acumula criterio operativo de forma clara</li>
+            </ul>
+          </div>
+
+          <div class="comparison__card comparison__card--focus">
+            <div class="comparison__label">Empleado IA Diginode</div>
+            <ul>
+              <li>Tiene rol, objetivos y responsabilidades</li>
+              <li>Trabaja desde WhatsApp, Telegram y documentos</li>
+              <li>Aprende de interacciones con jefe y clientes</li>
+              <li>Opera con memoria, límites y supervisión</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="empleados" class="employees section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="kicker">Bolsa de empleo IA</span>
+          <h2>Cuatro puestos diseñados para quitar trabajo real de la mesa.</h2>
+          <p>Contrata uno o combina varios. Cada empleado se configura con tus documentos, tono, protocolos y canales.</p>
+        </div>
+
+        <div class="employee-grid">
+          <article v-for="employee in employees" :key="employee.id" class="employee-card">
+            <div class="employee-card__top">
+              <div class="employee-card__avatar" :style="{ background: employee.color }">{{ employee.initials }}</div>
+              <div>
+                <h3>{{ employee.name }}</h3>
+                <span>{{ employee.role }}</span>
+              </div>
+            </div>
+            <p>{{ employee.pitch }}</p>
+            <div class="employee-card__channels">
+              <span v-for="channel in employee.channels" :key="channel">{{ channel }}</span>
+            </div>
+            <ul>
+              <li v-for="task in employee.tasks" :key="task">
+                <CheckCircle :size="14" />
+                {{ task }}
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="workflow-section section">
+      <div class="container">
+        <div class="workflow-shell">
+          <div class="section-heading">
+            <span class="kicker">Cómo se siente usarlo</span>
+            <h2>Das instrucciones normales. Recibes trabajo terminado.</h2>
+            <p>
+              El “wow” no está en hablar con una IA. Está en que vuelva con documentos,
+              respuestas, tareas y aprendizajes listos para aprobar.
+            </p>
+          </div>
+
+          <div class="workflow">
+            <div v-for="(step, index) in workflow" :key="step.title" class="workflow__step">
+              <div class="workflow__index">0{{ index + 1 }}</div>
+              <component :is="step.icon" :size="24" />
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.text }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof section">
+      <div class="container proof__inner">
+        <div class="proof__visual">
+          <div class="document-stack">
+            <div class="doc-card doc-card--front">
+              <div class="doc-card__head">
+                <FileText :size="18" />
+                Informe semanal
+              </div>
+              <div class="doc-card__line doc-card__line--wide" />
+              <div class="doc-card__line" />
+              <div class="doc-card__line doc-card__line--short" />
+              <div class="doc-card__decision">
+                <ShieldCheck :size="16" />
+                Requiere aprobación del jefe
+              </div>
+            </div>
+            <div class="doc-card doc-card--back">
+              <Brain :size="18" />
+              Segundo cerebro actualizado
+            </div>
+            <div class="doc-card doc-card--third">
+              <Send :size="18" />
+              Respuesta preparada para cliente
+            </div>
+          </div>
+        </div>
+
+        <div class="proof__copy">
+          <span class="kicker">Confianza y certeza</span>
+          <h2>Controlas el criterio. El empleado ejecuta.</h2>
+          <p>
+            Los empleados IA no improvisan a ciegas. Trabajan con protocolos,
+            documentos aprobados, memoria revisable y puntos de confirmación cuando
+            una decisión necesita criterio humano.
+          </p>
+          <div class="proof__checks">
+            <span><Lock :size="16" /> Límites de actuación definidos</span>
+            <span><Eye :size="16" /> Trazabilidad de tareas y documentos</span>
+            <span><ShieldCheck :size="16" /> Aprobación humana en decisiones sensibles</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="plans section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="kicker">Formas de empezar</span>
+          <h2>Empieza con un puesto o monta el equipo completo.</h2>
+          <p>El setup se centra en convertir tu forma de trabajar en protocolos operativos para tus empleados IA.</p>
+        </div>
+
+        <div class="plans__grid">
+          <article v-for="plan in plans" :key="plan.id" class="plan-card" :class="{ 'plan-card--featured': plan.featured }">
+            <div v-if="plan.featured" class="plan-card__badge">
+              <Star :size="13" />
+              Más completo
+            </div>
+            <div class="plan-card__head">
+              <component :is="plan.icon" :size="24" />
+              <div>
+                <h3>{{ plan.name }}</h3>
+                <span>{{ plan.target }}</span>
+              </div>
+            </div>
+            <ul>
+              <li v-for="feature in plan.features" :key="feature">
+                <CheckCircle :size="14" />
+                {{ feature }}
+              </li>
+            </ul>
+            <div class="plan-card__price">
+              <strong>{{ plan.price }}€</strong>
+              <span>/mes</span>
+            </div>
+            <RouterLink to="/bolsa-de-empleo" class="btn" :class="plan.featured ? 'btn--primary' : 'btn--secondary'">
+              <Zap :size="17" />
+              Ver {{ plan.name }}
+            </RouterLink>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq section">
       <div class="container faq__inner">
-        <div class="section-header">
-          <h2 class="section-title">Preguntas frecuentes</h2>
-          <p class="section-subtitle">Todo lo que necesitas saber antes de empezar</p>
+        <div class="section-heading">
+          <span class="kicker">Preguntas frecuentes</span>
+          <h2>Antes de incorporar a tu primer empleado IA.</h2>
         </div>
 
         <div class="faq__list">
-          <div
-            v-for="(item, i) in faqs"
-            :key="i"
+          <button
+            v-for="(item, index) in faqs"
+            :key="item.q"
             class="faq__item"
-            :class="{ 'faq__item--open': openFaq === i }"
-            @click="openFaq = openFaq === i ? null : i"
+            :class="{ 'faq__item--open': openFaq === index }"
+            @click="openFaq = openFaq === index ? null : index"
           >
-            <div class="faq__question">
-              <span>{{ item.q }}</span>
-              <ChevronDown :size="18" class="faq__chevron" :class="{ 'faq__chevron--open': openFaq === i }" />
-            </div>
-            <Transition name="accordion">
-              <div v-if="openFaq === i" class="faq__answer">
-                <p>{{ item.a }}</p>
-              </div>
-            </Transition>
+            <span class="faq__question">
+              {{ item.q }}
+              <ChevronDown :size="18" />
+            </span>
+            <span v-if="openFaq === index" class="faq__answer">{{ item.a }}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="container">
+        <div class="final-cta__box">
+          <span class="kicker">Demo gratuita</span>
+          <h2>Ve cómo sería dirigir a tu primer empleado IA.</h2>
+          <p>
+            En 30 minutos te enseñamos cómo se configura un puesto, qué puede
+            hacer desde WhatsApp o Telegram y qué documentos puede crear o procesar.
+          </p>
+          <div class="final-cta__actions">
+            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+              <CalendarCheck :size="18" />
+              Agendar demo
+            </a>
+            <a
+              href="https://wa.me/34604822385?text=Hola%2C%20quiero%20ver%20c%C3%B3mo%20funciona%20un%20empleado%20IA"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn--secondary"
+            >
+              <MessageSquare :size="18" />
+              Escribir por WhatsApp
+            </a>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- ── FINAL CTA ──────────────────────────────── -->
-    <section class="final-cta">
-      <div class="container">
-        <div class="final-cta__box">
-          <div class="final-cta__glow" aria-hidden="true" />
-          <Zap :size="36" class="final-cta__icon" />
-          <h2 class="final-cta__title">¿Listo para incorporar tu primer empleado IA?</h2>
-          <p class="final-cta__subtitle">La demo dura 30 minutos y es completamente gratuita. Sin compromiso.</p>
-          <a
-            :href="calLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-primary btn-primary--lg"
-          >
-            <CalendarCheck :size="20" />
-            Agendar demo gratuita
-          </a>
-          <p class="final-cta__whatsapp">
-            ¿Prefieres escribirnos?
-            <a
-              href="https://wa.me/34604822385?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20vuestros%20empleados%20IA"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Escríbenos por WhatsApp
-            </a>
-          </p>
-        </div>
-      </div>
-    </section>
-
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import {
-  Sparkles, CalendarCheck, ArrowDown, CheckCircle,
-  Users, LayoutGrid, Star, ChevronDown,
-  Info, Zap, MessageSquare, Wrench, BookOpen,
-  TrendingUp, TrendingDown, Building2, Share2, BarChart2,
-  CreditCard, GraduationCap, X,
+  Brain,
+  Building2,
+  CalendarCheck,
+  CheckCircle,
+  ChevronDown,
+  ClipboardCheck,
+  Clock,
+  CreditCard,
+  Eye,
+  FileText,
+  Lock,
+  MessageSquare,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Users,
+  Workflow,
+  Zap,
 } from 'lucide-vue-next'
 
-const calLink   = import.meta.env.VITE_CAL_BOOKING_LINK
-const view      = ref('employees')
-const openFaq   = ref(null)
-const blogPosts = ref([])
-const courses   = ref([])
+const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
+const openFaq = ref(null)
 
-// Waitlist modal state
-const waitlistModal  = ref(null)   // course object or null
-const waitlistForm   = ref({ name: '', email: '', phone: '' })
-const waitlistStatus = ref('')     // '' | 'loading' | 'success' | 'error'
-const waitlistError  = ref('')
-
-function openWaitlist(course) {
-  waitlistModal.value  = course
-  waitlistForm.value   = { name: '', email: '', phone: '' }
-  waitlistStatus.value = ''
-  waitlistError.value  = ''
-}
-
-function closeWaitlist() {
-  waitlistModal.value = null
-}
-
-async function submitWaitlist() {
-  waitlistStatus.value = 'loading'
-  waitlistError.value  = ''
-  try {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/courses/${waitlistModal.value.slug}/waitlist`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(waitlistForm.value),
-      }
-    ).then(r => r.json())
-
-    if (!res.success) throw new Error(res.message)
-    waitlistStatus.value = 'success'
-  } catch (err) {
-    waitlistStatus.value = 'error'
-    waitlistError.value  = err.message || 'Error al apuntarse. Inténtalo de nuevo.'
-  }
-}
-
-function formatCourseDate(d) {
-  if (!d) return 'Fecha por confirmar'
-  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
-}
-
-function formatBlogDate(d) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
-}
-
-onMounted(async () => {
-  try {
-    const API = import.meta.env.VITE_API_URL
-    const [coursesRes, blogRes] = await Promise.all([
-      fetch(`${API}/courses`).then(r => r.json()),
-      fetch(`${API}/blog?limit=3`).then(r => r.json()),
-    ])
-    courses.value   = coursesRes.data ?? []
-    blogPosts.value = blogRes.data ?? []
-  } catch {
-    // fail silently — sections won't render if empty
-  }
-})
-
-// ── Employee lifecycle ──
-const employeeProcess = [
+const confidence = [
   {
-    icon: CreditCard,
-    color: '#7c6fff',
-    bg: 'rgba(124,111,255,0.12)',
-    borderColor: 'rgba(124,111,255,0.3)',
-    title: 'Lo incorporas',
-    desc: 'Elige tu empleado en la Bolsa de Empleo y completa la incorporación. En minutos tienes todo preparado para empezar.',
-    stat: 'Sin permanencia mínima',
+    icon: ShieldCheck,
+    title: 'Protocolos antes de operar',
+    text: 'Primero se define qué puede hacer, qué debe preguntar y cuándo escalar.',
   },
   {
-    icon: Wrench,
-    color: '#f59e0b',
-    bg: 'rgba(245,158,11,0.12)',
-    borderColor: 'rgba(245,158,11,0.3)',
-    title: 'Lo entrenamos juntos',
-    desc: 'Celebramos una sesión de bienvenida donde defines la personalidad, el tono y el conocimiento de tu empleado. En siete días está activo.',
-    stat: 'Listo en 7 días',
+    icon: Eye,
+    title: 'Supervisión visible',
+    text: 'Tareas, documentos y aprendizajes quedan listos para revisar.',
   },
   {
-    icon: Zap,
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.12)',
-    borderColor: 'rgba(52,211,153,0.3)',
-    title: 'Trabaja por ti, siempre',
-    desc: 'Tu empleado trabaja de forma constante los 365 días del año. Tú recuperas el tiempo que dedicabas a tareas administrativas.',
-    stat: '24/7 · 365 días',
+    icon: Brain,
+    title: 'Memoria de negocio',
+    text: 'Aprende tono, preferencias y criterios a partir de interacciones reales.',
+  },
+  {
+    icon: Clock,
+    title: 'Disponible 24/7',
+    text: 'Responde, prepara y organiza aunque tu equipo no esté conectado.',
   },
 ]
 
-// ── Employees ────────────────────────────────────────────────────────────────
 const employees = [
   {
-    id:    'luna',
-    name:  'Luna',
-    role:  'Captadora',
-    dept:  'Motor de Adquisición',
-    icon:  TrendingUp,
-    color: '#34d399',
-    bg:    'rgba(52,211,153,0.12)',
-    pitch: 'Luna atiende cada contacto nuevo con calidez y criterio. Valora compatibilidad y agenda la primera sesión, incluso mientras duermes.',
-    benefits: [
-      'Ningún contacto nuevo queda sin respuesta, a cualquier hora',
-      'Solo llegan a ti los casos que encajan con tu perfil',
-      'La primera cita se agenda sola, sin que intervengas',
-      'Seguimiento automático a contactos que aún no estaban listos',
+    id: 'alex',
+    initials: 'AX',
+    name: 'Alex',
+    role: 'Asistente ejecutivo',
+    color: '#9cffcb',
+    pitch: 'Convierte instrucciones, reuniones y notas dispersas en agenda, documentos y seguimiento operativo.',
+    channels: ['WhatsApp', 'Telegram', 'Docs', 'Email'],
+    tasks: [
+      'Prepara minutas, briefs, propuestas y resúmenes',
+      'Organiza prioridades y seguimiento semanal',
+      'Aprende tus criterios de decisión',
     ],
   },
   {
-    id:    'sofia',
-    name:  'Sofía',
-    role:  'Asistente',
-    dept:  'Núcleo Operativo',
-    icon:  MessageSquare,
-    color: '#7c6fff',
-    bg:    'rgba(124,111,255,0.12)',
-    pitch: 'Sofía gestiona tu agenda, responde consultas y recuerda citas. Tu operativa diaria en piloto automático.',
-    benefits: [
-      'Tu agenda llega a las 7:30h para empezar el día con claridad',
-      'Tus clientes reciben respuesta inmediata, de día o de noche',
-      'Cancelaciones y cambios gestionados sin interrumpirte',
-      'Recordatorios automáticos para que ninguna sesión quede sin confirmar',
+    id: 'nora',
+    initials: 'NO',
+    name: 'Nora',
+    role: 'Recepcionista',
+    color: '#8fb3ff',
+    pitch: 'Atiende clientes, filtra solicitudes, agenda reuniones y mantiene conversaciones con el tono de tu marca.',
+    channels: ['WhatsApp', 'Telegram', 'Instagram DM', 'Calendar'],
+    tasks: [
+      'Responde preguntas frecuentes con protocolos',
+      'Cualifica contactos antes de pasarlos a ventas',
+      'Gestiona reservas, cambios y recordatorios',
     ],
   },
   {
-    id:    'valeria',
-    name:  'Valeria',
-    role:  'Contenido',
-    dept:  'Presencia Digital',
-    icon:  Share2,
-    color: '#f59e0b',
-    bg:    'rgba(245,158,11,0.12)',
-    pitch: 'Valeria mantiene tu presencia digital activa. Publica en redes, redacta artículos y crea materiales que te posicionan como referente.',
-    benefits: [
-      'Publicaciones semanales en Instagram, LinkedIn y TikTok',
-      'Artículos de blog con posicionamiento web sin escribir una línea',
-      'Comentarios respondidos para mantener tu comunidad activa',
-      'Calendario mensual de contenido con tendencias',
+    id: 'valeria',
+    initials: 'VA',
+    name: 'Valeria',
+    role: 'Content creator',
+    color: '#ffd38a',
+    pitch: 'Transforma ideas, audios, conversaciones y documentos en contenido publicable para tus canales.',
+    channels: ['Docs', 'LinkedIn', 'Instagram', 'Email'],
+    tasks: [
+      'Crea posts, guiones, emails y artículos',
+      'Reutiliza ideas en múltiples formatos',
+      'Detecta temas desde conversaciones con clientes',
     ],
   },
   {
-    id:    'marcos',
-    name:  'Marcos',
-    role:  'Administrador',
-    dept:  'Núcleo Operativo',
-    icon:  BarChart2,
-    color: '#818cf8',
-    bg:    'rgba(129,140,248,0.12)',
-    pitch: 'Marcos lleva las finanzas de tu negocio sin errores. Informes, alertas de cobro y calendario fiscal siempre al día.',
-    benefits: [
-      'Resumen semanal de ingresos sin hojas de cálculo',
-      'Alertas de cobros pendientes antes de que sean un problema',
-      'Informe financiero mensual listo en Google Docs',
-      'Aviso 15 días antes de cada declaración fiscal',
+    id: 'bruno',
+    initials: 'BR',
+    name: 'Bruno',
+    role: 'Gestor de comunidad',
+    color: '#d7b7ff',
+    pitch: 'Actúa como segundo cerebro: captura aprendizajes, objeciones, preguntas repetidas y oportunidades.',
+    channels: ['WhatsApp', 'Telegram', 'CRM', 'Base de conocimiento'],
+    tasks: [
+      'Resume aprendizajes de comunidad y clientes',
+      'Mantiene una memoria consultable del negocio',
+      'Propone respuestas, documentos y procesos nuevos',
     ],
   },
 ]
 
-// ── Plans ─────────────────────────────────────────────────────────────────────
+const workflow = [
+  {
+    icon: MessageSquare,
+    title: 'Pides algo natural',
+    text: 'Envías un audio, mensaje o documento por el canal que ya usas.',
+  },
+  {
+    icon: Workflow,
+    title: 'Aplica tus protocolos',
+    text: 'El empleado cruza la petición con tono, límites, fuentes y contexto.',
+  },
+  {
+    icon: FileText,
+    title: 'Entrega trabajo',
+    text: 'Crea documentos, respuestas, tareas o resúmenes listos para revisar.',
+  },
+  {
+    icon: Brain,
+    title: 'Aprende del resultado',
+    text: 'Guarda preferencias y patrones para responder mejor la próxima vez.',
+  },
+]
+
 const plans = [
   {
-    id:              'despacho',
-    name:            'Despacho Digital',
-    target:          'Para psicólogos, coaches y despachos',
-    icon:            Building2,
-    color:           '#34d399',
-    bg:              'rgba(52,211,153,0.12)',
-    featured:        false,
-    monthly_promo:   300,
-    monthly_regular: 200,
+    id: 'individual',
+    name: 'Empleado individual',
+    target: 'Para delegar un puesto concreto',
+    icon: CreditCard,
+    price: 150,
+    featured: false,
     features: [
-      'Captación y gestión de contactos 24/7 (Luna)',
-      'Asistente virtual para agenda y consultas (Sofía)',
-      'Web profesional + dashboard de gestión',
-      'Setup completo incluido · Activo en 7 días',
+      '1 empleado IA configurado con tu tono',
+      'WhatsApp o Telegram como canal principal',
+      'Documentos, protocolos y memoria inicial',
+      'Setup disponible desde la Bolsa de Empleo',
     ],
   },
   {
-    id:              'clinica',
-    name:            'Clínica Digital',
-    target:          'Para clínicas y centros de salud',
-    icon:            Sparkles,
-    color:           '#7c6fff',
-    bg:              'rgba(124,111,255,0.12)',
-    featured:        true,
-    monthly_promo:   500,
-    monthly_regular: 350,
+    id: 'operativo',
+    name: 'Equipo Operativo',
+    target: 'Para dirección, atención y documentos',
+    icon: Building2,
+    price: 300,
+    featured: false,
     features: [
-      'Todo lo de Despacho Digital, más:',
-      'Contenido y redes sociales activos (Valeria)',
-      'Administración financiera y fiscal (Marcos)',
-      'Los 4 empleados IA en paralelo · Panel central',
+      'Asistente ejecutivo y recepcionista IA',
+      'Agenda, documentos y atención conectados',
+      'Protocolos de trabajo y supervisión',
+      'Activo tras onboarding de 7 días',
+    ],
+  },
+  {
+    id: 'completo',
+    name: 'Equipo Completo',
+    target: 'Para operar contenido, comunidad y memoria',
+    icon: Sparkles,
+    price: 500,
+    featured: true,
+    features: [
+      'Los 4 empleados IA trabajando en paralelo',
+      'Content creator y segundo cerebro incluidos',
+      'Sistema de aprendizaje por interacciones',
+      'Panel central y mejora continua',
     ],
   },
 ]
 
-// ── FAQs ──
 const faqs = [
   {
-    q: '¿Por qué hay una mensualidad si ya pago el setup?',
-    a: 'La mensualidad cubre el mantenimiento continuo de tu empleado IA: actualizaciones con las últimas tecnologías de inteligencia artificial, soporte técnico ante cualquier incidencia, y reentrenamiento del agente —si es necesario— cada 6 meses para que siga respondiendo con precisión a la realidad de tu negocio. Sin esa inversión continua, el agente quedaría obsoleto en pocas semanas.',
+    q: '¿Qué hace que esto sea un empleado IA y no un agente?',
+    a: 'Un agente ejecuta una automatización. Un empleado IA tiene puesto, responsabilidades, memoria, protocolos y canales de comunicación. Se entrena para operar dentro de tu negocio, no solo para resolver una tarea aislada.',
   },
   {
-    q: '¿En qué plataformas trabajan los empleados IA?',
-    a: 'Sofía está conectada a WhatsApp Business API e Instagram DMs. El resto de empleados trabajan dentro de tu panel de control e integran con tus herramientas actuales (Google Calendar, email, Stripe, etc.).',
+    q: '¿Tengo que aprender una herramienta nueva?',
+    a: 'No como punto de partida. La interacción principal puede ocurrir por WhatsApp o Telegram. El panel sirve para supervisión, configuración y seguimiento cuando lo necesites.',
   },
   {
-    q: '¿Cuánto tarda en estar listo mi empleado IA?',
-    a: 'El proceso completo — sesión de bienvenida, configuración, entrenamiento e integración — se completa en 7 días desde el inicio. Ese tiempo lo usamos para personalizar la personalidad, los flujos y conectar tus cuentas.',
+    q: '¿Puede crear y procesar documentos?',
+    a: 'Sí. Puede crear propuestas, minutas, resúmenes, briefs, respuestas y reportes. También puede leer documentos existentes para extraer información, clasificarla o convertirla en tareas.',
   },
   {
-    q: '¿Puedo contratar solo un empleado y añadir más después?',
-    a: 'Sí, completamente. Puedes empezar con un único empleado y ampliar tu equipo cuando lo necesites. Los departamentos y el equipo completo ofrecen un precio más ventajoso al contratar varios a la vez.',
+    q: '¿Cómo aprende de mí y de mis clientes?',
+    a: 'Durante el onboarding definimos fuentes, ejemplos y criterios. Después, las interacciones reales sirven para ajustar tono, respuestas, objeciones frecuentes, límites y decisiones que debe escalar.',
   },
   {
-    q: '¿Puedo fraccionar el pago de la incorporación?',
-    a: 'Sí. El coste de incorporación se puede dividir en hasta 3 cuotas mensuales cargadas automáticamente. Eliges la opción al finalizar la contratación en la Bolsa de Empleo.',
-  },
-  {
-    q: '¿Cuándo empieza a cobrarse la mensualidad?',
-    a: 'La primera cuota mensual se cobra el primer día del mes siguiente a la entrega de tus empleados. Por ejemplo, si entregamos el 15 de mayo, la primera mensualidad es el 1 de junio.',
-  },
-  {
-    q: '¿Necesito conocimientos técnicos para usarlo?',
-    a: 'Para nada. El panel de control está diseñado para que cualquier persona sin perfil técnico pueda usarlo con comodidad. Nosotros nos encargamos de toda la infraestructura.',
-  },
-  {
-    q: '¿Puedo cancelar la suscripción en cualquier momento?',
-    a: 'Sí. No existe permanencia mínima. Si decides cancelar, solo tienes que avisarnos con un mes de antelación. El pago de incorporación no es reembolsable, ya que cubre trabajo ya realizado.',
-  },
-  {
-    q: '¿Qué ocurre con mis datos y los de mis clientes?',
-    a: 'Todos los datos se almacenan en servidores seguros de MongoDB Atlas en la Unión Europea. No compartimos información con terceros y cumplimos con el RGPD. Puedes consultar nuestra Política de Privacidad para más detalles.',
-  },
-  {
-    q: '¿Los empleados IA hablan solo español?',
-    a: 'Pueden configurarse para atender en varios idiomas, incluyendo español e inglés. Por defecto trabajan en español. Podemos adaptarlos a tus necesidades.',
+    q: '¿Cuánto tarda en estar funcionando?',
+    a: 'El onboarding estándar dura 7 días. En ese tiempo definimos el puesto, conectamos canales, cargamos documentos, configuramos protocolos y probamos conversaciones reales.',
   },
 ]
 </script>
 
 <style lang="scss" scoped>
-// ── Global ──────────────────────────────
+.home {
+  --ink: #f8f6ee;
+  --muted: #a8b1aa;
+  --subtle: #65706c;
+  --panel: rgba(11, 23, 21, 0.86);
+  --panel-strong: #10241f;
+  --line: rgba(198, 255, 219, 0.14);
+  --line-strong: rgba(198, 255, 219, 0.32);
+  --mint: #9cffcb;
+  --blue: #8fb3ff;
+  --amber: #ffd38a;
+  --violet: #d7b7ff;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(156, 255, 203, 0.12), transparent 28%),
+    radial-gradient(circle at 86% 12%, rgba(143, 179, 255, 0.14), transparent 24%),
+    #06110f;
+  color: var(--ink);
+  overflow: hidden;
+}
+
 .container {
-  max-width: 1200px;
+  width: min(1160px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 0 $space-6;
+}
 
-  @media (max-width: 640px) {
-    padding: 0 $space-4;
+.section {
+  padding: 96px 0;
+
+  @media (max-width: 760px) {
+    padding: 72px 0;
   }
 }
 
-.section-header {
-  text-align: center;
-  margin-bottom: $space-12;
-}
-
-.section-title {
-  font-size: $text-3xl;
-  font-weight: $fw-bold;
-  letter-spacing: -0.02em;
-  color: $text;
-  margin-bottom: $space-3;
-
-  @media (max-width: 640px) {
-    font-size: $text-2xl;
-  }
-}
-
-.section-subtitle {
-  font-size: $text-base;
-  color: $text-muted;
-}
-
-.btn-primary {
+.kicker,
+.eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: $space-2;
-  height: 48px;
-  padding: 0 $space-6;
-  background: $primary;
-  color: #fff;
-  font-size: $text-base;
-  font-weight: $fw-semibold;
-  border-radius: $radius;
+  gap: 8px;
+  color: var(--mint);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.section-heading {
+  max-width: 720px;
+  margin-bottom: 40px;
+
+  h2 {
+    margin: 12px 0 14px;
+    color: var(--ink);
+    font-size: clamp(2rem, 4vw, 3.35rem);
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  &--split {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 48px;
+    align-items: end;
+    max-width: none;
+
+    p {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 860px) {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 800;
   text-decoration: none;
-  transition: $transition;
-  box-shadow: 0 0 24px $primary-glow;
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
 
   &:hover {
-    background: $primary-dark;
     transform: translateY(-2px);
-    box-shadow: 0 0 36px rgba(124,111,255,0.4);
-    color: #fff;
   }
 
-  &--lg {
-    height: 56px;
-    padding: 0 $space-8;
-    font-size: $text-lg;
+  &--primary {
+    background: var(--mint);
+    color: #07110f;
+    box-shadow: 0 18px 56px rgba(156, 255, 203, 0.22);
   }
-}
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  height: 48px;
-  padding: 0 $space-5;
-  border: 1px solid $border;
-  border-radius: $radius;
-  color: $text-muted;
-  font-size: $text-base;
-  font-weight: $fw-medium;
-  text-decoration: none;
-  transition: $transition-fast;
+  &--secondary {
+    background: rgba(248, 246, 238, 0.04);
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
 
-  &:hover {
-    border-color: $border-hover;
-    color: $text;
+  @media (max-width: 520px) {
+    width: 100%;
   }
 }
 
-// ── Hero ────────────────────────────────
 .hero {
   position: relative;
-  padding: $space-16 0;
-  padding-top: calc($space-16 + $space-8);
-  overflow: hidden;
-  text-align: center;
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  padding: 84px 0 64px;
 
-  @media (max-width: 640px) {
-    padding: $space-10 0;
-  }
-
-  &__bg {
+  &__grid {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(124, 111, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124, 111, 255, 0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
+      linear-gradient(rgba(248, 246, 238, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(248, 246, 238, 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
+  }
+
+  &__glow {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
     pointer-events: none;
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(124,111,255,0.18) 0%, transparent 70%);
+    &--mint {
+      left: -120px;
+      top: 140px;
+      background: var(--mint);
+    }
+
+    &--blue {
+      right: -120px;
+      top: 80px;
+      background: var(--blue);
     }
   }
 
-  .container {
+  &__inner {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(430px, 1.05fr);
+    gap: 48px;
     align-items: center;
-    gap: $space-6;
+
+    @media (max-width: 980px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__copy h1 {
     max-width: 760px;
+    margin: 18px 0 22px;
+    font-size: clamp(3rem, 5.4vw, 5.6rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+    color: var(--ink);
   }
 
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-2 $space-4;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
-    border-radius: $radius-full;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $primary-light;
-  }
-
-  &__title {
-    font-size: clamp(2.25rem, 5vw, 3.5rem);
-    font-weight: $fw-bold;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    color: $text;
-  }
-
-  &__title-accent {
-    background: linear-gradient(135deg, $primary-light 0%, $accent 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  &__subtitle {
-    font-size: $text-lg;
-    color: $text-muted;
-    line-height: 1.7;
-    max-width: 600px;
+  &__lead {
+    max-width: 660px;
+    color: var(--muted);
+    font-size: clamp(1.06rem, 1.8vw, 1.25rem);
+    line-height: 1.72;
   }
 
   &__actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: $space-3;
+    gap: 14px;
+    margin-top: 32px;
   }
 
-  &__trust {
+  &__assurance {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: $space-4;
-    margin-top: $space-2;
-  }
+    gap: 14px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 0.92rem;
 
-  &__trust-item {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    font-size: $text-sm;
-    color: $text-muted;
-
-    svg { color: $accent; flex-shrink: 0; }
-  }
-}
-
-// ── Employee lifecycle ───────────────────
-.ep {
-  padding: $space-16 0;
-  border-bottom: 1px solid $border;
-
-  &__phases {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $space-6;
-  }
-
-  &__phase {
-    text-align: center;
-    padding: $space-6 $space-4;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $space-3;
-    transition: $transition;
-
-    &:hover {
-      border-color: $border-hover;
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
     }
-  }
 
-  &__icon-wrap {
-    width: 64px;
-    height: 64px;
-    border-radius: $radius-lg;
-    border: 1px solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  &__phase-num {
-    font-size: $text-xs;
-    font-weight: $fw-bold;
-    letter-spacing: 0.1em;
-    color: $text-muted;
-    font-family: monospace;
-  }
-
-  &__phase-title {
-    font-size: $text-base;
-    font-weight: $fw-semibold;
-    color: $text;
-  }
-
-  &__phase-desc {
-    font-size: $text-sm;
-    line-height: 1.6;
-    color: $text-muted;
-    flex: 1;
-  }
-
-  &__stat {
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    letter-spacing: 0.05em;
-    padding: $space-1 $space-3;
-    border: 1px solid;
-    border-radius: $radius-full;
-    margin-top: $space-1;
-  }
-
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-8;
-    margin-top: $space-8;
-    padding: $space-5 $space-8;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-
-    @media (max-width: 480px) {
-      gap: $space-4;
-      padding: $space-4;
-      flex-wrap: wrap;
-    }
-  }
-
-  &__footer-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $space-1;
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__footer-num {
-    font-size: $text-2xl;
-    font-weight: $fw-bold;
-    color: $accent;
-    line-height: 1;
-  }
-
-  &__footer-sep {
-    width: 1px;
-    height: 40px;
-    background: $border;
-
-    @media (max-width: 480px) {
-      display: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    &__phases {
-      grid-template-columns: 1fr;
+    svg {
+      color: var(--mint);
     }
   }
 }
 
-// ── Catalog ─────────────────────────────
-.catalog {
-  padding: $space-16 0;
-
-  &__toggle {
-    display: flex;
-    justify-content: center;
-    gap: $space-2;
-    margin-bottom: $space-10;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-    padding: $space-2;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-
-    @media (max-width: 600px) {
-      flex-direction: column;
-      width: 100%;
-    }
-  }
-
-  &__tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 40px;
-    padding: 0 $space-5;
-    background: transparent;
-    border: none;
-    border-radius: $radius;
-    color: $text-muted;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    cursor: pointer;
-    transition: $transition-fast;
-    white-space: nowrap;
-
-    &:hover { color: $text; }
-
-    &--active {
-      background: $primary;
-      color: #fff;
-      box-shadow: 0 0 16px $primary-glow;
-    }
-  }
-
-  &__hire-btn {
-    margin-top: $space-4;
-  }
-
-  &__footnote {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    justify-content: center;
-    margin-top: $space-8;
-    padding: $space-3 $space-5;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius;
-    font-size: $text-sm;
-    color: $text-muted;
-    text-align: center;
-    max-width: 620px;
-    margin-left: auto;
-    margin-right: auto;
-
-    svg { flex-shrink: 0; margin-top: 2px; color: $primary-light; }
-  }
-}
-
-// ── Cards grid ─────────────────────────
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $space-5;
-
-  &--packages {
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-  }
-}
-
-// ── Employee card ───────────────────────
-.emp-card {
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  padding: $space-5;
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  transition: $transition;
-
-  &:hover {
-    border-color: $border-hover;
-    box-shadow: $shadow-glow;
-    transform: translateY(-3px);
-  }
-
-  &__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: $radius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__role-badge {
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    padding: 3px $space-2;
-    border-radius: $radius-full;
-    border: 1px solid;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-  }
-
-  &__body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: $space-3;
-  }
-
-  &__name {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-  }
-
-  &__role {
-    font-size: $text-xs;
-    color: $text-subtle;
-    font-weight: $fw-medium;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-top: $space-1;
-  }
-
-  &__pitch {
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.6;
-  }
-
-  &__pain {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    background: $warning-bg;
-    border: 1px solid rgba(245,158,11,0.15);
-    border-radius: $radius;
-    padding: $space-3;
-    font-size: $text-xs;
-    color: $text-muted;
-    line-height: 1.5;
-
-    &-icon { color: $warning; flex-shrink: 0; margin-top: 1px; }
-  }
-
-  &__solution {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    background: $success-bg;
-    border: 1px solid rgba(52,211,153,0.15);
-    border-radius: $radius;
-    padding: $space-3;
-    font-size: $text-xs;
-    color: $text-muted;
-    line-height: 1.5;
-
-    &-icon { color: $accent; flex-shrink: 0; margin-top: 1px; }
-  }
-
-  // ── Job profile toggle ──
-  &__profile-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: $space-2 $space-3;
-    background: transparent;
-    border: 1px solid $border;
-    border-radius: $radius;
-    color: $text-muted;
-    font-size: $text-xs;
-    font-weight: $fw-medium;
-    cursor: pointer;
-    transition: $transition-fast;
-    letter-spacing: 0.02em;
-
-    &:hover {
-      border-color: $border-hover;
-      color: $text;
-    }
-  }
-
-  &__profile-chevron {
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-
-    &--open { transform: rotate(180deg); }
-  }
-
-  &__profile {
-    background: rgba(124,111,255,0.04);
-    border: 1px solid rgba(124,111,255,0.15);
-    border-radius: $radius;
-    padding: $space-3;
-    margin-top: -$space-2;
-  }
-
-  &__tasks {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-  }
-
-  &__task {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    font-size: $text-xs;
-    color: $text-muted;
-    line-height: 1.5;
-  }
-
-  &__task-icon {
-    color: $primary-light;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  &__footer {
-    border-top: 1px solid $border;
-    padding-top: $space-4;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: $space-3;
-    flex-wrap: wrap;
-  }
-
-  &__price {
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-  }
-
-  &__price-monthly {
-    display: flex;
-    align-items: baseline;
-    gap: $space-1;
-  }
-
-  &__price-amount {
-    font-size: $text-2xl;
-    font-weight: $fw-bold;
-    color: $text;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__price-period {
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__price-period {
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__price-setup {
-    font-size: $text-xs;
-    font-weight: $fw-medium;
-    color: $text-muted;
-  }
-
-  &__benefits {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-  }
-
-  &__benefit {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.5;
-  }
-
-  &__benefit-icon {
-    color: $accent;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  &__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    height: 38px;
-    padding: 0 $space-4;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
-    border-radius: $radius;
-    color: $primary-light;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    text-decoration: none;
-    transition: $transition;
-    white-space: nowrap;
-
-    &:hover {
-      background: $primary;
-      color: #fff;
-      border-color: $primary;
-    }
-  }
-}
-
-// ── Package card ────────────────────────
-.pkg-card {
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  padding: $space-6;
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  transition: $transition;
+.ops-panel {
   position: relative;
-
-  &:hover {
-    border-color: $border-hover;
-    transform: translateY(-3px);
-  }
-
-  &--featured {
-    border-color: rgba(52,211,153,0.4);
-    background: linear-gradient(145deg, $bg-card, rgba(52,211,153,0.04));
-    box-shadow: 0 0 40px rgba(52,211,153,0.1);
-
-    &:hover {
-      border-color: rgba(52,211,153,0.6);
-      box-shadow: 0 0 56px rgba(52,211,153,0.2);
-    }
-  }
-
-  &__ribbon {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    padding: $space-1 $space-3;
-    background: $accent;
-    color: $bg;
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $fw-bold;
-    white-space: nowrap;
-    letter-spacing: 0.03em;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: $space-4;
-  }
-
-  &__icon {
-    width: 52px;
-    height: 52px;
-    border-radius: $radius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__name {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-  }
-
-  &__includes {
-    font-size: $text-xs;
-    color: $text-muted;
-    margin-top: $space-1;
-  }
-
-  &__pitch {
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.6;
-  }
-
-  &__pain {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    background: $warning-bg;
-    border: 1px solid rgba(245,158,11,0.15);
-    border-radius: $radius;
-    padding: $space-3;
-    font-size: $text-xs;
-    color: $text-muted;
-    line-height: 1.5;
-
-    svg { color: $warning; flex-shrink: 0; margin-top: 1px; }
-  }
-
-  &__solution {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    background: $success-bg;
-    border: 1px solid rgba(52,211,153,0.15);
-    border-radius: $radius;
-    padding: $space-3;
-    font-size: $text-xs;
-    color: $text-muted;
-    line-height: 1.5;
-
-    svg { color: $accent; flex-shrink: 0; margin-top: 1px; }
-  }
-
-  &__footer {
-    border-top: 1px solid $border;
-    padding-top: $space-4;
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: $space-3;
-  }
-
-  &__price {
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-  }
-
-  &__price-row {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-    flex-wrap: wrap;
-  }
-
-  &__price-amount {
-    font-size: $text-3xl;
-    font-weight: $fw-bold;
-    color: $text;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__price-period {
-    font-size: $text-base;
-    color: $text-muted;
-  }
-
-  &__saving {
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    color: $accent;
-    background: $success-bg;
-    padding: 2px $space-2;
-    border-radius: $radius-full;
-    border: 1px solid rgba(52,211,153,0.2);
-  }
-
-  &__setup {
-    font-size: $text-xs;
-    font-weight: $fw-medium;
-    color: $text-muted;
-  }
-
-  &__benefits {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    flex: 1;
-  }
-
-  &__benefit {
-    display: flex;
-    align-items: flex-start;
-    gap: $space-2;
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.5;
-  }
-
-  &__benefit-icon {
-    color: $accent;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  &__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 44px;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
-    border-radius: $radius;
-    color: $primary-light;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    text-decoration: none;
-    transition: $transition;
-
-    &:hover {
-      background: $primary;
-      color: #fff;
-      border-color: $primary;
-    }
-
-    &--featured {
-      background: $accent;
-      border-color: $accent;
-      color: $bg;
-      box-shadow: 0 0 20px rgba(52,211,153,0.3);
-
-      &:hover {
-        background: #2ebf86;
-        color: $bg;
-        box-shadow: 0 0 28px rgba(52,211,153,0.5);
-      }
-    }
-  }
-}
-
-// ── Despacho panel (catalog tab) ─────────
-.despacho-panel {
-  position: relative;
-  background: $bg-card;
-  border: 1px solid rgba(52,211,153,0.3);
-  border-radius: $radius-xl;
-  padding: $space-10;
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: $space-10;
-  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 38%),
+    var(--panel);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  box-shadow: 0 0 60px rgba(52,211,153,0.07);
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    padding: $space-6;
-    gap: $space-6;
-  }
-
-  &__glow {
+  &::before {
+    content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(52,211,153,0.07) 0%, transparent 60%);
+    background-image:
+      linear-gradient(rgba(156, 255, 203, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(156, 255, 203, 0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
     pointer-events: none;
   }
 
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-1 $space-3;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    color: $accent;
-    letter-spacing: 0.03em;
-    margin-bottom: $space-4;
-  }
-
-  &__title {
-    font-size: $text-3xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.02em;
-    margin-bottom: $space-3;
-
-    @media (max-width: 640px) {
-      font-size: $text-2xl;
-    }
-  }
-
-  &__sub {
-    font-size: $text-base;
-    color: $text-muted;
-    line-height: 1.6;
-    margin-bottom: $space-4;
-    max-width: 480px;
-  }
-
-  &__saving {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-2 $space-4;
-    background: rgba(52,211,153,0.08);
-    border: 1px solid rgba(52,211,153,0.2);
-    border-radius: $radius-full;
-    font-size: $text-sm;
-    color: $accent;
-    margin-bottom: $space-5;
-
-    strong { font-weight: $fw-bold; }
-    svg { flex-shrink: 0; }
-  }
-
-  &__features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: $space-2;
-      font-size: $text-sm;
-      color: $text-muted;
-
-      svg { color: $accent; flex-shrink: 0; }
-    }
-  }
-
-  &__right {
+  &__topbar,
+  &__main,
+  .employee-dock {
     position: relative;
   }
 
-  &__price-box {
-    background: $bg-surface;
-    border: 1px solid $border-hover;
-    border-radius: $radius-lg;
-    padding: $space-6;
+  &__topbar {
     display: flex;
-    flex-direction: column;
-    gap: $space-3;
-  }
-
-  &__price {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-  }
-
-  &__price-num {
-    font-size: 2.5rem;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__price-period {
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__price-note {
-    font-size: $text-xs;
-    color: $text-subtle;
-    margin-top: -$space-2;
-  }
-
-  &__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 48px;
-    background: $accent;
-    border: none;
-    border-radius: $radius;
-    color: $bg;
-    font-size: $text-base;
-    font-weight: $fw-bold;
-    text-decoration: none;
-    transition: $transition;
-    box-shadow: 0 0 20px rgba(52,211,153,0.3);
-
-    &:hover {
-      background: #2ebf86;
-      transform: translateY(-1px);
-      box-shadow: 0 0 28px rgba(52,211,153,0.45);
-      color: $bg;
-    }
-  }
-
-  &__demo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $text-sm;
-    color: $text-muted;
-    text-decoration: none;
-    transition: $transition-fast;
-
-    &:hover { color: $text; }
-  }
-}
-
-// ── Despacho home banner ─────────────────
-.home-despacho {
-  padding: $space-16 0;
-  background: $bg-surface;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
-
-  &__inner {
-    position: relative;
-    background: $bg-card;
-    border: 1px solid rgba(52,211,153,0.3);
-    border-radius: $radius-xl;
-    padding: $space-10;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: $space-8;
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(52,211,153,0.07);
+    align-items: center;
+    gap: 18px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
 
-    @media (max-width: 768px) {
-      flex-direction: column;
-      padding: $space-6;
-      text-align: center;
-    }
-  }
-
-  &__glow {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 50% 100% at 100% 50%, rgba(52,211,153,0.08) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  &__text {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $space-3;
-
-    @media (max-width: 768px) {
+    div {
+      display: inline-flex;
       align-items: center;
+      gap: 9px;
+      color: var(--ink);
+      font-weight: 800;
     }
   }
 
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-1 $space-3;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    color: $accent;
-    letter-spacing: 0.03em;
+  &__status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 0 6px rgba(156, 255, 203, 0.12);
   }
 
-  &__title {
-    font-size: $text-3xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.02em;
+  &__main {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    padding: 20px;
 
-    @media (max-width: 640px) {
-      font-size: $text-2xl;
+    @media (max-width: 620px) {
+      grid-template-columns: 1fr;
     }
   }
 
-  &__sub {
-    font-size: $text-base;
-    color: $text-muted;
-    line-height: 1.6;
-    max-width: 500px;
-  }
-
-  &__saving {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-2 $space-4;
-    background: rgba(52,211,153,0.08);
-    border: 1px solid rgba(52,211,153,0.2);
-    border-radius: $radius-full;
-    font-size: $text-sm;
-    color: $accent;
-
-    strong { font-weight: $fw-bold; }
-    svg { flex-shrink: 0; }
-  }
-
-  &__action {
-    position: relative;
+  &__chat {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: $space-3;
-    flex-shrink: 0;
+    gap: 14px;
   }
 
-  &__price {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-  }
-
-  &__price-num {
-    font-size: 2.25rem;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__price-period {
-    font-size: $text-sm;
-    color: $text-muted;
-    white-space: nowrap;
-  }
-
-  &__cta {
+  &__input {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 52px;
-    padding: 0 $space-8;
-    background: $accent;
-    border: none;
-    border-radius: $radius;
-    color: $bg;
-    font-size: $text-base;
-    font-weight: $fw-bold;
-    text-decoration: none;
-    transition: $transition;
-    box-shadow: 0 0 24px rgba(52,211,153,0.3);
-    white-space: nowrap;
+    gap: 9px;
+    width: fit-content;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(37, 211, 102, 0.12);
+    color: var(--mint);
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
 
-    &:hover {
-      background: #2ebf86;
-      transform: translateY(-2px);
-      box-shadow: 0 0 36px rgba(52,211,153,0.45);
-      color: $bg;
-    }
+  &__side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }
 
-// ── Plan card (catalog tab) ──────────────
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $space-6;
-  max-width: 920px;
-  margin: 0 auto;
+.chat-message {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    max-width: 480px;
+  span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--subtle);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  p {
+    color: var(--ink);
+    line-height: 1.55;
+  }
+
+  &--employee {
+    border-color: rgba(156, 255, 203, 0.28);
+    background: rgba(156, 255, 203, 0.08);
   }
 }
 
-.plan-card {
-  position: relative;
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-xl;
-  padding: $space-8;
+.work-card {
   display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  transition: $transition;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
 
-  &:hover {
-    border-color: $border-hover;
-    transform: translateY(-3px);
-  }
-
-  &--featured {
-    border-color: rgba(124,111,255,0.4);
-    background: linear-gradient(145deg, $bg-card, rgba(124,111,255,0.04));
-    box-shadow: 0 0 40px rgba(124,111,255,0.1);
-
-    &:hover {
-      border-color: rgba(124,111,255,0.6);
-      box-shadow: 0 0 56px rgba(124,111,255,0.18);
-    }
-  }
-
-  &__ribbon {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    padding: $space-1 $space-3;
-    background: $primary;
-    color: #fff;
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $fw-bold;
-    white-space: nowrap;
-    letter-spacing: 0.03em;
-    box-shadow: 0 0 16px $primary-glow;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-  }
-
-  &__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: $radius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  svg {
+    color: var(--blue);
     flex-shrink: 0;
   }
 
-  &__name {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.01em;
+  strong,
+  span {
+    display: block;
   }
 
-  &__target {
-    font-size: $text-xs;
-    color: $text-muted;
-    margin-top: 2px;
+  strong {
+    color: var(--ink);
+    font-size: 0.94rem;
   }
 
-  &__features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-
-    li {
-      display: flex;
-      align-items: flex-start;
-      gap: $space-2;
-      font-size: $text-sm;
-      color: $text-muted;
-      line-height: 1.5;
-    }
+  span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.8rem;
   }
 
-  &__check {
-    color: $accent;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  &__pricing {
-    border-top: 1px solid $border;
-    padding-top: $space-4;
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-  }
-
-  &__price-row {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-    flex-wrap: wrap;
-  }
-
-  &__amount {
-    font-size: $text-3xl;
-    font-weight: $fw-bold;
-    color: $text;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-  }
-
-  &__period {
-    font-size: $text-base;
-    color: $text-muted;
-  }
-
-  &__tag {
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    color: $accent;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
-    padding: 2px $space-2;
-    border-radius: $radius-full;
-  }
-
-  &__after {
-    font-size: $text-sm;
-    color: $text-muted;
-
-    strong { color: $text; font-weight: $fw-semibold; }
-  }
-
-  &__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 44px;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
-    border-radius: $radius;
-    color: $primary-light;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    text-decoration: none;
-    transition: $transition;
-
-    &:hover {
-      background: $primary;
-      border-color: $primary;
-      color: #fff;
-    }
-
-    &--featured {
-      background: $primary;
-      border-color: $primary;
-      color: #fff;
-      box-shadow: 0 0 20px $primary-glow;
-
-      &:hover { background: $primary-dark; }
-    }
+  &--active svg {
+    color: var(--mint);
   }
 }
 
-// ── Home plans section ────────────────────
-.home-plans {
-  padding: $space-16 0;
-  background: $bg-surface;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
+.employee-dock {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 0 20px 20px;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 620px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.employee-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.16);
+
+  > span {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    color: #06110f;
+    font-size: 0.76rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  strong,
+  small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: var(--ink);
+    font-size: 0.86rem;
+  }
+
+  small {
+    color: var(--muted);
+    font-size: 0.74rem;
+  }
+}
+
+.confidence {
+  position: relative;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-5;
-    max-width: 920px;
-    margin: 0 auto;
+    grid-template-columns: repeat(4, 1fr);
 
-    @media (max-width: 768px) {
+    @media (max-width: 920px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 560px) {
       grid-template-columns: 1fr;
-      max-width: 480px;
     }
-  }
-}
-
-.home-plan-card {
-  position: relative;
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-xl;
-  padding: $space-8;
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  transition: $transition;
-
-  &:hover {
-    border-color: $border-hover;
-    transform: translateY(-3px);
-  }
-
-  &--featured {
-    border-color: rgba(124,111,255,0.4);
-    background: linear-gradient(145deg, $bg-card, rgba(124,111,255,0.04));
-    box-shadow: 0 0 40px rgba(124,111,255,0.1);
-
-    &:hover {
-      border-color: rgba(124,111,255,0.6);
-      box-shadow: 0 0 56px rgba(124,111,255,0.18);
-    }
-  }
-
-  &__ribbon {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    padding: $space-1 $space-3;
-    background: $primary;
-    color: #fff;
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $fw-bold;
-    white-space: nowrap;
-    box-shadow: 0 0 16px $primary-glow;
-  }
-
-  &__top {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-  }
-
-  &__icon {
-    width: 44px;
-    height: 44px;
-    border-radius: $radius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__name {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.01em;
-  }
-
-  &__target {
-    font-size: $text-xs;
-    color: $text-muted;
-    margin-top: 2px;
-  }
-
-  &__price {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-  }
-
-  &__amount {
-    font-size: 2.25rem;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__period {
-    font-size: $text-sm;
-    color: $text-muted;
-    white-space: nowrap;
-  }
-
-  &__after {
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 48px;
-    margin-top: auto;
-    background: $primary-subtle;
-    border: 1px solid rgba(124,111,255,0.25);
-    border-radius: $radius;
-    color: $primary-light;
-    font-size: $text-base;
-    font-weight: $fw-semibold;
-    text-decoration: none;
-    transition: $transition;
-
-    &:hover {
-      background: $primary;
-      border-color: $primary;
-      color: #fff;
-      box-shadow: 0 0 20px $primary-glow;
-    }
-
-    &--featured {
-      background: $primary;
-      border-color: $primary;
-      color: #fff;
-      box-shadow: 0 0 20px $primary-glow;
-
-      &:hover { background: $primary-dark; }
-    }
-  }
-}
-
-// ── FAQ ─────────────────────────────────
-.faq {
-  padding: $space-16 0;
-
-  &__inner {
-    max-width: 760px;
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
   }
 
   &__item {
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-    overflow: hidden;
-    cursor: pointer;
-    transition: $transition-fast;
+    min-height: 160px;
+    padding: 28px 24px;
+    border-left: 1px solid var(--line);
 
-    &:hover { border-color: $border-hover; }
-    &--open { border-color: $border-hover; }
-  }
+    &:last-child {
+      border-right: 1px solid var(--line);
+    }
 
-  &__question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-4;
-    padding: $space-5 $space-6;
-    font-size: $text-base;
-    font-weight: $fw-medium;
-    color: $text;
-    user-select: none;
-  }
+    svg {
+      color: var(--mint);
+      margin-bottom: 18px;
+    }
 
-  &__chevron {
-    color: $text-muted;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
+    strong,
+    span {
+      display: block;
+    }
 
-    &--open { transform: rotate(180deg); }
-  }
+    strong {
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 1rem;
+    }
 
-  &__answer {
-    border-top: 1px solid $border;
-    padding: $space-5 $space-6;
-
-    p {
-      font-size: $text-sm;
-      color: $text-muted;
-      line-height: 1.8;
+    span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
     }
   }
 }
 
-// FAQ accordion
-.accordion-enter-active,
-.accordion-leave-active {
-  transition: all 0.2s ease;
-  overflow: hidden;
-}
-.accordion-enter-from,
-.accordion-leave-to { opacity: 0; max-height: 0; }
-.accordion-enter-to,
-.accordion-leave-from { opacity: 1; max-height: 400px; }
-
-// ── Final CTA ───────────────────────────
-.final-cta {
-  padding: $space-16 0;
-
-  &__box {
-    position: relative;
-    background: $bg-card;
-    border: 1px solid $border-hover;
-    border-radius: $radius-xl;
-    padding: $space-16 $space-8;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $space-5;
-    overflow: hidden;
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
-  &__glow {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,111,255,0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  &__icon {
-    color: $primary;
-    filter: drop-shadow(0 0 12px $primary-glow);
-  }
-
-  &__title {
-    font-size: $text-3xl;
-    font-weight: $fw-bold;
-    letter-spacing: -0.02em;
-    position: relative;
-
-    @media (max-width: 640px) {
-      font-size: $text-2xl;
-    }
-  }
-
-  &__subtitle {
-    font-size: $text-base;
-    max-width: 440px;
-    line-height: 1.6;
-    position: relative;
-  }
-
-  &__whatsapp {
-    font-size: $text-sm;
-    color: $text-muted;
-    position: relative;
-
-    a {
-      color: #25d366;
-      font-weight: $fw-medium;
-      text-decoration: none;
-
-      &:hover { text-decoration: underline; }
-    }
-  }
-}
-
-// ── Blog section ────────────────────────
-.blog-section {
-  padding: $space-16 0;
-  background: $bg;
-
-  .section-header {
-    margin-bottom: $space-10;
-  }
-}
-
-.blog-grid {
+.comparison {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $space-6;
-}
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 20px;
 
-.blog-card {
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-xl;
-  overflow: hidden;
-  text-decoration: none;
-  color: $text;
-  display: flex;
-  flex-direction: column;
-  transition: $transition;
-
-  &:hover {
-    border-color: $primary;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(124, 111, 255, 0.15);
+  @media (max-width: 820px) {
+    grid-template-columns: 1fr;
   }
 
-  &__thumb {
-    height: 168px;
-    overflow: hidden;
-    background: $bg-surface;
+  &__card {
+    padding: 28px;
+    border-radius: 26px;
+    border: 1px solid var(--line);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
+    ul {
+      display: grid;
+      gap: 14px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      line-height: 1.55;
     }
 
-    &-empty {
-      height: 100%;
-      background: linear-gradient(135deg, $bg-surface 0%, $bg-card-2 100%);
+    li {
+      padding-left: 18px;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.68em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+    }
+
+    &--muted {
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    &--focus {
+      background:
+        linear-gradient(135deg, rgba(156, 255, 203, 0.14), rgba(143, 179, 255, 0.08)),
+        var(--panel-strong);
+      border-color: var(--line-strong);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+
+      ul {
+        color: var(--ink);
+      }
     }
   }
 
-  &:hover &__thumb img {
-    transform: scale(1.04);
-  }
-
-  &__body {
-    padding: $space-5;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    flex: 1;
-  }
-
-  &__date {
-    font-size: $text-xs;
-    color: $text-subtle;
-    font-family: $font-mono;
-  }
-
-  &__title {
-    font-size: $text-base;
-    font-weight: $fw-semibold;
-    line-height: 1.4;
-  }
-
-  &__excerpt {
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.55;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex: 1;
-  }
-
-  &__cta {
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    color: $primary-light;
-    margin-top: $space-1;
+  &__label {
+    color: var(--ink);
+    font-size: 1.25rem;
+    font-weight: 900;
   }
 }
 
-.blog-more {
-  display: flex;
-  justify-content: center;
-  margin-top: $space-10;
+.employees {
+  background: rgba(255, 255, 255, 0.025);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
-// ── Courses ─────────────────────────────
-.courses-section {
-  padding: $space-16 0;
-  border-top: 1px solid $border;
-  border-bottom: 1px solid $border;
-}
-
-.course-grid {
+.employee-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: $space-6;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+
+  @media (max-width: 1120px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
   }
 }
 
-.course-card {
-  background: $bg-card;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  overflow: hidden;
+.employee-card {
   display: flex;
   flex-direction: column;
-  transition: $transition;
+  gap: 18px;
+  min-height: 430px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--panel);
+  transition: transform 0.18s ease, border-color 0.18s ease;
 
   &:hover {
-    border-color: $border-hover;
-    box-shadow: $shadow-glow;
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    border-color: var(--line-strong);
   }
 
-  &--inactive {
-    opacity: 0.85;
-  }
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 
-  &__thumb {
-    position: relative;
-    height: 180px;
-    overflow: hidden;
-    background: $bg-surface;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
+    h3 {
+      color: var(--ink);
+      font-size: 1.22rem;
+      margin-bottom: 4px;
     }
 
-    &-empty {
-      width: 100%;
-      height: 100%;
+    span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+  }
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 17px;
+    color: #06110f;
+    font-weight: 900;
+  }
+
+  p {
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  &__channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    span {
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+
+  ul {
+    display: grid;
+    gap: 12px;
+    margin: auto 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    gap: 9px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+
+    svg {
+      color: var(--mint);
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.workflow-section {
+  .workflow-shell {
+    padding: 34px;
+    border: 1px solid var(--line);
+    border-radius: 34px;
+    background:
+      linear-gradient(135deg, rgba(255, 211, 138, 0.07), transparent 42%),
+      var(--panel);
+  }
+}
+
+.workflow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+
+  @media (max-width: 980px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+
+  &__step {
+    min-height: 220px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.04);
+
+    svg {
+      color: var(--amber);
+      margin: 18px 0 16px;
+    }
+
+    h3 {
+      color: var(--ink);
+      font-size: 1.1rem;
+      margin-bottom: 9px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+  }
+
+  &__index {
+    color: var(--subtle);
+    font-family: $font-mono;
+    font-size: 0.82rem;
+  }
+}
+
+.proof {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 56px;
+    align-items: center;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__visual {
+    min-height: 420px;
+    display: grid;
+    place-items: center;
+  }
+
+  &__copy h2 {
+    margin: 12px 0 18px;
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
+    line-height: 1.02;
+    letter-spacing: 0;
+  }
+
+  &__copy p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  &__checks {
+    display: grid;
+    gap: 12px;
+    margin-top: 24px;
+
+    span {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, rgba(124,111,255,0.08), rgba(52,211,153,0.06));
-      color: $text-subtle;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    svg {
+      color: var(--mint);
+      flex-shrink: 0;
+    }
+  }
+}
+
+.document-stack {
+  position: relative;
+  width: min(420px, 100%);
+  min-height: 340px;
+}
+
+.doc-card {
+  position: absolute;
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  background: #f8f6ee;
+  color: #07110f;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+
+  &--front {
+    inset: 28px 26px 0 0;
+    z-index: 3;
+    padding: 24px;
+  }
+
+  &--back,
+  &--third {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px;
+    font-weight: 900;
+  }
+
+  &--back {
+    top: 0;
+    right: 0;
+    width: 74%;
+    height: 86px;
+    background: var(--blue);
+    transform: rotate(5deg);
+    z-index: 2;
+  }
+
+  &--third {
+    left: 0;
+    bottom: 18px;
+    width: 70%;
+    height: 82px;
+    background: var(--amber);
+    transform: rotate(-5deg);
+    z-index: 1;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 900;
+    margin-bottom: 30px;
+  }
+
+  &__line {
+    height: 12px;
+    width: 74%;
+    margin-bottom: 14px;
+    border-radius: 999px;
+    background: rgba(7, 17, 15, 0.16);
+
+    &--wide {
+      width: 92%;
+    }
+
+    &--short {
+      width: 54%;
     }
   }
 
-  &:hover &__thumb img {
-    transform: scale(1.04);
+  &__decision {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(6, 17, 15, 0.08);
+    color: #0b3b29;
+    font-weight: 900;
+    font-size: 0.82rem;
+  }
+}
+
+.plans {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+
+    @media (max-width: 920px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 470px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--panel);
+
+  &--featured {
+    border-color: rgba(156, 255, 203, 0.46);
+    background:
+      linear-gradient(135deg, rgba(156, 255, 203, 0.14), rgba(215, 183, 255, 0.08)),
+      var(--panel-strong);
   }
 
   &__badge {
     position: absolute;
-    top: $space-3;
-    left: $space-3;
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    padding: 3px $space-3;
-    border-radius: $radius-full;
-    background: rgba(139,138,168,0.2);
-    border: 1px solid rgba(139,138,168,0.3);
-    color: $text-muted;
-    letter-spacing: 0.04em;
+    top: -14px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--mint);
+    color: #06110f;
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
 
-    &--active {
-      background: rgba(52,211,153,0.15);
-      border-color: rgba(52,211,153,0.3);
-      color: $accent;
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    svg {
+      color: var(--mint);
+    }
+
+    h3 {
+      color: var(--ink);
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+    }
+
+    span {
+      color: var(--muted);
+      font-size: 0.9rem;
     }
   }
 
-  &__body {
-    padding: $space-5;
+  ul {
+    display: grid;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
     display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    flex: 1;
-  }
+    gap: 9px;
+    color: var(--muted);
+    line-height: 1.5;
 
-  &__title {
-    font-size: $text-lg;
-    font-weight: $fw-bold;
-    color: $text;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-  }
-
-  &__desc {
-    font-size: $text-sm;
-    color: $text-muted;
-    line-height: 1.6;
-    flex: 1;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: $space-2;
-  }
-
-  &__date {
-    font-size: $text-xs;
-    color: $text-subtle;
-    font-family: $font-mono;
+    svg {
+      color: var(--mint);
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
   }
 
   &__price {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-    font-variant-numeric: tabular-nums;
+    margin-top: auto;
+
+    strong {
+      color: var(--ink);
+      font-size: 3rem;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    span {
+      color: var(--muted);
+      margin-left: 4px;
+    }
+  }
+}
+
+.faq {
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+
+  &__inner {
+    max-width: 900px;
   }
 
-  &__footer {
-    padding: $space-4 $space-5;
-    border-top: 1px solid $border;
+  &__list {
+    display: grid;
+    gap: 12px;
   }
 
-  &__cta {
+  &__item {
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--panel);
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+
+    &--open {
+      border-color: var(--line-strong);
+    }
+  }
+
+  &__question {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    width: 100%;
-    height: 42px;
-    border-radius: $radius;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    transition: $transition;
+    gap: 18px;
+    padding: 20px 22px;
+    color: var(--ink);
+    font-weight: 900;
 
-    &--primary {
-      background: $primary-subtle;
-      border: 1px solid rgba(124,111,255,0.25);
-      color: $primary-light;
-
-      &:hover {
-        background: $primary;
-        border-color: $primary;
-        color: #fff;
-      }
+    svg {
+      color: var(--muted);
+      flex-shrink: 0;
     }
+  }
 
-    &--waitlist {
-      background: transparent;
-      border: 1px solid $border;
-      color: $text-muted;
-
-      &:hover {
-        border-color: $primary;
-        color: $primary-light;
-      }
-    }
+  &__answer {
+    display: block;
+    padding: 0 22px 22px;
+    color: var(--muted);
+    line-height: 1.7;
   }
 }
 
-// ── Waitlist modal ───────────────────────
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(8,8,26,0.8);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: $space-4;
-}
+.final-cta {
+  padding: 96px 0;
 
-.modal {
-  position: relative;
-  background: $bg-surface;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  padding: $space-8;
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $space-4;
-
-  &__close {
-    position: absolute;
-    top: $space-4;
-    right: $space-4;
-    background: transparent;
-    border: none;
-    color: $text-muted;
-    cursor: pointer;
-    padding: $space-1;
-    border-radius: $radius;
-    transition: $transition-fast;
-
-    &:hover { color: $text; }
-  }
-
-  &__icon {
-    color: $primary;
-  }
-
-  &__success-icon {
-    color: $accent;
-  }
-
-  &__title {
-    font-size: $text-xl;
-    font-weight: $fw-bold;
-    color: $text;
-    letter-spacing: -0.01em;
-  }
-
-  &__subtitle {
-    font-size: $text-sm;
-    color: $text-muted;
+  &__box {
+    padding: clamp(32px, 7vw, 72px);
+    border: 1px solid var(--line-strong);
+    border-radius: 36px;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(156, 255, 203, 0.18), transparent 30%),
+      radial-gradient(circle at 92% 12%, rgba(143, 179, 255, 0.14), transparent 28%),
+      var(--panel);
     text-align: center;
-    line-height: 1.6;
 
-    strong { color: $text; }
-  }
+    h2 {
+      max-width: 760px;
+      margin: 12px auto 18px;
+      color: var(--ink);
+      font-size: clamp(2.2rem, 5vw, 4.8rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
 
-  &__form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: $space-4;
-  }
-
-  &__label {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $text-muted;
-  }
-
-  &__input {
-    height: 42px;
-    padding: 0 $space-4;
-    background: $bg-card;
-    border: 1px solid $border;
-    border-radius: $radius;
-    color: $text;
-    font-size: $text-sm;
-    transition: $transition-fast;
-
-    &::placeholder { color: $text-subtle; }
-
-    &:focus {
-      outline: none;
-      border-color: $primary;
-      box-shadow: 0 0 0 3px rgba(124,111,255,0.15);
+    p {
+      max-width: 650px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.75;
     }
   }
 
-  &__error {
-    font-size: $text-sm;
-    color: $danger;
-    text-align: center;
-  }
-
-  &__submit {
-    width: 100%;
+  &__actions {
+    display: flex;
     justify-content: center;
-
-    &:disabled { opacity: 0.6; cursor: not-allowed; }
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
   }
 }
 
-.modal-enter-active,
-.modal-leave-active { transition: all 0.2s ease; }
-.modal-enter-from,
-.modal-leave-to { opacity: 0; }
-.modal-enter-from .modal,
-.modal-leave-to .modal { transform: scale(0.95) translateY(8px); }
+@media (max-width: 760px) {
+  .container {
+    width: min(100% - 28px, 1160px);
+  }
 
-// ── Transitions ─────────────────────────
-.fade-slide-enter-active,
-.fade-slide-leave-active { transition: all 0.2s ease; }
-.fade-slide-enter-from   { opacity: 0; transform: translateY(10px); }
-.fade-slide-leave-to     { opacity: 0; transform: translateY(-10px); }
+  .hero {
+    padding-top: 54px;
+
+    &__copy h1 {
+      font-size: clamp(2.65rem, 17vw, 4.5rem);
+    }
+  }
+
+  .ops-panel {
+    border-radius: 22px;
+  }
+
+  .workflow-section .workflow-shell {
+    padding: 20px;
+    border-radius: 26px;
+  }
+}
 </style>

@@ -25,7 +25,7 @@
             <li><strong>Nora — Recepcionista:</strong> empleado IA para la atención, cualificación y agendado de clientes en canales de mensajería (WhatsApp Business, Telegram, Instagram).</li>
             <li><strong>Alex — Asistente ejecutivo:</strong> empleado IA para la organización de la operativa diaria, preparación de documentos, recordatorios y seguimiento de prioridades.</li>
             <li><strong>Valeria — Content creator:</strong> empleado IA para la creación, planificación y publicación de contenido en redes sociales y blog.</li>
-            <li><strong>Marcos — Closer / SDR:</strong> empleado IA para la atención y cualificación de leads de venta, seguimiento comercial y cierre de oportunidades.</li>
+            <li><strong>Marcos — Analista de negocio:</strong> empleado IA para el análisis del CRM, detección de clientes en riesgo, minería de leads fríos y generación de informes ejecutivos semanales con recomendaciones.</li>
           </ul>
           <p>Los servicios pueden contratarse de manera individual o en los paquetes "Operación Solo" (Alex + 1 empleado a elegir + web profesional + panel de gestión) y "Equipo Solopreneur" (los 4 empleados + web + panel), según las tarifas vigentes publicadas en el sitio web.</p>
         </section>
@@ -57,7 +57,7 @@
                 <tr><td>Nora — Recepcionista (individual)</td><td>600 €</td><td>150 €</td></tr>
                 <tr><td>Alex — Asistente ejecutivo (individual)</td><td>600 €</td><td>150 €</td></tr>
                 <tr><td>Valeria — Content creator (individual)</td><td>600 €</td><td>150 €</td></tr>
-                <tr><td>Marcos — Closer / SDR (individual)</td><td>600 €</td><td>150 €</td></tr>
+                <tr><td>Marcos — Analista de negocio (individual)</td><td>600 €</td><td>150 €</td></tr>
                 <tr><td>Paquete Operación Solo (Alex + 1 + web)</td><td>Incluido</td><td>300 € los 6 primeros meses · 200 € después</td></tr>
                 <tr><td>Paquete Equipo Solopreneur (4 empleados + web)</td><td>Incluido</td><td>500 € los 6 primeros meses · 350 € después</td></tr>
               </tbody>

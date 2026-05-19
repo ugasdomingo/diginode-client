@@ -331,7 +331,7 @@ import { useRoute } from 'vue-router'
 import {
   CheckCircle, CalendarCheck, ArrowLeft, Briefcase,
   Star, ShieldCheck, RefreshCcw, Clock, Info,
-  TrendingUp, MessageSquare, Share2, BarChart2,
+  MessageSquare, Share2, BarChart2,
   Building2, Sparkles, CreditCard,
 } from 'lucide-vue-next'
 
@@ -455,16 +455,16 @@ const employees = [
   {
     id:    'marcos',
     name:  'Marcos',
-    role:  'Closer / SDR',
-    icon:  TrendingUp,
+    role:  'Analista de negocio',
+    icon:  BarChart2,
     color: '#d7b7ff',
     bg:    'rgba(215, 183, 255, 0.12)',
-    pitch: 'Marcos cierra ventanas de venta que tú ahora pierdes. Contesta leads al instante, cualifica y hace seguimiento hasta cierre o descarte.',
+    pitch: 'Marcos vigila qué clientes están en riesgo, por qué se enfriaron tus leads y qué patrones esconden tus datos. Te entrega cada semana lo que tu negocio necesita saber para decidir.',
     tasks: [
-      'Responde a leads en minutos con tu pitch',
-      'Cualifica con preguntas clave antes de la demo',
-      'Hace seguimiento programado hasta el cierre',
-      'Reporte semanal de pipeline y conversión',
+      'Reporte semanal de pipeline, retention y métricas clave',
+      'Análisis de leads fríos y patrones de pérdida',
+      'Post-venta proactivo en clientes en riesgo',
+      'Recomendaciones de negocio basadas en tus datos',
     ],
   },
 ]
@@ -506,7 +506,7 @@ const plans = [
     features: [
       'Todo lo de Operación Solo, más:',
       'Valeria publica contenido cada semana en tu nombre',
-      'Marcos contesta y cierra leads que ahora pierdes',
+      'Marcos analiza tus datos y te avisa antes de que los clientes se vayan',
       'Los 4 empleados aprendiendo de tus interacciones',
       'Panel central con trazabilidad de cada acción',
     ],

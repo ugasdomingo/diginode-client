@@ -244,7 +244,7 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
-  MessageSquare, Briefcase, TrendingUp, Share2,
+  MessageSquare, Briefcase, BarChart2, Share2,
   CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, TrendingDown, ChevronDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
@@ -306,7 +306,7 @@ const includes = [
 const optionalEmployees = [
   { id: 'luna',    name: 'Nora',    role: 'Recepcionista',   icon: MessageSquare, color: '#9cffcb' },
   { id: 'valeria', name: 'Valeria', role: 'Content creator', icon: Share2,        color: '#ffd38a' },
-  { id: 'marcos',  name: 'Marcos',  role: 'Closer / SDR',    icon: TrendingUp,    color: '#d7b7ff' },
+  { id: 'marcos',  name: 'Marcos',  role: 'Analista de negocio', icon: BarChart2, color: '#d7b7ff' },
 ]
 
 const steps = [

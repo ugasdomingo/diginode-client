@@ -19,6 +19,7 @@ export const useClientStore = defineStore('client', () => {
   const subscription = computed(() => _data.value?.subscription ?? null)
   const upcoming     = computed(() => _data.value?.upcoming     ?? [])
   const openTickets  = computed(() => _data.value?.open_tickets ?? 0)
+  const office       = computed(() => _data.value?.client?.office ?? null)
 
   // ── Actions ───────────────────────────────────────────────────────────────
 
@@ -57,6 +58,7 @@ export const useClientStore = defineStore('client', () => {
     subscription,
     upcoming,
     openTickets,
+    office,
     load,
     clear,
   }

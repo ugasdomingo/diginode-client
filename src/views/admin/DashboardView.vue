@@ -156,6 +156,14 @@ const stats = computed(() => {
       bg: 'rgba(215, 183, 255, 0.12)',
       trend: null,
     },
+    {
+      label: 'Oficinas activas',
+      value: d.live_offices ?? 0,
+      icon: Monitor,
+      color: '#7dd3fc',
+      bg: 'rgba(125, 211, 252, 0.12)',
+      trend: null,
+    },
   ]
 })
 

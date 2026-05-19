@@ -91,6 +91,32 @@
         </div>
       </section>
 
+      <!-- Office access -->
+      <section v-if="clientStore.office" class="office-card">
+        <div class="office-card__header">
+          <div class="office-card__icon">
+            <ExternalLink :size="18" />
+          </div>
+          <div class="office-card__info">
+            <h3 class="office-card__name">Mi oficina AI</h3>
+            <p class="office-card__meta">{{ officeStatusText }}</p>
+          </div>
+          <AppBadge :variant="officeStatusVariant">
+            {{ officeStatusLabel }}
+          </AppBadge>
+        </div>
+        <a
+          v-if="clientStore.office.url"
+          :href="clientStore.office.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="office-card__button"
+        >
+          Entrar a mi oficina
+          <ExternalLink :size="14" />
+        </a>
+      </section>
+
       <!-- Upcoming payments -->
       <section v-if="clientStore.upcoming.length">
         <h2 class="section-title">
@@ -225,6 +251,40 @@ const nextBillingText = computed(() => {
   const next = clientStore.upcoming.find(u => u.due_date)
   if (next) return formatDate(next.due_date)
   return '—'
+})
+
+const officeStatusLabel = computed(() => {
+  const status = clientStore.office?.status ?? 'not_requested'
+  return {
+    not_requested: 'No solicitada',
+    requested: 'Solicitada',
+    provisioning: 'Preparando',
+    training: 'Entrenando',
+    review: 'En revisión',
+    live: 'Activa',
+    paused: 'Pausada',
+    error: 'Incidencia',
+  }[status] ?? status
+})
+
+const officeStatusVariant = computed(() => {
+  const status = clientStore.office?.status
+  return {
+    live: 'success',
+    requested: 'info',
+    provisioning: 'warning',
+    training: 'warning',
+    review: 'warning',
+    paused: 'warning',
+    error: 'danger',
+  }[status] ?? 'default'
+})
+
+const officeStatusText = computed(() => {
+  if (clientStore.office?.url) return 'Tu oficina aislada está lista para trabajar.'
+  if (clientStore.office?.status === 'training') return 'Estamos entrenando tus empleados con tus materiales.'
+  if (clientStore.office?.status === 'review') return 'Pendiente de revisión humana antes de activar.'
+  return 'Aquí aparecerá el acceso cuando la instancia esté desplegada.'
 })
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -427,6 +487,69 @@ function planLabel(slug) {
     color: $accent;
 
     strong { color: $text; }
+  }
+}
+
+// ── Office card ─────────────────────────────────────────────────────────────
+.office-card {
+  background: $bg-card;
+  border: 1px solid rgba(143, 179, 255, 0.22);
+  border-radius: $radius-lg;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius;
+    background: rgba(143, 179, 255, 0.12);
+    color: $accent-blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__info { flex: 1; min-width: 0; }
+
+  &__name {
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    color: $text;
+    margin-bottom: 2px;
+  }
+
+  &__meta {
+    font-size: $text-sm;
+    color: $text-muted;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    min-height: 40px;
+    padding: 0 $space-4;
+    border-radius: $radius;
+    background: $primary;
+    color: #0b1020;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
   }
 }
 

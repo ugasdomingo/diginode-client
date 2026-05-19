@@ -230,6 +230,83 @@
               <strong>{{ totalSpend }}</strong>
             </div>
 
+            <!-- Office access -->
+            <div class="detail-office">
+              <h3 class="detail-section-title">
+                <ExternalLink :size="14" /> Oficina de empleados
+              </h3>
+
+              <div class="office-summary">
+                <div>
+                  <span class="office-summary__label">Estado</span>
+                  <AppBadge :variant="officeStatusVariant(detail?.client?.office_status)">
+                    {{ officeStatusLabel(detail?.client?.office_status) }}
+                  </AppBadge>
+                </div>
+                <a
+                  v-if="detail?.client?.office_url"
+                  :href="detail.client.office_url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="office-summary__link"
+                >
+                  Abrir oficina
+                  <ExternalLink :size="12" />
+                </a>
+              </div>
+
+              <form class="office-form" @submit.prevent="saveOffice">
+                <div class="field">
+                  <label class="field__label">URL de oficina</label>
+                  <input
+                    v-model="officeForm.office_url"
+                    type="url"
+                    class="field__input"
+                    placeholder="https://cliente-office.up.railway.app"
+                  />
+                </div>
+
+                <div class="field-row field-row--office">
+                  <div class="field">
+                    <label class="field__label">Estado</label>
+                    <select v-model="officeForm.office_status" class="field__input">
+                      <option value="not_requested">No solicitada</option>
+                      <option value="requested">Solicitada</option>
+                      <option value="provisioning">Preparando</option>
+                      <option value="training">Entrenando</option>
+                      <option value="review">En revisión</option>
+                      <option value="live">Activa</option>
+                      <option value="paused">Pausada</option>
+                      <option value="error">Incidencia</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label class="field__label">Plan office</label>
+                    <select v-model="officeForm.office_plan" class="field__input">
+                      <option value="">Sin asignar</option>
+                      <option value="individual">Individual</option>
+                      <option value="operativo">Operativo</option>
+                      <option value="full">Full</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="field__label">Instance ID</label>
+                  <input
+                    v-model="officeForm.office_instance_id"
+                    type="text"
+                    class="field__input"
+                    placeholder="diginode-office-cliente"
+                  />
+                </div>
+
+                <AppButton size="sm" :loading="officeLoading">
+                  Guardar oficina
+                </AppButton>
+              </form>
+            </div>
+
             <!-- Payment link generator -->
             <div class="detail-pay-link">
               <h3 class="detail-section-title">
@@ -412,10 +489,17 @@ async function openDetail(client) {
   detailLoading.value = true
   generatedUrl.value  = ''
   linkForm.value      = { label: '', amount: null, installment_number: null, installment_total: null }
+  officeForm.value    = { office_url: '', office_status: 'not_requested', office_plan: '', office_instance_id: '' }
 
   try {
     const res = await api.get(`/admin/clients/${client._id}`)
     detail.value = res.data
+    officeForm.value = {
+      office_url: detail.value.client?.office_url ?? '',
+      office_status: detail.value.client?.office_status ?? 'not_requested',
+      office_plan: detail.value.client?.office_plan ?? '',
+      office_instance_id: detail.value.client?.office_instance_id ?? '',
+    }
 
     // Cache total spend
     const total_spend = (res.data.payments ?? []).reduce((s, p) => s + (p.amount ?? 0), 0)
@@ -438,6 +522,13 @@ const linkForm = ref({ label: '', amount: null, installment_number: null, instal
 const linkLoading   = ref(false)
 const generatedUrl  = ref('')
 const copied        = ref(false)
+const officeLoading = ref(false)
+const officeForm = ref({
+  office_url: '',
+  office_status: 'not_requested',
+  office_plan: '',
+  office_instance_id: '',
+})
 
 async function generateLink() {
   if (!linkForm.value.label || !linkForm.value.amount) return
@@ -470,6 +561,21 @@ async function copyLink() {
     setTimeout(() => (copied.value = false), 2000)
   } catch {
     toast.error('No se pudo copiar al portapapeles')
+  }
+}
+
+async function saveOffice() {
+  if (!selected.value?._id) return
+  officeLoading.value = true
+  try {
+    const res = await api.patch(`/admin/clients/${selected.value._id}/office`, officeForm.value)
+    detail.value = { ...detail.value, client: res.data }
+    selected.value = { ...selected.value, ...res.data }
+    toast.success('Oficina actualizada')
+  } catch (err) {
+    toast.error(err.message ?? 'No se pudo actualizar la oficina')
+  } finally {
+    officeLoading.value = false
   }
 }
 
@@ -509,6 +615,31 @@ function subStatusVariant(s) {
 
 function typeIcon(type) {
   return { course: BookOpen, bolsa: Users, subscription: Repeat, manual: Receipt }[type] ?? FileText
+}
+
+function officeStatusLabel(status = 'not_requested') {
+  return {
+    not_requested: 'No solicitada',
+    requested: 'Solicitada',
+    provisioning: 'Preparando',
+    training: 'Entrenando',
+    review: 'En revisión',
+    live: 'Activa',
+    paused: 'Pausada',
+    error: 'Incidencia',
+  }[status] ?? status
+}
+
+function officeStatusVariant(status = 'not_requested') {
+  return {
+    live: 'success',
+    requested: 'info',
+    provisioning: 'warning',
+    training: 'warning',
+    review: 'warning',
+    paused: 'warning',
+    error: 'danger',
+  }[status] ?? 'default'
 }
 </script>
 
@@ -876,6 +1007,51 @@ function typeIcon(type) {
 }
 
 // ── Purchase row (inside panel) ────────────────────────────────────────────
+.detail-office {
+  border-top: 1px solid $border;
+  padding-top: $space-5;
+}
+
+.office-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  background: rgba(143, 179, 255, 0.06);
+  border: 1px solid rgba(143, 179, 255, 0.18);
+  border-radius: $radius-lg;
+  margin-bottom: $space-3;
+
+  &__label {
+    display: block;
+    font-size: $text-xs;
+    color: $text-muted;
+    margin-bottom: $space-1;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    min-height: 32px;
+    padding: 0 $space-3;
+    border-radius: $radius-sm;
+    background: $primary;
+    color: #0b1020;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+}
+
+.office-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
 .purchase-row {
   display: flex;
   align-items: center;
@@ -965,6 +1141,10 @@ function typeIcon(type) {
   display: grid;
   grid-template-columns: 1fr 80px 80px;
   gap: $space-2;
+
+  &--office {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .field {

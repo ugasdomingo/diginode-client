@@ -8,82 +8,84 @@
         <div class="hero__grid" aria-hidden="true" />
       </div>
 
-      <div class="container hero__content">
-        <div class="hero__badge">
-          <Sparkles :size="14" />
-          <span>Empleados IA para emprendedores y autonomos</span>
-        </div>
-
-        <h1 class="hero__title">
-          <span class="hero__title-line">Tu equipo de IA.</span>
-          <span class="hero__title-line hero__title-gradient">Listo para trabajar.</span>
-        </h1>
-
-        <p class="hero__subtitle">
-          Cuatro empleados con inteligencia artificial que atienden clientes, organizan tu agenda, 
-          crean contenido y analizan tu negocio. Activos en 7 dias, sin contratar personal.
-        </p>
-
-        <div class="hero__actions">
-          <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
-            <CalendarCheck :size="18" />
-            Agendar demo gratuita
-          </a>
-          <RouterLink to="/bolsa-de-empleo" class="btn btn--secondary">
-            <Users :size="18" />
-            Conocer al equipo
-          </RouterLink>
-        </div>
-
-        <div class="hero__stats">
-          <div class="hero__stat">
-            <span class="hero__stat-value">7</span>
-            <span class="hero__stat-label">dias para empezar</span>
+      <div class="container hero__container">
+        <div class="hero__content">
+          <div class="hero__badge">
+            <Sparkles :size="14" />
+            <span>Empleados IA para emprendedores y autonomos</span>
           </div>
-          <div class="hero__stat-divider" />
-          <div class="hero__stat">
-            <span class="hero__stat-value">24/7</span>
-            <span class="hero__stat-label">disponibilidad</span>
-          </div>
-          <div class="hero__stat-divider" />
-          <div class="hero__stat">
-            <span class="hero__stat-value">0</span>
-            <span class="hero__stat-label">permanencia</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Floating Employee Cards -->
-      <div class="hero__showcase">
-        <div class="showcase-panel">
-          <div class="showcase-panel__header">
-            <div class="showcase-panel__status" />
-            <span>DigiNode Employee OS</span>
-            <span class="showcase-panel__live">En vivo</span>
+          <h1 class="hero__title">
+            <span class="hero__title-line">Tu equipo de IA.</span>
+            <span class="hero__title-line hero__title-gradient">Listo para trabajar.</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            Cuatro empleados con inteligencia artificial que atienden clientes, organizan tu agenda, 
+            crean contenido y analizan tu negocio. Activos en 7 dias, sin contratar personal.
+          </p>
+
+          <div class="hero__actions">
+            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+              <CalendarCheck :size="18" />
+              Agendar demo gratuita
+            </a>
+            <RouterLink to="/bolsa-de-empleo" class="btn btn--secondary">
+              <Users :size="18" />
+              Conocer al equipo
+            </RouterLink>
           </div>
-          
-          <div class="showcase-panel__chat">
-            <div class="chat-msg chat-msg--user">
-              <div class="chat-msg__avatar chat-msg__avatar--user">Tu</div>
-              <div class="chat-msg__content">
-                <p>Alex, prepara el resumen de la reunion y convierte las decisiones en tareas.</p>
-              </div>
+
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <span class="hero__stat-value">7</span>
+              <span class="hero__stat-label">dias para empezar</span>
             </div>
-            <div class="chat-msg chat-msg--ai">
-              <div class="chat-msg__avatar" style="background: rgba(96, 176, 255, 0.15); color: #60B0FF;">AX</div>
-              <div class="chat-msg__content">
-                <span class="chat-msg__name">Alex - Asistente ejecutivo</span>
-                <p>Minuta creada, 6 tareas detectadas, 2 decisiones requieren tu aprobacion.</p>
-              </div>
+            <div class="hero__stat-divider" />
+            <div class="hero__stat">
+              <span class="hero__stat-value">24/7</span>
+              <span class="hero__stat-label">disponibilidad</span>
+            </div>
+            <div class="hero__stat-divider" />
+            <div class="hero__stat">
+              <span class="hero__stat-value">0</span>
+              <span class="hero__stat-label">permanencia</span>
             </div>
           </div>
+        </div>
 
-          <div class="showcase-panel__employees">
-            <div v-for="emp in employees" :key="emp.id" class="employee-chip" :style="{ '--emp-color': emp.color, '--emp-bg': emp.bg }">
-              <span class="employee-chip__avatar">{{ emp.initials }}</span>
-              <div class="employee-chip__info">
-                <strong>{{ emp.name }}</strong>
-                <small>{{ emp.role }}</small>
+        <!-- Showcase Panel Below -->
+        <div class="hero__showcase">
+          <div class="showcase-panel">
+            <div class="showcase-panel__header">
+              <div class="showcase-panel__status" />
+              <span>DigiNode Employee OS</span>
+              <span class="showcase-panel__live">En vivo</span>
+            </div>
+            
+            <div class="showcase-panel__chat">
+              <div class="chat-msg chat-msg--user">
+                <div class="chat-msg__avatar chat-msg__avatar--user">Tu</div>
+                <div class="chat-msg__content">
+                  <p>Alex, prepara el resumen de la reunion y convierte las decisiones en tareas.</p>
+                </div>
+              </div>
+              <div class="chat-msg chat-msg--ai">
+                <div class="chat-msg__avatar" style="background: rgba(96, 176, 255, 0.15); color: #60B0FF;">AX</div>
+                <div class="chat-msg__content">
+                  <span class="chat-msg__name">Alex - Asistente ejecutivo</span>
+                  <p>Minuta creada, 6 tareas detectadas, 2 decisiones requieren tu aprobacion.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="showcase-panel__employees">
+              <div v-for="emp in employees" :key="emp.id" class="employee-chip" :style="{ '--emp-color': emp.color, '--emp-bg': emp.bg }">
+                <span class="employee-chip__avatar">{{ emp.initials }}</span>
+                <div class="employee-chip__info">
+                  <strong>{{ emp.name }}</strong>
+                  <small>{{ emp.role }}</small>
+                </div>
               </div>
             </div>
           </div>
@@ -566,11 +568,11 @@ $hero-height: min(100vh, 900px);
   min-height: $hero-height;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: $space-24 0;
   overflow: hidden;
 
   @media (max-width: $bp-lg) {
-    flex-direction: column;
     padding: $space-16 0;
     min-height: auto;
   }
@@ -603,7 +605,8 @@ $hero-height: min(100vh, 900px);
       height: 600px;
       background: $primary;
       top: -200px;
-      left: -100px;
+      left: 50%;
+      transform: translateX(-50%);
       opacity: 0.15;
     }
 
@@ -612,20 +615,24 @@ $hero-height: min(100vh, 900px);
       height: 500px;
       background: $accent;
       bottom: -150px;
-      right: -100px;
+      left: 50%;
+      transform: translateX(-50%);
       opacity: 0.12;
     }
   }
 
-  &__content {
+  &__container {
     position: relative;
     z-index: 2;
-    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
 
-    @media (max-width: $bp-lg) {
-      max-width: 100%;
-      text-align: center;
-    }
+  &__content {
+    max-width: 800px;
   }
 
   &__badge {
@@ -665,35 +672,28 @@ $hero-height: min(100vh, 900px);
     color: $text-muted;
     line-height: 1.7;
     margin-bottom: $space-8;
-    max-width: 540px;
-
-    @media (max-width: $bp-lg) {
-      max-width: 100%;
-    }
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &__actions {
     display: flex;
+    justify-content: center;
     gap: $space-4;
     margin-bottom: $space-10;
 
     @media (max-width: $bp-sm) {
       flex-direction: column;
-    }
-
-    @media (max-width: $bp-lg) {
-      justify-content: center;
+      align-items: center;
     }
   }
 
   &__stats {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: $space-6;
-
-    @media (max-width: $bp-lg) {
-      justify-content: center;
-    }
 
     @media (max-width: $bp-sm) {
       flex-wrap: wrap;
@@ -729,22 +729,10 @@ $hero-height: min(100vh, 900px);
   }
 
   &__showcase {
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-
-    @media (max-width: $bp-lg) {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-      margin-top: $space-12;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
+    margin-top: $space-12;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 }
 

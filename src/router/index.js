@@ -159,7 +159,7 @@ const routes = [
       {
         path: 'onboarding',
         name: 'portal.onboarding',
-        component: () => import('@/views/portal/OnboardingView.vue'),
+        redirect: '/portal/dashboard',
       },
     ],
   },

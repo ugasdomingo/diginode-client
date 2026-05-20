@@ -625,14 +625,26 @@ $hero-height: min(100vh, 900px);
     position: relative;
     z-index: 2;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    gap: $space-12;
     width: 100%;
+
+    @media (max-width: $bp-lg) {
+      flex-direction: column;
+      text-align: center;
+    }
   }
 
   &__content {
-    max-width: 800px;
+    max-width: 560px;
+    text-align: left;
+
+    @media (max-width: $bp-lg) {
+      text-align: center;
+      max-width: 100%;
+    }
   }
 
   &__badge {
@@ -672,16 +684,22 @@ $hero-height: min(100vh, 900px);
     color: $text-muted;
     line-height: 1.7;
     margin-bottom: $space-8;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 500px;
+
+    @media (max-width: $bp-lg) {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   &__actions {
     display: flex;
-    justify-content: center;
     gap: $space-4;
     margin-bottom: $space-10;
+
+    @media (max-width: $bp-lg) {
+      justify-content: center;
+    }
 
     @media (max-width: $bp-sm) {
       flex-direction: column;
@@ -692,8 +710,11 @@ $hero-height: min(100vh, 900px);
   &__stats {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: $space-6;
+
+    @media (max-width: $bp-lg) {
+      justify-content: center;
+    }
 
     @media (max-width: $bp-sm) {
       flex-wrap: wrap;
@@ -729,10 +750,11 @@ $hero-height: min(100vh, 900px);
   }
 
   &__showcase {
-    margin-top: $space-12;
-    display: flex;
-    justify-content: center;
-    width: 100%;
+    flex-shrink: 0;
+
+    @media (max-width: $bp-lg) {
+      margin-top: $space-8;
+    }
   }
 }
 

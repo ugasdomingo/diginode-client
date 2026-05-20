@@ -1,56 +1,67 @@
 // ─────────────────────────────────────────
 // DIGINODE — Design Tokens
-// Paleta mint/verde-oscuro (alineada al Home)
+// Paleta azul/naranja (alineada al logo 3D)
 // ─────────────────────────────────────────
 
-// Colors — Background
-$bg:           #06110f;
-$bg-surface:   #0b1715;
-$bg-card:      #10241f;
-$bg-card-2:    #0e1d1a;
-$bg-input:     #0b1715;
+// Colors — Background (deep dark with blue undertones)
+$bg:           #050a0f;
+$bg-surface:   #0a1018;
+$bg-card:      #0f1620;
+$bg-card-2:    #121c28;
+$bg-input:     #0a1018;
 
-// Colors — Border (tinte mint sobre fondo oscuro)
-$border:       rgba(198, 255, 219, 0.14);
-$border-hover: rgba(198, 255, 219, 0.32);
-$border-focus: rgba(198, 255, 219, 0.55);
+// Colors — Border (tinte azul sobre fondo oscuro)
+$border:       rgba(30, 144, 255, 0.15);
+$border-hover: rgba(30, 144, 255, 0.35);
+$border-focus: rgba(30, 144, 255, 0.55);
 
-// Colors — Brand (Mint)
-$primary:        #9cffcb;
-$primary-dark:   #74e8ad;
-$primary-light:  #c6ffdb;
-$primary-glow:   rgba(156, 255, 203, 0.20);
-$primary-subtle: rgba(156, 255, 203, 0.08);
+// Colors — Brand Primary (Vibrant Blue from logo)
+$primary:        #1E90FF;
+$primary-dark:   #0070E0;
+$primary-light:  #60B0FF;
+$primary-glow:   rgba(30, 144, 255, 0.25);
+$primary-subtle: rgba(30, 144, 255, 0.08);
 
-// Colors — Accent (alineado al primary mint, conservado por compatibilidad)
-$accent:        #9cffcb;
-$accent-glow:   rgba(156, 255, 203, 0.18);
+// Colors — Brand Secondary (Warm Orange/Amber from logo)
+$accent:        #F5A623;
+$accent-light:  #FFB94D;
+$accent-dark:   #E08A00;
+$accent-glow:   rgba(245, 166, 35, 0.25);
+$accent-subtle: rgba(245, 166, 35, 0.08);
 
-// Colors — Accents secundarios (paleta del Home)
-$accent-blue:   #8fb3ff;
-$accent-amber:  #ffd38a;
-$accent-violet: #d7b7ff;
+// Colors — Accents secundarios (para empleados)
+$accent-blue:   #1E90FF;
+$accent-orange: #F5A623;
+$accent-teal:   #20D5D2;
+$accent-coral:  #FF6B6B;
+
+// Employee colors (basados en logo)
+$employee-alex:    #60B0FF;  // Blue - Asistente ejecutivo
+$employee-nora:    #F5A623;  // Orange - Recepcionista
+$employee-valeria: #20D5D2;  // Teal - Content creator
+$employee-marcos:  #FF6B6B;  // Coral - Analista
 
 // Colors — Status
-$success:       #9cffcb;
-$warning:       #ffd38a;
-$danger:        #ff8a8a;
-$info:          #8fb3ff;
+$success:       #20D5D2;
+$warning:       #F5A623;
+$danger:        #FF6B6B;
+$info:          #60B0FF;
 
 // Colors — Status subtle
-$success-bg:    rgba(156, 255, 203, 0.10);
-$warning-bg:    rgba(255, 211, 138, 0.10);
-$danger-bg:     rgba(255, 138, 138, 0.10);
-$info-bg:       rgba(143, 179, 255, 0.10);
+$success-bg:    rgba(32, 213, 210, 0.10);
+$warning-bg:    rgba(245, 166, 35, 0.10);
+$danger-bg:     rgba(255, 107, 107, 0.10);
+$info-bg:       rgba(96, 176, 255, 0.10);
 
 // Colors — Text
-$text:         #f8f6ee;
-$text-muted:   #a8b1aa;
-$text-subtle:  #65706c;
-$text-inverse: #07110f;
+$text:         #F8FAFC;
+$text-muted:   #94A3B8;
+$text-subtle:  #64748B;
+$text-inverse: #050a0f;
 
 // Typography
 $font-sans:  'Inter', system-ui, sans-serif;
+$font-display: 'Space Grotesk', system-ui, sans-serif;
 $font-mono:  'JetBrains Mono', 'Fira Code', monospace;
 
 $text-xs:   0.75rem;    // 12px
@@ -61,12 +72,15 @@ $text-xl:   1.25rem;    // 20px
 $text-2xl:  1.5rem;     // 24px
 $text-3xl:  1.875rem;   // 30px
 $text-4xl:  2.25rem;    // 36px
+$text-5xl:  3rem;       // 48px
+$text-6xl:  3.75rem;    // 60px
 
 $fw-light:    300;
 $fw-regular:  400;
 $fw-medium:   500;
 $fw-semibold: 600;
 $fw-bold:     700;
+$fw-black:    900;
 
 // Spacing (8px base)
 $space-1:  0.25rem;   // 4px
@@ -79,24 +93,27 @@ $space-8:  2rem;      // 32px
 $space-10: 2.5rem;    // 40px
 $space-12: 3rem;      // 48px
 $space-16: 4rem;      // 64px
+$space-20: 5rem;      // 80px
+$space-24: 6rem;      // 96px
 
 // Border radius
 $radius-sm: 6px;
-$radius:    10px;
-$radius-lg: 16px;
-$radius-xl: 24px;
+$radius:    12px;
+$radius-lg: 20px;
+$radius-xl: 28px;
 $radius-full: 9999px;
 
 // Shadows
 $shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.5);
-$shadow:     0 4px 16px rgba(0, 0, 0, 0.4);
-$shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.5);
-$shadow-glow: 0 0 32px rgba(156, 255, 203, 0.18);
+$shadow:     0 4px 24px rgba(0, 0, 0, 0.4);
+$shadow-lg:  0 8px 40px rgba(0, 0, 0, 0.5);
+$shadow-glow-blue: 0 0 60px rgba(30, 144, 255, 0.25);
+$shadow-glow-orange: 0 0 60px rgba(245, 166, 35, 0.2);
 
 // Transitions
 $transition:      all 0.2s ease;
 $transition-fast: all 0.15s ease;
-$transition-slow: all 0.35s ease;
+$transition-slow: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
 // Sidebar
 $sidebar-width: 240px;

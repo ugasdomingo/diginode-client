@@ -122,6 +122,11 @@ const routes = [
         component: () => import('@/views/admin/ClientsView.vue'),
       },
       {
+        path: 'offices',
+        name: 'admin.offices',
+        component: () => import('@/views/admin/OfficesHealthView.vue'),
+      },
+      {
         path: 'knowledge',
         name: 'admin.knowledge',
         component: () => import('@/views/admin/KnowledgeView.vue'),
@@ -159,7 +164,7 @@ const routes = [
       {
         path: 'onboarding',
         name: 'portal.onboarding',
-        redirect: '/portal/dashboard',
+        component: () => import('@/views/portal/OnboardingView.vue'),
       },
     ],
   },

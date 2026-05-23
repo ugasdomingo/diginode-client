@@ -91,6 +91,20 @@
         </div>
       </section>
 
+      <!-- Onboarding CTA -->
+      <RouterLink
+        v-if="clientStore.client?.onboarding_status === 'pending_form'"
+        to="/portal/onboarding"
+        class="onboarding-cta"
+      >
+        <Sparkles :size="18" />
+        <div class="onboarding-cta__body">
+          <strong>Completá el formulario de tu oficina</strong>
+          <span>Necesitamos algunos datos para preparar tu instancia. Lleva 5 minutos.</span>
+        </div>
+        <ChevronRight :size="18" />
+      </RouterLink>
+
       <!-- Office access -->
       <section v-if="clientStore.office" class="office-card">
         <div class="office-card__header">
@@ -215,6 +229,7 @@ import { computed, onMounted } from 'vue'
 import {
   ShoppingBag, CalendarClock, LifeBuoy, Repeat, Bell,
   FileText, Receipt, BookOpen, Users, Wrench, ExternalLink,
+  Sparkles, ChevronRight,
 } from 'lucide-vue-next'
 import { useClientStore } from '@/stores/client'
 import { useToastStore } from '@/stores/toast'
@@ -773,6 +788,31 @@ function planLabel(slug) {
     border-color: $primary;
     color: $primary;
     background: $primary-subtle;
+  }
+}
+
+// ── Onboarding CTA ─────────────────────────────────────────────────────────
+.onboarding-cta {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  background: $primary-subtle;
+  border: 1px solid rgba(156, 255, 203, 0.25);
+  border-radius: $radius-lg;
+  text-decoration: none;
+  color: $text;
+  transition: $transition-fast;
+
+  &:hover { filter: brightness(1.05); }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    strong { font-size: $text-sm; font-weight: $fw-semibold; color: $primary-light; }
+    span   { font-size: $text-xs; color: $text-muted; }
   }
 }
 

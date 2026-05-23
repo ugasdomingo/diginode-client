@@ -108,7 +108,7 @@
               <a :href="calLink" target="_blank" rel="noopener noreferrer">Agendar demo</a>
               <a :href="telegramLink" target="_blank" rel="noopener noreferrer">Telegram</a>
               <a href="https://ig.me/m/midiginode" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="mailto:info@midiginode.com">Correo</a>
+              <a :href="emailLink" target="_blank" rel="noopener noreferrer">Correo</a>
             </nav>
           </div>
         </div>
@@ -165,7 +165,8 @@ import { Menu, X, CalendarCheck, Instagram, Mail, MessageCircle, Send } from 'lu
 import { useAuthStore } from '@/stores/auth'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
-const telegramLink = 'tg://resolve?phone=34614770015'
+const telegramLink = 'https://t.me/+34614770015?text=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.'
+const emailLink = 'https://mail.google.com/mail/?view=cm&fs=1&to=info@midiginode.com&su=Hola%20DigiNode&body=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.'
 const mobileOpen = ref(false)
 const contactOpen = ref(false)
 const isScrolled = ref(false)
@@ -186,9 +187,9 @@ const contactOptions = [
   },
   {
     label: 'Correo',
-    href: 'mailto:info@midiginode.com?subject=Hola%20DigiNode&body=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.',
+    href: emailLink,
     icon: Mail,
-    external: false,
+    external: true,
   },
 ]
 

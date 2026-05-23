@@ -106,7 +106,9 @@
             <h4>Contacto</h4>
             <nav class="footer__links">
               <a :href="calLink" target="_blank" rel="noopener noreferrer">Agendar demo</a>
-              <a href="https://wa.me/34604822385" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              <a :href="telegramLink" target="_blank" rel="noopener noreferrer">Telegram</a>
+              <a href="https://ig.me/m/midiginode" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="mailto:info@midiginode.com">Correo</a>
             </nav>
           </div>
         </div>
@@ -117,31 +119,78 @@
       </div>
     </footer>
 
-    <!-- WhatsApp floating button -->
-    <a
-      href="https://wa.me/34604822385?text=Hola%2C%20soy%20emprendedor%20y%20quiero%20conocer%20m%C3%A1s%20sobre%20vuestros%20empleados%20IA"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="whatsapp-btn"
-      aria-label="Contactar por WhatsApp"
-    >
-      <svg class="whatsapp-btn__icon" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-      </svg>
-      <span class="whatsapp-btn__label">Hablamos?</span>
-    </a>
+    <!-- Contact floating button -->
+    <div class="contact-fab" @click.stop>
+      <Transition name="contact-menu">
+        <div
+          v-if="contactOpen"
+          class="contact-fab__menu"
+          role="menu"
+          aria-label="Elige un canal de contacto"
+        >
+          <a
+            v-for="option in contactOptions"
+            :key="option.label"
+            :href="option.href"
+            :target="option.external ? '_blank' : undefined"
+            :rel="option.external ? 'noopener noreferrer' : undefined"
+            class="contact-fab__option"
+            role="menuitem"
+            @click="contactOpen = false"
+          >
+            <component :is="option.icon" :size="18" />
+            <span>{{ option.label }}</span>
+          </a>
+        </div>
+      </Transition>
+
+      <button
+        type="button"
+        class="contact-fab__button"
+        :aria-expanded="contactOpen"
+        aria-haspopup="menu"
+        aria-label="Elegir canal de contacto"
+        @click="contactOpen = !contactOpen"
+      >
+        <MessageCircle class="contact-fab__icon" :size="24" />
+        <span class="contact-fab__label">Hablamos?</span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Menu, X, CalendarCheck } from 'lucide-vue-next'
+import { Menu, X, CalendarCheck, Instagram, Mail, MessageCircle, Send } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
+const telegramLink = 'tg://resolve?phone=34614770015'
 const mobileOpen = ref(false)
+const contactOpen = ref(false)
 const isScrolled = ref(false)
 const year = new Date().getFullYear()
+
+const contactOptions = [
+  {
+    label: 'Telegram',
+    href: telegramLink,
+    icon: Send,
+    external: true,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://ig.me/m/midiginode',
+    icon: Instagram,
+    external: true,
+  },
+  {
+    label: 'Correo',
+    href: 'mailto:info@midiginode.com?subject=Hola%20DigiNode&body=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.',
+    icon: Mail,
+    external: false,
+  },
+]
 
 const auth = useAuthStore()
 const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
@@ -150,13 +199,27 @@ function handleScroll() {
   isScrolled.value = window.scrollY > 20
 }
 
+function closeContactMenu() {
+  contactOpen.value = false
+}
+
+function handleKeydown(event) {
+  if (event.key === 'Escape') {
+    closeContactMenu()
+  }
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  window.addEventListener('click', closeContactMenu)
+  window.addEventListener('keydown', handleKeydown)
   handleScroll()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('click', closeContactMenu)
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
@@ -514,38 +577,78 @@ main {
   }
 }
 
-// ── WhatsApp floating button ──────────────────────
-.whatsapp-btn {
+// ── Contact floating button ──────────────────────
+.contact-fab {
   position: fixed;
   bottom: $space-6;
   right: $space-6;
   z-index: 500;
   display: flex;
-  align-items: center;
-  gap: $space-2;
-  height: 52px;
-  padding: 0 $space-5;
-  background: #25d366;
-  color: #fff;
-  border-radius: $radius-full;
-  text-decoration: none;
-  font-size: $text-sm;
-  font-weight: $fw-semibold;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-  transition: $transition;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $space-3;
 
   @media (max-width: $bp-sm) {
     bottom: $space-4;
     right: $space-4;
-    padding: 0 $space-4;
-    height: 48px;
   }
 
-  &:hover {
-    background: #20c05c;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
-    color: #fff;
+  &__menu {
+    min-width: 190px;
+    padding: $space-2;
+    background: rgba($bg-card, 0.96);
+    border: 1px solid $border-hover;
+    border-radius: $radius;
+    box-shadow: $shadow-lg, 0 0 28px rgba($primary, 0.16);
+    backdrop-filter: blur(18px);
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    width: 100%;
+    padding: $space-3;
+    color: $text;
+    border-radius: $radius-sm;
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover {
+      background: $primary-subtle;
+      color: $primary-light;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    height: 52px;
+    padding: 0 $space-5;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    border: 0;
+    color: $text-inverse;
+    border-radius: $radius-full;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    box-shadow: 0 4px 20px rgba($primary, 0.32);
+    transition: $transition;
+
+    @media (max-width: $bp-sm) {
+      padding: 0 $space-4;
+      height: 48px;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba($primary, 0.42);
+      color: $text-inverse;
+    }
   }
 
   &__icon {
@@ -557,5 +660,16 @@ main {
       display: none;
     }
   }
+}
+
+.contact-menu-enter-active,
+.contact-menu-leave-active {
+  transition: all 0.18s ease;
+}
+
+.contact-menu-enter-from,
+.contact-menu-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 </style>

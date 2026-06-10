@@ -26,13 +26,13 @@
           </p>
 
           <div class="hero__actions">
-            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
-              <CalendarCheck :size="18" />
-              Agendar demo gratuita
-            </a>
-            <RouterLink to="/bolsa-de-empleo" class="btn btn--secondary">
-              <Users :size="18" />
-              Conocer al equipo
+            <RouterLink to="/demo" class="btn btn--primary">
+              <MessageSquare :size="18" />
+              Habla con Nora ahora
+            </RouterLink>
+            <RouterLink to="/plan" class="btn btn--secondary">
+              <Zap :size="18" />
+              Ver el Plan
             </RouterLink>
           </div>
 
@@ -235,9 +235,9 @@
               <span class="plan-card__period">/mes</span>
             </div>
 
-            <RouterLink to="/bolsa-de-empleo" class="btn" :class="plan.featured ? 'btn--primary' : 'btn--secondary'">
-              <Zap :size="17" />
-              Empezar con {{ plan.name }}
+            <RouterLink :to="plan.featured ? '/plan' : '/demo'" class="btn" :class="plan.featured ? 'btn--primary' : 'btn--secondary'">
+              <component :is="plan.featured ? Zap : MessageSquare" :size="17" />
+              {{ plan.featured ? `Empezar con ${plan.name}` : 'Habla con Nora' }}
             </RouterLink>
           </article>
         </div>
@@ -277,24 +277,19 @@
       <div class="container">
         <div class="final-cta__box">
           <div class="final-cta__glow" aria-hidden="true" />
-          <span class="kicker">Demo gratuita</span>
+          <span class="kicker">Pruebala ahora</span>
           <h2>Imagina tu proximo lunes<br/><span class="gradient-text">sin hacerlo todo tu.</span></h2>
-          <p>30 minutos. Te ensenamos como configuramos un empleado con tu negocio real, que hace desde el dia 1 y como apruebas lo que ejecuta.</p>
+          <p>Escribe a Nora como si fueras tu propio cliente. Veras en directo como atiende, resuelve y agenda — y ella misma te reserva una demo con el equipo.</p>
           
           <div class="final-cta__actions">
-            <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
-              <CalendarCheck :size="20" />
-              Agendar demo gratuita
-            </a>
-            <a
-              href="https://wa.me/34604822385?text=Hola%2C%20quiero%20ver%20c%C3%B3mo%20funciona%20un%20empleado%20IA"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn--secondary btn--lg"
-            >
+            <RouterLink to="/demo" class="btn btn--primary btn--lg">
               <MessageSquare :size="20" />
-              Escribir por WhatsApp
-            </a>
+              Habla con Nora ahora
+            </RouterLink>
+            <RouterLink to="/plan" class="btn btn--secondary btn--lg">
+              <Zap :size="20" />
+              Ver el Plan
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -307,7 +302,6 @@ import { ref } from 'vue'
 import {
   Brain,
   Building2,
-  CalendarCheck,
   CheckCircle,
   ChevronDown,
   Clock,
@@ -320,13 +314,11 @@ import {
   ShieldCheck,
   Sparkles,
   Star,
-  Users,
   Workflow,
   XCircle,
   Zap,
 } from 'lucide-vue-next'
 
-const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
 const openFaq = ref(null)
 
 const trustItems = [
@@ -428,7 +420,7 @@ const plans = [
     name: 'Un empleado',
     target: 'Empieza por tu dolor mas urgente',
     icon: CreditCard,
-    price: 150,
+    price: 180,
     featured: false,
     features: [
       '1 empleado IA configurado con tu tono y criterio',
@@ -438,26 +430,26 @@ const plans = [
     ],
   },
   {
-    id: 'operativo',
-    name: 'Operacion Solo',
-    target: 'Recupera tus tardes y domingos',
+    id: 'entrepreneur',
+    name: 'Plan Entrepreneur',
+    target: 'Tu negocio operativo sin ti',
     icon: Building2,
     price: 300,
-    featured: false,
+    featured: true,
     features: [
       'Nora (recepcionista) + Alex (asistente)',
+      'Web profesional + panel de gestion incluidos',
       'Atencion al cliente y operativa diaria resueltas',
-      'Web profesional incluida los primeros 6 meses',
-      'Activo en 7 dias - sin migrar herramienta',
+      'Activo en 7 dias · garantia de 14 dias · sin permanencia',
     ],
   },
   {
     id: 'completo',
-    name: 'Equipo Solopreneur',
-    target: 'Tu negocio entero, sin contratar',
+    name: 'Clinica',
+    target: 'Para negocios con equipo',
     icon: Sparkles,
     price: 500,
-    featured: true,
+    featured: false,
     features: [
       'Los 4 empleados IA trabajando en paralelo',
       'Atencion, operativa, contenido y ventas',

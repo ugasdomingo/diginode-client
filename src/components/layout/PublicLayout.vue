@@ -9,25 +9,17 @@
         </RouterLink>
 
         <nav class="navbar__nav" aria-label="Navegacion principal">
-          <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__link">Empleados</RouterLink>
+          <RouterLink to="/plan" class="navbar__link">El Plan</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#precios' }" class="navbar__link">Precios</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
         </nav>
 
         <div class="navbar__actions">
-          <RouterLink to="/bolsa-de-empleo" class="navbar__cta-secondary">
-            Conocer al equipo
+          <RouterLink to="/demo" class="navbar__cta">
+            <MessageCircle :size="16" />
+            Habla con Nora
           </RouterLink>
-          <a
-            :href="calLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="navbar__cta"
-          >
-            <CalendarCheck :size="16" />
-            Agendar demo
-          </a>
         </div>
 
         <!-- Mobile menu toggle -->
@@ -44,24 +36,19 @@
       <!-- Mobile nav -->
       <Transition name="mobile-nav">
         <div v-if="mobileOpen" class="navbar__mobile">
-          <RouterLink :to="{ path: '/', hash: '#empleados' }" class="navbar__mobile-link" @click="mobileOpen = false">Empleados</RouterLink>
+          <RouterLink to="/plan" class="navbar__mobile-link" @click="mobileOpen = false">El Plan</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#precios' }" class="navbar__mobile-link" @click="mobileOpen = false">Precios</RouterLink>
           <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <div class="navbar__mobile-actions">
-            <RouterLink to="/bolsa-de-empleo" class="navbar__mobile-cta-secondary" @click="mobileOpen = false">
-              Conocer al equipo
-            </RouterLink>
-            <a
-              :href="calLink"
-              target="_blank"
-              rel="noopener noreferrer"
+            <RouterLink
+              to="/demo"
               class="navbar__mobile-cta"
               @click="mobileOpen = false"
             >
-              <CalendarCheck :size="16" />
-              Agendar demo gratuita
-            </a>
+              <MessageCircle :size="16" />
+              Habla con Nora
+            </RouterLink>
           </div>
         </div>
       </Transition>
@@ -87,7 +74,8 @@
           <div class="footer__links-group">
             <h4>Producto</h4>
             <nav class="footer__links">
-              <RouterLink to="/bolsa-de-empleo">Empleados IA</RouterLink>
+              <RouterLink to="/plan">El Plan</RouterLink>
+              <RouterLink to="/demo">Habla con Nora</RouterLink>
               <RouterLink :to="{ path: '/', hash: '#precios' }">Precios</RouterLink>
               <RouterLink :to="{ path: '/', hash: '#faq' }">FAQ</RouterLink>
             </nav>
@@ -161,7 +149,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Menu, X, CalendarCheck, Instagram, Mail, MessageCircle, Send } from 'lucide-vue-next'
+import { Menu, X, Instagram, Mail, MessageCircle, Send } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'

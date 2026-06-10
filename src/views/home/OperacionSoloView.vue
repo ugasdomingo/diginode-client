@@ -59,15 +59,15 @@
           <button class="btn-primary btn-primary--lg" :disabled="loading" @click="goToCheckout">
             <AppSpinner v-if="loading" :size="17" />
             <CreditCard v-else :size="17" />
-            {{ loading ? 'Redirigiendo...' : 'Contratar — 300€/mes' }}
+            {{ loading ? 'Redirigiendo...' : `Contratar — ${flagshipMonthly}€/mes` }}
           </button>
-          <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-demo">
-            Ver una demo gratuita →
-          </a>
+          <RouterLink to="/demo" class="btn-demo">
+            Habla con Nora primero →
+          </RouterLink>
         </div>
 
         <p class="hero__fine">
-          6 meses al precio promo · Luego 200€/mes · Sin permanencia · Pago seguro con Stripe
+          {{ flagshipMonthly }}€/mes · Sin permanencia · Garantía de 14 días · Pago seguro con Stripe
         </p>
       </div>
     </section>
@@ -187,12 +187,12 @@
         <div class="price__card">
 
           <div class="price__info">
-            <span class="price__tag">Operación Solo</span>
+            <span class="price__tag">Plan Entrepreneur</span>
             <div class="price__amount">
-              <span class="price__num">300€</span>
-              <span class="price__period">/mes · 6 meses</span>
+              <span class="price__num">{{ flagshipMonthly }}€</span>
+              <span class="price__period">/mes</span>
             </div>
-            <p class="price__after">Luego 200€/mes sin permanencia</p>
+            <p class="price__after">Sin permanencia · Garantía de 14 días</p>
             <div class="price__saving">
               <TrendingDown :size="13" />
               Ahorras +1.100€ vs. montarlo por separado
@@ -216,17 +216,12 @@
               <CreditCard v-else :size="17" />
               {{ loading ? 'Redirigiendo...' : 'Contratar ahora' }}
             </button>
-            <a
-              :href="calLink"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-demo btn-demo--full"
-            >
-              Prefiero ver una demo primero →
-            </a>
+            <RouterLink to="/demo" class="btn-demo btn-demo--full">
+              Prefiero hablar con Nora primero →
+            </RouterLink>
             <p class="price__secure">
               <Lock :size="12" />
-              Stripe gestiona el pago. Cancela tras el 6.º mes sin coste.
+              Stripe gestiona el pago. Garantía de 14 días, cancela cuando quieras.
             </p>
           </div>
 
@@ -240,7 +235,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
@@ -248,6 +243,7 @@ import {
   CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, TrendingDown, ChevronDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
+import { usePlans } from '@/data/plans'
 
 // ── Route / success state ─────────────────────────
 const route  = useRoute()
@@ -258,13 +254,18 @@ const showSuccess = computed(() => route.query.success === 'true')
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
 const API     = import.meta.env.VITE_API_URL
 
+// ── Pricing (fuente única: GET /api/plans) ────────
+const { load: loadPlans, flagship } = usePlans()
+const flagshipMonthly = computed(() => flagship().monthly)
+onMounted(loadPlans)
+
 // ── Checkout ─────────────────────────────────────
 const loading = ref(false)
 
 const goToCheckout = async () => {
   loading.value = true
   try {
-    const res = await fetch(`${API}/despacho/checkout`, { method: 'POST' })
+    const res = await fetch(`${API}/entrepreneur/checkout`, { method: 'POST' })
     const data = await res.json()
     if (!data.success || !data.url) throw new Error(data.message ?? 'Error al iniciar el pago')
     window.location.href = data.url
@@ -344,15 +345,15 @@ const faqs = [
   },
   {
     q: '¿Puedo cambiar de segundo empleado más adelante?',
-    a: 'Sí. Pasado el periodo inicial de 6 meses puedes solicitar un cambio de empleado. Se aplica una pequeña tarifa de reconfiguración según la complejidad del nuevo empleado.',
+    a: 'Sí. Puedes solicitar un cambio de empleado cuando lo necesites. Se aplica una pequeña tarifa de reconfiguración según la complejidad del nuevo empleado.',
   },
   {
     q: '¿Hay coste de setup o entrada?',
-    a: 'No. Operación Solo no tiene coste de setup separado. Los 300€/mes del primer período cubren también toda la configuración, el onboarding y la puesta en marcha.',
+    a: 'No. El Plan Entrepreneur no tiene coste de setup separado. Los 300€/mes cubren también toda la configuración, el onboarding y la puesta en marcha.',
   },
   {
-    q: '¿Qué pasa cuando terminan los 6 meses?',
-    a: 'La suscripción pasa a 200€/mes sin permanencia. Puedes cancelar cuando quieras con un mes de antelación. No hay penalización ni cláusulas de permanencia adicionales.',
+    q: '¿Y si no me convence?',
+    a: 'Tienes 14 días de garantía: si en ese plazo no te ha ahorrado tiempo, te devolvemos el mes. Y no hay permanencia: cancelas cuando quieras con un mes de antelación, sin penalización.',
   },
   {
     q: '¿Puedo ampliar a más empleados después?',

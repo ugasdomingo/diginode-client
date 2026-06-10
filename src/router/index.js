@@ -54,6 +54,11 @@ const routes = [
         component: () => import('@/views/home/OperacionSoloView.vue'),
       },
       {
+        path: 'demo',
+        name: 'demo',
+        component: () => import('@/views/home/DemoView.vue'),
+      },
+      {
         path: 'despacho-digital',
         redirect: '/operacion-solo',
       },

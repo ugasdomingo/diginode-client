@@ -83,7 +83,7 @@
           </div>
         </section>
 
-        <div v-if="course.content" class="course-article__content prose" v-html="course.content" />
+        <div v-if="course.content" class="course-article__content prose" v-html="sanitize(course.content)" />
 
         <!-- Bottom CTA -->
         <div class="course-article__cta-bottom">
@@ -155,7 +155,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowLeft, Calendar, CreditCard, HelpCircle, Bell, X, CheckCircle } from 'lucide-vue-next'
+import { useSanitizedHtml } from '@/composables/useSanitizedHtml'
 
+const { sanitize } = useSanitizedHtml()
 const route   = useRoute()
 const course  = ref(null)
 const loading = ref(true)

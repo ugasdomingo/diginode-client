@@ -102,23 +102,24 @@ La prioridad del usuario es el modelo de negocio. F0 va primero **únicamente** 
 - [ ] F4-5 Revisión semanal de métricas norte (recurrente) — leer el dashboard de Funnel
 - ⚠️ Acciones humanas para F4: poner `VITE_META_PIXEL_ID` en `.env` del client; `ENABLE_FOLLOWUPS=true` en `.env` de la API (producción) para activar los emails de seguimiento.
 
-### F5 — Robustez técnica (post-lanzamiento)
-- [ ] F5-1 Revocación de sesiones (token_version) · ver P1-1
-- [ ] F5-2 Tope de paginación · ver P1-5
-- [ ] F5-3 Índices MongoDB · ver P1-6
-- [ ] F5-4 office_admin_token enmascarado · ver P1-7
-- [ ] F5-5 Validación de ObjectId · ver P1-8
-- [ ] F5-6 Defensa anti prompt-injection · ver P1-4
+### F5 — Robustez técnica (post-lanzamiento) — COMPLETA
+- [x] F5-1 — 2026-06-11 — token_version + logout-all + expiración cliente 24h (commit api 589276f)
+- [x] F5-2 — 2026-06-11 — clamp_pagination en 5 endpoints (commit api 000f624)
+- [x] F5-3 — 2026-06-11 — índices Payment/PackageSubscription (commit api bb80f20)
+- [x] F5-4 — 2026-06-11 — token nunca expuesto + flag office_admin_token_set (commit api 24e0050)
+- [x] F5-5 — 2026-06-11 — validate_object_id en rutas admin (commit api a0c62d3)
+- [x] F5-6 — 2026-06-11 — delimitadores + instrucción anti-injection en FAQs (commit api ee4375b)
 
-### F6 — Mantenibilidad (continuo)
-- [ ] F6-1 ESLint + Prettier en ambos repos · ver P2-2
-- [ ] F6-2 Refactor de vistas gigantes restantes · ver P2-1
-- [ ] F6-3 División de admin_controller y stripe_service · ver P2-3
-- [ ] F6-4 Imágenes a object storage · ver P2-4
-- [ ] F6-5 Reintentos en webhooks salientes · ver P2-5
-- [ ] F6-6 Toast de sesión expirada + doc de localStorage · ver P2-6
-- [ ] F6-7 Tests: stripe_service, auth, guards · ver P3
-- [ ] F6-8 Logger pino con redacción de sensibles · ver P3
+### F6 — Mantenibilidad
+- [x] F6-1 — 2026-06-11 — ESLint+Prettier en ambos repos; el lint detectó un import faltante real (commits api 3bddab8 / client 3a2d080)
+- [~] F6-2 DIFERIDA — refactor de vistas gigantes. Riesgo alto / valor bajo en vísperas de lanzamiento; el funnel ya funciona. Hacer post-tracción, vista por vista. (NoraCta ya extraído en F2)
+- [~] F6-3 DIFERIDA — dividir admin_controller/stripe_service. Movimiento mecánico pero arriesgado sobre la ruta de pago justo antes de lanzar; sin valor funcional inmediato. Hacer con tests de pago primero.
+- [ ] F6-4 BLOQUEADA (infra humana) — imágenes base64 → object storage (R2/S3). Requiere cuenta de storage + credenciales; no testeable en local. Pendiente de que el humano cree el bucket.
+- [x] F6-5 — 2026-06-11 — post_webhook (reintentos+dead-letter) en salientes a Make (commit api 4fc1dbb)
+- [x] F6-6 — 2026-06-11 — toast de sesión expirada + doc localStorage (commit client 925efcd)
+- [x] F6-7 — 2026-06-11 — vitest, 13 tests de lógica pura (commit api 201f1e5)
+- [x] F6-8 — 2026-06-11 — logger pino con redacción (commit api bcf786c)
+- ⚠️ F6-2/F6-3 son refactors de calidad sin impacto funcional; F6-4 espera infra. Ninguna bloquea el lanzamiento comercial.
 
 ---
 

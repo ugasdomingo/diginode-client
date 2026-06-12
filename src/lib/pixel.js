@@ -6,7 +6,6 @@ const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID
 export function initPixel() {
   if (!PIXEL_ID || typeof window === 'undefined' || window.fbq) return
 
-  /* eslint-disable */
   !(function (f, b, e, v, n, t, s) {
     if (f.fbq) return
     n = f.fbq = function () {

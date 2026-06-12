@@ -3,7 +3,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Conocimiento</h1>
-        <p class="page-subtitle">Base de conocimiento que La Recepcionista usa para responder</p>
+        <p class="page-subtitle">Bases de conocimiento que usan tus empleados IA para responder</p>
       </div>
       <AppButton :loading="saving" @click="save">
         <Save :size="16" />
@@ -11,12 +11,24 @@
       </AppButton>
     </div>
 
+    <div class="base-tabs">
+      <button
+        v-for="b in bases"
+        :key="b.key"
+        class="base-tabs__tab"
+        :class="{ 'base-tabs__tab--active': b.key === activeKey }"
+        @click="selectBase(b.key)"
+      >
+        {{ b.label }}
+      </button>
+    </div>
+
     <div v-if="loading" class="editor-skeleton" />
 
     <div v-else class="editor-card">
       <div class="editor-card__header">
         <Brain :size="16" />
-        <span>FAQ y contexto — La Recepcionista</span>
+        <span>{{ activeBase.label }}</span>
       </div>
       <textarea
         v-model="content"
@@ -33,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Brain, Save } from 'lucide-vue-next'
 import { useApi } from '@/composables/useApi'
 import { useToastStore } from '@/stores/toast'
@@ -42,14 +54,23 @@ import AppButton from '@/components/ui/AppButton.vue'
 const api   = useApi()
 const toast = useToastStore()
 
+const bases = [
+  { key: 'recepcionista', label: 'La Recepcionista (prospectos)' },
+  { key: 'nora_demo',     label: 'Nora — Demo / FAQ' },
+]
+
+const activeKey = ref('recepcionista')
 const content   = ref('')
 const loading   = ref(true)
 const saving    = ref(false)
 const lastSaved = ref(null)
 
+const activeBase = computed(() => bases.find((b) => b.key === activeKey.value) ?? bases[0])
+
 async function fetchKnowledge() {
+  loading.value = true
   try {
-    const res = await api.get('/admin/knowledge/recepcionista')
+    const res = await api.get(`/admin/knowledge/${activeKey.value}`)
     content.value = res.data?.content ?? ''
   } catch {
     toast.error('Error cargando el conocimiento')
@@ -58,10 +79,17 @@ async function fetchKnowledge() {
   }
 }
 
+function selectBase(key) {
+  if (key === activeKey.value) return
+  activeKey.value = key
+  lastSaved.value = null
+  fetchKnowledge()
+}
+
 async function save() {
   saving.value = true
   try {
-    await api.put('/admin/knowledge/recepcionista', { content: content.value })
+    await api.put(`/admin/knowledge/${activeKey.value}`, { content: content.value })
     toast.success('Conocimiento guardado')
     lastSaved.value = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
   } catch {
@@ -99,6 +127,30 @@ onMounted(fetchKnowledge)
   color: $text-muted;
   font-size: $text-sm;
   margin-top: $space-1;
+}
+
+.base-tabs {
+  display: flex;
+  gap: $space-1;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: $space-1;
+  width: fit-content;
+
+  &__tab {
+    background: none;
+    border: none;
+    color: $text-muted;
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    padding: $space-2 $space-4;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &--active { background: $primary-subtle; color: $primary-light; }
+  }
 }
 
 .editor-skeleton {

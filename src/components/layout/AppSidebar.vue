@@ -45,6 +45,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   LayoutDashboard,
   Users,
+  Filter,
   LayoutGrid,
   BarChart3,
   FileText,
@@ -73,6 +74,7 @@ const router      = useRouter()
 const adminNav = [
   { to: '/admin/dashboard', label: 'Dashboard',  icon: LayoutDashboard },
   { to: '/admin/leads',     label: 'Leads',       icon: Users },
+  { to: '/admin/funnel',    label: 'Funnel',      icon: Filter },
   { to: '/admin/content',   label: 'Contenido',   icon: LayoutGrid },
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },

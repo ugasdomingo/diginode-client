@@ -101,6 +101,11 @@ const routes = [
         component: () => import('@/views/admin/LeadsView.vue'),
       },
       {
+        path: 'funnel',
+        name: 'admin.funnel',
+        component: () => import('@/views/admin/FunnelView.vue'),
+      },
+      {
         path: 'content',
         name: 'admin.content',
         component: () => import('@/views/admin/ContentView.vue'),

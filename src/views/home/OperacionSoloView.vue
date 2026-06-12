@@ -59,15 +59,15 @@
           <button class="btn-primary btn-primary--lg" :disabled="loading" @click="goToCheckout">
             <AppSpinner v-if="loading" :size="17" />
             <CreditCard v-else :size="17" />
-            {{ loading ? 'Redirigiendo...' : 'Contratar — 300€/mes' }}
+            {{ loading ? 'Redirigiendo...' : `Contratar — ${flagshipMonthly}€/mes` }}
           </button>
-          <a :href="calLink" target="_blank" rel="noopener noreferrer" class="btn-demo">
-            Ver una demo gratuita →
-          </a>
+          <RouterLink to="/demo" class="btn-demo">
+            Habla con Nora primero →
+          </RouterLink>
         </div>
 
         <p class="hero__fine">
-          6 meses al precio promo · Luego 200€/mes · Sin permanencia · Pago seguro con Stripe
+          {{ flagshipMonthly }}€/mes · Sin permanencia · Garantía de 14 días · Pago seguro con Stripe
         </p>
       </div>
     </section>
@@ -181,18 +181,35 @@
       </div>
     </section>
 
+    <!-- ── CASOS (prueba social) ──────────────────── -->
+    <section v-if="casos.length" class="casos">
+      <div class="container">
+        <h2 class="casos__title">Negocios que ya no lo hacen todo solos</h2>
+        <div class="casos__grid">
+          <figure v-for="(c, i) in casos" :key="i" class="caso">
+            <blockquote class="caso__quote">“{{ c.quote }}”</blockquote>
+            <figcaption class="caso__author">
+              <strong>{{ c.name }}</strong>
+              <span>{{ c.business }}</span>
+            </figcaption>
+            <p v-if="c.metric" class="caso__metric">{{ c.metric }}</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <!-- ── PRECIO ─────────────────────────────────── -->
     <section class="price" id="precio">
       <div class="container">
         <div class="price__card">
 
           <div class="price__info">
-            <span class="price__tag">Operación Solo</span>
+            <span class="price__tag">Plan Entrepreneur</span>
             <div class="price__amount">
-              <span class="price__num">300€</span>
-              <span class="price__period">/mes · 6 meses</span>
+              <span class="price__num">{{ flagshipMonthly }}€</span>
+              <span class="price__period">/mes</span>
             </div>
-            <p class="price__after">Luego 200€/mes sin permanencia</p>
+            <p class="price__after">Sin permanencia · Garantía de 14 días</p>
             <div class="price__saving">
               <TrendingDown :size="13" />
               Ahorras +1.100€ vs. montarlo por separado
@@ -216,17 +233,12 @@
               <CreditCard v-else :size="17" />
               {{ loading ? 'Redirigiendo...' : 'Contratar ahora' }}
             </button>
-            <a
-              :href="calLink"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-demo btn-demo--full"
-            >
-              Prefiero ver una demo primero →
-            </a>
+            <RouterLink to="/demo" class="btn-demo btn-demo--full">
+              Prefiero hablar con Nora primero →
+            </RouterLink>
             <p class="price__secure">
               <Lock :size="12" />
-              Stripe gestiona el pago. Cancela tras el 6.º mes sin coste.
+              Stripe gestiona el pago. Garantía de 14 días, cancela cuando quieras.
             </p>
           </div>
 
@@ -240,7 +252,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Globe, LayoutDashboard, BotMessageSquare,
@@ -248,6 +260,8 @@ import {
   CheckCircle, CalendarCheck, CreditCard, Lock, Sparkles, TrendingDown, ChevronDown,
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
+import { usePlans } from '@/data/plans'
+import { track } from '@/lib/pixel'
 
 // ── Route / success state ─────────────────────────
 const route  = useRoute()
@@ -258,13 +272,21 @@ const showSuccess = computed(() => route.query.success === 'true')
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK
 const API     = import.meta.env.VITE_API_URL
 
+// ── Pricing (fuente única: GET /api/plans) ────────
+const { load: loadPlans, flagship } = usePlans()
+const flagshipMonthly = computed(() => flagship().monthly)
+onMounted(() => {
+  loadPlans()
+  if (showSuccess.value) track('Purchase', { currency: 'EUR', value: flagshipMonthly.value })
+})
+
 // ── Checkout ─────────────────────────────────────
 const loading = ref(false)
 
 const goToCheckout = async () => {
   loading.value = true
   try {
-    const res = await fetch(`${API}/despacho/checkout`, { method: 'POST' })
+    const res = await fetch(`${API}/entrepreneur/checkout`, { method: 'POST' })
     const data = await res.json()
     if (!data.success || !data.url) throw new Error(data.message ?? 'Error al iniciar el pago')
     window.location.href = data.url
@@ -324,6 +346,14 @@ const steps = [
   },
 ]
 
+// ── Casos / prueba social (F3-4) ──────────────────
+// Rellena con casos reales (3 recomendados). Mientras esté vacío, la sección
+// no se renderiza. Plantilla y guía en CASOS_PLANTILLA.md (raíz del repo).
+const casos = [
+  // { quote: 'Nora contestó 87 WhatsApps el primer mes y agendó 12 citas mientras yo trabajaba.',
+  //   name: 'María G.', business: 'Fisioterapeuta', metric: '12 citas agendadas el 1.er mes' },
+]
+
 const priceFeatures = [
   'Web profesional personalizada',
   'Panel privado para tus clientes',
@@ -344,15 +374,15 @@ const faqs = [
   },
   {
     q: '¿Puedo cambiar de segundo empleado más adelante?',
-    a: 'Sí. Pasado el periodo inicial de 6 meses puedes solicitar un cambio de empleado. Se aplica una pequeña tarifa de reconfiguración según la complejidad del nuevo empleado.',
+    a: 'Sí. Puedes solicitar un cambio de empleado cuando lo necesites. Se aplica una pequeña tarifa de reconfiguración según la complejidad del nuevo empleado.',
   },
   {
     q: '¿Hay coste de setup o entrada?',
-    a: 'No. Operación Solo no tiene coste de setup separado. Los 300€/mes del primer período cubren también toda la configuración, el onboarding y la puesta en marcha.',
+    a: 'No. El Plan Entrepreneur no tiene coste de setup separado. Los 300€/mes cubren también toda la configuración, el onboarding y la puesta en marcha.',
   },
   {
-    q: '¿Qué pasa cuando terminan los 6 meses?',
-    a: 'La suscripción pasa a 200€/mes sin permanencia. Puedes cancelar cuando quieras con un mes de antelación. No hay penalización ni cláusulas de permanencia adicionales.',
+    q: '¿Y si no me convence?',
+    a: 'Tienes 14 días de garantía: si en ese plazo no te ha ahorrado tiempo, te devolvemos el mes. Y no hay permanencia: cancelas cuando quieras con un mes de antelación, sin penalización.',
   },
   {
     q: '¿Puedo ampliar a más empleados después?',
@@ -829,6 +859,50 @@ const faqs = [
       color: $text-muted;
       line-height: 1.6;
     }
+  }
+}
+
+// ── Casos (prueba social) ───────────────────────
+.casos {
+  padding: $space-12 $space-6;
+
+  &__title {
+    text-align: center;
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: $fw-bold;
+    color: $text;
+    margin-bottom: $space-8;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: $space-5;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+.caso {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: $space-5;
+
+  &__quote { color: $text; font-size: $text-base; line-height: 1.5; }
+  &__author {
+    display: flex;
+    flex-direction: column;
+    margin-top: $space-4;
+    strong { color: $text; font-size: $text-sm; }
+    span   { color: $text-muted; font-size: $text-xs; }
+  }
+  &__metric {
+    margin-top: $space-3;
+    color: $primary-light;
+    font-weight: $fw-semibold;
+    font-size: $text-sm;
   }
 }
 

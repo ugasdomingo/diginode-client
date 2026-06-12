@@ -49,13 +49,22 @@ const routes = [
         component: () => import('@/views/home/BolsaEmpleoView.vue'),
       },
       {
-        path: 'operacion-solo',
-        name: 'operacion-solo',
+        path: 'plan',
+        name: 'plan',
         component: () => import('@/views/home/OperacionSoloView.vue'),
       },
       {
+        path: 'operacion-solo',
+        redirect: '/plan',
+      },
+      {
+        path: 'demo',
+        name: 'demo',
+        component: () => import('@/views/home/DemoView.vue'),
+      },
+      {
         path: 'despacho-digital',
-        redirect: '/operacion-solo',
+        redirect: '/plan',
       },
     ],
   },
@@ -90,6 +99,11 @@ const routes = [
         path: 'leads',
         name: 'admin.leads',
         component: () => import('@/views/admin/LeadsView.vue'),
+      },
+      {
+        path: 'funnel',
+        name: 'admin.funnel',
+        component: () => import('@/views/admin/FunnelView.vue'),
       },
       {
         path: 'content',

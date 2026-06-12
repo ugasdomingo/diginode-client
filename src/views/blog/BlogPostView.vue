@@ -31,7 +31,7 @@
           <img :src="post.thumbnail_url" :alt="post.title" />
         </div>
 
-        <div class="post-article__content prose" v-html="post.content" />
+        <div class="post-article__content prose" v-html="sanitize(post.content)" />
 
         <footer class="post-article__footer">
           <RouterLink to="/blog" class="back-link">
@@ -49,7 +49,9 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowLeft } from 'lucide-vue-next'
+import { useSanitizedHtml } from '@/composables/useSanitizedHtml'
 
+const { sanitize } = useSanitizedHtml()
 const route   = useRoute()
 const post    = ref(null)
 const loading = ref(true)

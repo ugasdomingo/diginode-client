@@ -1,5 +1,9 @@
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
 
+// El JWT se guarda en localStorage (no en cookie HttpOnly) como compromiso
+// consciente: la API es stateless y no emite cookies. El vector XSS que esto
+// implica está mitigado al sanitizar todo v-html con DOMPurify (F0-5). Migrar a
+// cookie HttpOnly + sameSite=lax + CSRF requeriría cambios coordinados en la API.
 function getToken() {
   return localStorage.getItem('dn_token')
 }
@@ -17,6 +21,8 @@ async function request(method, path, body = null) {
 
   if (res.status === 401) {
     localStorage.removeItem('dn_token')
+    // Flag picked up after the reload to show a "session expired" toast (F6-6).
+    sessionStorage.setItem('dn_session_expired', '1')
     window.location.href = '/login'
     return
   }

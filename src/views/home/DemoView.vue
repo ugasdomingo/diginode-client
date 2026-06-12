@@ -71,6 +71,20 @@
       </form>
     </div>
 
+    <!-- Suggestion cards -->
+    <div class="demo__cards">
+      <button
+        v-for="s in suggestions"
+        :key="s.label"
+        class="demo-card"
+        :disabled="sending || capped"
+        @click="sendSuggestion(s.text)"
+      >
+        <span class="demo-card__icon">{{ s.icon }}</span>
+        <span class="demo-card__label">{{ s.label }}</span>
+      </button>
+    </div>
+
     <p v-if="capped" class="demo__capped">
       Has alcanzado el límite de esta demo. ¿List@ para tenerla en tu negocio?
       <RouterLink to="/operacion-solo" class="demo__capped-link">Ver el Plan Entrepreneur →</RouterLink>
@@ -122,6 +136,18 @@ async function scrollToBottom() {
 function pushNora(text) {
   messages.value.push({ from: 'nora', text, time: now(), bookingUrl: extractUrl(text) })
   scrollToBottom()
+}
+
+const suggestions = [
+  { icon: '✉️', label: 'Pídele que te mande un correo', text: 'Nora, ¿me puedes enviar un correo con un resumen de lo que hace DigiNode?' },
+  { icon: '📅', label: 'Pídele su agenda de la semana', text: 'Nora, enséñame tu agenda de citas de esta semana.' },
+  { icon: '💡', label: '¿Qué es DigiNode?', text: '¿Qué es DigiNode y qué harías tú por mi negocio?' },
+]
+
+function sendSuggestion(text) {
+  if (sending.value || capped.value) return
+  draft.value = text
+  send()
 }
 
 async function send() {
@@ -197,9 +223,41 @@ onMounted(() => {
     font-size: $text-sm;
   }
 
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-3;
+    max-width: 420px;
+  }
+
   &__capped { color: $text-muted; }
   &__capped-link { color: $primary-light; font-weight: $fw-semibold; }
   &__error { color: $danger; }
+}
+
+.demo-card {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-full;
+  padding: $space-2 $space-4;
+  color: $text;
+  font-size: $text-sm;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: $primary;
+    background: $primary-subtle;
+    color: $primary-light;
+  }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  &__icon { font-size: $text-base; }
 }
 
 // ── Phone mockup ────────────────────────────

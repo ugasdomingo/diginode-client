@@ -181,6 +181,23 @@
       </div>
     </section>
 
+    <!-- ── CASOS (prueba social) ──────────────────── -->
+    <section v-if="casos.length" class="casos">
+      <div class="container">
+        <h2 class="casos__title">Negocios que ya no lo hacen todo solos</h2>
+        <div class="casos__grid">
+          <figure v-for="(c, i) in casos" :key="i" class="caso">
+            <blockquote class="caso__quote">“{{ c.quote }}”</blockquote>
+            <figcaption class="caso__author">
+              <strong>{{ c.name }}</strong>
+              <span>{{ c.business }}</span>
+            </figcaption>
+            <p v-if="c.metric" class="caso__metric">{{ c.metric }}</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <!-- ── PRECIO ─────────────────────────────────── -->
     <section class="price" id="precio">
       <div class="container">
@@ -323,6 +340,14 @@ const steps = [
     title: 'Tu negocio operativo',
     desc: 'En 7 días, web activa y equipo funcionando. Tú vuelves a hacer solo lo importante.',
   },
+]
+
+// ── Casos / prueba social (F3-4) ──────────────────
+// Rellena con casos reales (3 recomendados). Mientras esté vacío, la sección
+// no se renderiza. Plantilla y guía en CASOS_PLANTILLA.md (raíz del repo).
+const casos = [
+  // { quote: 'Nora contestó 87 WhatsApps el primer mes y agendó 12 citas mientras yo trabajaba.',
+  //   name: 'María G.', business: 'Fisioterapeuta', metric: '12 citas agendadas el 1.er mes' },
 ]
 
 const priceFeatures = [
@@ -830,6 +855,50 @@ const faqs = [
       color: $text-muted;
       line-height: 1.6;
     }
+  }
+}
+
+// ── Casos (prueba social) ───────────────────────
+.casos {
+  padding: $space-12 $space-6;
+
+  &__title {
+    text-align: center;
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: $fw-bold;
+    color: $text;
+    margin-bottom: $space-8;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: $space-5;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+.caso {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: $space-5;
+
+  &__quote { color: $text; font-size: $text-base; line-height: 1.5; }
+  &__author {
+    display: flex;
+    flex-direction: column;
+    margin-top: $space-4;
+    strong { color: $text; font-size: $text-sm; }
+    span   { color: $text-muted; font-size: $text-xs; }
+  }
+  &__metric {
+    margin-top: $space-3;
+    color: $primary-light;
+    font-weight: $fw-semibold;
+    font-size: $text-sm;
   }
 }
 

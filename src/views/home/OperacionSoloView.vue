@@ -261,6 +261,7 @@ import {
 } from 'lucide-vue-next'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
 import { usePlans } from '@/data/plans'
+import { track } from '@/lib/pixel'
 
 // ── Route / success state ─────────────────────────
 const route  = useRoute()
@@ -274,7 +275,10 @@ const API     = import.meta.env.VITE_API_URL
 // ── Pricing (fuente única: GET /api/plans) ────────
 const { load: loadPlans, flagship } = usePlans()
 const flagshipMonthly = computed(() => flagship().monthly)
-onMounted(loadPlans)
+onMounted(() => {
+  loadPlans()
+  if (showSuccess.value) track('Purchase', { currency: 'EUR', value: flagshipMonthly.value })
+})
 
 // ── Checkout ─────────────────────────────────────
 const loading = ref(false)

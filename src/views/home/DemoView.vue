@@ -82,6 +82,7 @@
 <script setup>
 import { ref, nextTick, onMounted } from 'vue'
 import { useApi } from '@/composables/useApi'
+import { track } from '@/lib/pixel'
 
 const api = useApi()
 
@@ -126,6 +127,9 @@ function pushNora(text) {
 async function send() {
   const text = draft.value.trim()
   if (!text || sending.value || capped.value) return
+
+  // First message from the visitor = a started conversation (Meta "Contact").
+  if (!messages.value.some(m => m.from === 'me')) track('Contact')
 
   messages.value.push({ from: 'me', text, time: now() })
   draft.value = ''

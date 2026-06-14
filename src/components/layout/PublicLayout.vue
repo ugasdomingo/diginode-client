@@ -116,12 +116,23 @@
           role="menu"
           aria-label="Elige un canal de contacto"
         >
+          <RouterLink
+            v-for="option in internalOptions"
+            :key="option.label"
+            :to="option.route"
+            class="contact-fab__option"
+            role="menuitem"
+            @click="contactOpen = false"
+          >
+            <component :is="option.icon" :size="18" />
+            <span>{{ option.label }}</span>
+          </RouterLink>
           <a
-            v-for="option in contactOptions"
+            v-for="option in externalOptions"
             :key="option.label"
             :href="option.href"
-            :target="option.external ? '_blank' : undefined"
-            :rel="option.external ? 'noopener noreferrer' : undefined"
+            target="_blank"
+            rel="noopener noreferrer"
             class="contact-fab__option"
             role="menuitem"
             @click="contactOpen = false"
@@ -149,7 +160,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Menu, X, Instagram, Mail, MessageCircle, Send } from 'lucide-vue-next'
+import { Menu, X, Instagram, Mail, MessageCircle, Send, Bot } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
@@ -160,25 +171,14 @@ const contactOpen = ref(false)
 const isScrolled = ref(false)
 const year = new Date().getFullYear()
 
-const contactOptions = [
-  {
-    label: 'Telegram',
-    href: telegramLink,
-    icon: Send,
-    external: true,
-  },
-  {
-    label: 'Instagram',
-    href: 'https://ig.me/m/midiginode',
-    icon: Instagram,
-    external: true,
-  },
-  {
-    label: 'Correo',
-    href: emailLink,
-    icon: Mail,
-    external: true,
-  },
+const internalOptions = [
+  { label: 'Habla con Nora', route: '/demo', icon: Bot },
+]
+
+const externalOptions = [
+  { label: 'Telegram', href: telegramLink, icon: Send },
+  { label: 'Instagram', href: 'https://ig.me/m/midiginode', icon: Instagram },
+  { label: 'Correo', href: emailLink, icon: Mail },
 ]
 
 const auth = useAuthStore()

@@ -122,10 +122,22 @@ function now() {
   return new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
 }
 
+// Strips markdown the model sometimes emits (**bold**, *italic*, `code`, # headings)
+// so the WhatsApp bubble shows clean plain text.
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+}
+
 // Pulls the first http(s) URL out of a reply so we can render it as a CTA button.
+// Trims trailing markdown/punctuation the model may glue to the link (e.g. "url**").
 function extractUrl(text) {
   const match = text.match(/https?:\/\/[^\s]+/)
-  return match ? match[0] : null
+  if (!match) return null
+  return match[0].replace(/[*_`)\].,;:!?]+$/, '')
 }
 
 async function scrollToBottom() {
@@ -134,7 +146,7 @@ async function scrollToBottom() {
 }
 
 function pushNora(text) {
-  messages.value.push({ from: 'nora', text, time: now(), bookingUrl: extractUrl(text) })
+  messages.value.push({ from: 'nora', text: stripMarkdown(text), time: now(), bookingUrl: extractUrl(text) })
   scrollToBottom()
 }
 

@@ -152,7 +152,7 @@
         @click="contactOpen = !contactOpen"
       >
         <MessageCircle class="contact-fab__icon" :size="24" />
-        <span class="contact-fab__label">Hablamos?</span>
+        <span class="contact-fab__label">¿Hablamos?</span>
       </button>
     </div>
   </div>
@@ -160,7 +160,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Menu, X, Instagram, Mail, MessageCircle, Send, Bot } from 'lucide-vue-next'
+import { Menu, X, Mail, MessageCircle, Bot } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
@@ -176,8 +176,6 @@ const internalOptions = [
 ]
 
 const externalOptions = [
-  { label: 'Telegram', href: telegramLink, icon: Send },
-  { label: 'Instagram', href: 'https://ig.me/m/midiginode', icon: Instagram },
   { label: 'Correo', href: emailLink, icon: Mail },
 ]
 

@@ -7,7 +7,7 @@
           Volver al inicio
         </RouterLink>
         <h1 class="legal-page__title">Términos y Condiciones</h1>
-        <p class="legal-page__updated">Última actualización: 8 de marzo de 2026</p>
+        <p class="legal-page__updated">Última actualización: 14 de agosto de 2026</p>
       </div>
 
       <div class="legal-page__body">
@@ -20,57 +20,39 @@
 
         <section class="legal-section">
           <h2>2. Descripción del servicio</h2>
-          <p>Diginode ofrece un servicio de "empleados de inteligencia artificial" dirigido a solopreneurs y autónomos. Incluye, sin carácter exhaustivo, los siguientes empleados IA:</p>
+          <p>Diginode ofrece el servicio <strong>"Clínica Digital"</strong>, dirigido a psicólogos, coaches, terapeutas y otros profesionales de la práctica privada. El servicio incluye:</p>
           <ul>
-            <li><strong>Nora — Recepcionista:</strong> empleado IA para la atención, cualificación y agendado de clientes en canales de mensajería (WhatsApp Business, Telegram, Instagram).</li>
-            <li><strong>Alex — Asistente ejecutivo:</strong> empleado IA para la organización de la operativa diaria, preparación de documentos, recordatorios y seguimiento de prioridades.</li>
-            <li><strong>Valeria — Content creator:</strong> empleado IA para la creación, planificación y publicación de contenido en redes sociales y blog.</li>
-            <li><strong>Marcos — Analista de negocio:</strong> empleado IA para el análisis del CRM, detección de clientes en riesgo, minería de leads fríos y generación de informes ejecutivos semanales con recomendaciones.</li>
+            <li><strong>Página web profesional</strong> con el dominio y la marca del Cliente.</li>
+            <li><strong>Nora — Recepcionista:</strong> empleado IA para la atención, resolución de dudas y agendado de pacientes en los canales del Cliente.</li>
+            <li><strong>Alex — Auxiliar técnico:</strong> empleado IA para la supervisión y el mantenimiento del funcionamiento de la web y los sistemas.</li>
+            <li><strong>Valeria — Creadora de contenido:</strong> empleado IA para la creación y planificación de contenido para el blog y las redes sociales del Cliente.</li>
+            <li><strong>Panel de cliente</strong> con acceso a facturas, soporte técnico y reserva de reuniones.</li>
           </ul>
-          <p>Los servicios pueden contratarse de manera individual o en los paquetes "Operación Solo" (Alex + 1 empleado a elegir + web profesional + panel de gestión) y "Equipo Solopreneur" (los 4 empleados + web + panel), según las tarifas vigentes publicadas en el sitio web.</p>
+          <p>El servicio se presta en régimen de <strong>alquiler con opción a compra</strong>: al completar el pago de doce (12) cuotas mensuales, la página web y los empleados IA pasan a ser propiedad del Cliente. El dominio y los datos de sus pacientes son propiedad del Cliente desde el primer día, en todos los escenarios.</p>
         </section>
 
         <section class="legal-section">
           <h2>3. Proceso de contratación</h2>
           <p>La contratación se formaliza mediante los siguientes pasos:</p>
           <ol>
-            <li>El Cliente solicita una demostración gratuita a través del sistema de reservas disponible en el sitio web.</li>
-            <li>Tras la demostración, si el Cliente desea proceder, Diginode emite un enlace de pago a través de la plataforma Stripe.</li>
-            <li>El pago del <em>setup</em> (configuración inicial) activa el proceso de implementación del servicio.</li>
-            <li>Una vez configurado el sistema (plazo estimado de 72 horas hábiles), se inicia la primera facturación mensual.</li>
+            <li>El Cliente contrata directamente desde el sitio web a través de la plataforma de pago Stripe, abonando la primera cuota mensual.</li>
+            <li>Tras el pago, el Cliente recibe acceso a su panel y completa un formulario de bienvenida con la información de su consulta.</li>
+            <li>Diginode configura y entrega la web y los empleados IA en un plazo estimado de siete (7) días desde la recepción del formulario.</li>
           </ol>
         </section>
 
         <section class="legal-section">
           <h2>4. Precios y facturación</h2>
-          <p>Los precios actuales de los servicios son:</p>
-          <div class="legal-table-wrapper">
-            <table class="legal-table">
-              <thead>
-                <tr>
-                  <th>Servicio</th>
-                  <th>Setup</th>
-                  <th>Mensual</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Nora — Recepcionista (individual)</td><td>600 €</td><td>150 €</td></tr>
-                <tr><td>Alex — Asistente ejecutivo (individual)</td><td>600 €</td><td>150 €</td></tr>
-                <tr><td>Valeria — Content creator (individual)</td><td>600 €</td><td>150 €</td></tr>
-                <tr><td>Marcos — Analista de negocio (individual)</td><td>600 €</td><td>150 €</td></tr>
-                <tr><td>Paquete Operación Solo (Alex + 1 + web)</td><td>Incluido</td><td>300 € los 6 primeros meses · 200 € después</td></tr>
-                <tr><td>Paquete Equipo Solopreneur (4 empleados + web)</td><td>Incluido</td><td>500 € los 6 primeros meses · 350 € después</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>Todos los precios están expresados en euros e incluyen el IVA aplicable según la legislación española vigente. Diginode se reserva el derecho de modificar sus tarifas con un preaviso de 30 días naturales al Cliente.</p>
-          <p>El <em>setup</em> de los empleados individuales puede fraccionarse en hasta tres (3) mensualidades. En los paquetes Operación Solo y Equipo Solopreneur, el setup está incluido en la cuota mensual promocional de los primeros 6 meses. Las cuotas mensuales se cobran de forma automática a través de Stripe.</p>
+          <p>El precio del servicio Clínica Digital es una cuota única de <strong>150 € al mes</strong>, sin coste de configuración inicial ni permanencia mínima. El registro del dominio corre a cargo del Cliente por ser de su propiedad.</p>
+          <p>Todos los precios están expresados en euros e incluyen el IVA aplicable según la legislación española vigente. Diginode se reserva el derecho de modificar sus tarifas con un preaviso de 30 días naturales al Cliente; dicha modificación no afectará a las cuotas ya abonadas ni al cómputo de las doce (12) cuotas de la opción a compra ya iniciada.</p>
+          <p>Las cuotas mensuales se cobran de forma automática a través de Stripe.</p>
         </section>
 
         <section class="legal-section">
-          <h2>5. Duración y cancelación</h2>
-          <p>El servicio no tiene permanencia mínima. El Cliente puede cancelar su suscripción mensual en cualquier momento con un preaviso mínimo de <strong>30 días naturales</strong> enviado por escrito a la dirección de correo electrónico de Diginode.</p>
-          <p>La cancelación tendrá efecto al término del período mensual en curso. El pago del <em>setup</em> no es reembolsable, dado que retribuye el trabajo de configuración ya realizado.</p>
+          <h2>5. Duración, cancelación y opción a compra</h2>
+          <p>El servicio no tiene permanencia mínima. El Cliente puede cancelar su suscripción mensual en cualquier momento desde su panel o por escrito a la dirección de correo electrónico de Diginode. La cancelación tendrá efecto al término del período mensual en curso, sin penalización.</p>
+          <p>Si el Cliente cancela antes de completar las doce (12) cuotas, el servicio se desactiva al final del período pagado. El Cliente conserva en todo caso su dominio y una exportación completa de los datos de sus pacientes.</p>
+          <p>Al completar el pago de la duodécima (12ª) cuota mensual se concreta el traspaso: la página web y los empleados IA pasan a ser propiedad del Cliente, quien podrá optar por continuar la suscripción (manteniendo alojamiento, mejoras y soporte) o llevarse el producto en el estado en que se encuentre en ese momento, dejando de recibir mejoras futuras.</p>
           <p>Diginode se reserva el derecho de suspender o cancelar el servicio de forma inmediata en caso de impago o uso fraudulento o contrario a la ley.</p>
         </section>
 

@@ -218,6 +218,10 @@
           <LifeBuoy :size="16" />
           Abrir ticket
         </RouterLink>
+        <a :href="calLink" target="_blank" rel="noopener noreferrer" class="quick-link">
+          <CalendarClock :size="16" />
+          Agendar reunión
+        </a>
       </div>
 
     </template>
@@ -237,6 +241,9 @@ import AppBadge from '@/components/ui/AppBadge.vue'
 
 const clientStore = useClientStore()
 const toast       = useToastStore()
+
+// Reunión directa con el propietario (misma agenda Cal que usa la web pública).
+const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
 
 const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
 

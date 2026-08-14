@@ -1,5 +1,7 @@
 # Plan de Acción por Fases — DigiNode
 
+> ⚠️ **MODELO COMERCIAL VIGENTE (2026-08-14) — anula cualquier precio u oferta descrita más abajo:** producto único **"Clínica Digital"** = página web + 3 empleados IA (Nora recepcionista, Alex auxiliar técnico, Valeria creadora de contenido) por **150€/mes**, sin setup, sin trial, sin permanencia. Alquiler con opción a compra: al pagar la cuota 12 la web y los agentes pasan a ser del cliente (dominio y datos de pacientes suyos desde el día 1). Nicho SEO: "clínica digital para psicólogos, coaches y terapeutas". Vistas públicas: Home (landing no-scroll con demo de Nora), ¿Es para mí?, FAQ, Blog, legales. Fuente de verdad de precios: `diginode-api/src/config/plans.js`. Las referencias a Bolsa de Empleo, Operación Solo, Plan Entrepreneur, cursos y paquetes que aparezcan abajo son **históricas**.
+
 > **Este es el documento maestro.** Está escrito para ser ejecutado por un modelo de IA a lo largo de muchas sesiones, asumiendo que **perderás el contexto entre sesiones**. Todo lo que necesitas para retomar el trabajo está aquí y en los otros dos documentos. No dependas de tu memoria de conversación: depende de este archivo, del registro de progreso y de `git log`.
 
 ---

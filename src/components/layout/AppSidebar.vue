@@ -52,9 +52,7 @@ import {
   LifeBuoy,
   LogOut,
   BookOpen,
-  GraduationCap,
   Brain,
-  Package,
   CreditCard,
   MessageCircle,
 } from 'lucide-vue-next'
@@ -78,8 +76,6 @@ const adminNav = [
   { to: '/admin/content',   label: 'Contenido',   icon: LayoutGrid },
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
-  { to: '/admin/courses',    label: 'Cursos',       icon: GraduationCap },
-  { to: '/admin/packages',   label: 'Paquetes',     icon: Package },
   { to: '/admin/clients',         label: 'Clientes',        icon: CreditCard },
   { to: '/admin/knowledge',       label: 'Conocimiento',    icon: Brain },
   { to: '/admin/conversaciones',  label: 'Conversaciones',  icon: MessageCircle },

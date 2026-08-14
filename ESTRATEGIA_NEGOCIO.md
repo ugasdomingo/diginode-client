@@ -1,5 +1,7 @@
 # Estrategia de Negocio — DigiNode
 
+> ⚠️ **MODELO COMERCIAL VIGENTE (2026-08-14) — anula los precios y ofertas de las tablas de abajo:** producto único **"Clínica Digital"** = página web + 3 empleados IA (Nora recepcionista, Alex auxiliar técnico, Valeria creadora de contenido) por **150€/mes**, sin setup ni permanencia, con opción a compra al completar 12 cuotas (el cliente es dueño de su dominio y datos desde el día 1). Nicho: psicólogos, coaches y terapeutas. Modelo "portable", no SaaS: cada cliente se despliega desde 4 repos plantilla de GitHub y las mejoras se propagan desde la plantilla mientras esté suscrito.
+
 > **Documento de instrucciones para un modelo de IA** que actuará como asesor de negocio/marketing. Contiene: (1) el modelo actual tal como está implementado en el código, (2) validación y crítica, (3) el enfoque recomendado, y (4) tareas ejecutables con criterio de "hecho". Objetivo declarado del fundador: **generar ingresos rápidamente** vía contenido y publicidad.
 
 ## 1. El modelo actual (contexto — no necesitas explorar los repos)

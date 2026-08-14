@@ -9,17 +9,19 @@
         </RouterLink>
 
         <nav class="navbar__nav" aria-label="Navegacion principal">
-          <RouterLink to="/plan" class="navbar__link">El Plan</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#precios' }" class="navbar__link">Precios</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__link">FAQ</RouterLink>
+          <RouterLink to="/es-para-mi" class="navbar__link">¿Es para mí?</RouterLink>
+          <RouterLink to="/faq" class="navbar__link">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
         </nav>
 
         <div class="navbar__actions">
-          <RouterLink to="/demo" class="navbar__cta">
-            <MessageCircle :size="16" />
-            Habla con Nora
+          <RouterLink :to="clientLink" class="navbar__cta-secondary">
+            Soy cliente
           </RouterLink>
+          <button type="button" class="navbar__cta" :disabled="buying" @click="buyClinica">
+            <ShoppingBag :size="16" />
+            {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
+          </button>
         </div>
 
         <!-- Mobile menu toggle -->
@@ -36,19 +38,26 @@
       <!-- Mobile nav -->
       <Transition name="mobile-nav">
         <div v-if="mobileOpen" class="navbar__mobile">
-          <RouterLink to="/plan" class="navbar__mobile-link" @click="mobileOpen = false">El Plan</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#precios' }" class="navbar__mobile-link" @click="mobileOpen = false">Precios</RouterLink>
-          <RouterLink :to="{ path: '/', hash: '#faq' }" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
+          <RouterLink to="/es-para-mi" class="navbar__mobile-link" @click="mobileOpen = false">¿Es para mí?</RouterLink>
+          <RouterLink to="/faq" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
           <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
           <div class="navbar__mobile-actions">
             <RouterLink
-              to="/demo"
-              class="navbar__mobile-cta"
+              :to="clientLink"
+              class="navbar__mobile-cta-secondary"
               @click="mobileOpen = false"
             >
-              <MessageCircle :size="16" />
-              Habla con Nora
+              Soy cliente
             </RouterLink>
+            <button
+              type="button"
+              class="navbar__mobile-cta"
+              :disabled="buying"
+              @click="mobileOpen = false; buyClinica()"
+            >
+              <ShoppingBag :size="16" />
+              {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
+            </button>
           </div>
         </div>
       </Transition>
@@ -59,8 +68,8 @@
       <RouterView />
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- Footer (oculto en Home para respetar el no-scroll) -->
+    <footer v-if="showFooter" class="footer">
       <div class="footer__inner">
         <div class="footer__top">
           <div class="footer__brand">
@@ -68,16 +77,16 @@
               <img src="/logo.png" alt="DigiNode" class="footer__logo-img" />
               <span>DigiNode</span>
             </RouterLink>
-            <p class="footer__tagline">Empleados IA para emprendedores que quieren dejar de hacerlo todo solos.</p>
+            <p class="footer__tagline">Clínica digital llave en mano para psicólogos, coaches y terapeutas.</p>
           </div>
 
           <div class="footer__links-group">
             <h4>Producto</h4>
             <nav class="footer__links">
-              <RouterLink to="/plan">El Plan</RouterLink>
-              <RouterLink to="/demo">Habla con Nora</RouterLink>
-              <RouterLink :to="{ path: '/', hash: '#precios' }">Precios</RouterLink>
-              <RouterLink :to="{ path: '/', hash: '#faq' }">FAQ</RouterLink>
+              <RouterLink to="/">Habla con Nora</RouterLink>
+              <RouterLink to="/es-para-mi">¿Es para mí?</RouterLink>
+              <RouterLink to="/faq">FAQ</RouterLink>
+              <RouterLink to="/blog">Blog</RouterLink>
             </nav>
           </div>
 
@@ -160,8 +169,10 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Menu, X, Mail, MessageCircle, Bot } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
+import { Menu, X, Mail, MessageCircle, Bot, ShoppingBag } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
+import { useCheckout } from '@/composables/useCheckout'
 
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
 const telegramLink = 'https://t.me/+34614770015?text=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.'
@@ -171,16 +182,25 @@ const contactOpen = ref(false)
 const isScrolled = ref(false)
 const year = new Date().getFullYear()
 
+// The Nora demo now lives on the Home hero, so the FAB points there.
 const internalOptions = [
-  { label: 'Habla con Nora', route: '/demo', icon: Bot },
+  { label: 'Habla con Nora', route: '/', icon: Bot },
 ]
 
 const externalOptions = [
   { label: 'Correo', href: emailLink, icon: Mail },
 ]
 
+const route = useRoute()
+const showFooter = computed(() => route.name !== 'home')
+
 const auth = useAuthStore()
-const dashboardLink = computed(() => auth.isAdmin ? '/admin' : '/portal')
+const clientLink = computed(() => {
+  if (!auth.isAuthenticated) return '/login'
+  return auth.isAdmin ? '/admin' : '/portal'
+})
+
+const { buying, buyClinica } = useCheckout()
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 20
@@ -339,17 +359,25 @@ onUnmounted(() => {
     padding: 0 $space-5;
     background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
     color: $text-inverse;
+    font-family: inherit;
     font-size: $text-sm;
     font-weight: $fw-semibold;
+    border: 0;
     border-radius: $radius;
     text-decoration: none;
+    cursor: pointer;
     transition: $transition;
     box-shadow: 0 4px 16px rgba($primary, 0.25);
 
-    &:hover {
+    &:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 6px 24px rgba($primary, 0.35);
       color: $text-inverse;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
     }
   }
 
@@ -437,10 +465,18 @@ onUnmounted(() => {
     padding: 0 $space-5;
     background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
     color: $text-inverse;
+    font-family: inherit;
     font-size: $text-sm;
     font-weight: $fw-semibold;
+    border: 0;
     border-radius: $radius;
     text-decoration: none;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
   }
 }
 

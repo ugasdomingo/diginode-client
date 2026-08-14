@@ -12,60 +12,60 @@ const routes = [
         path: '',
         name: 'home',
         component: () => import('@/views/home/HomeView.vue'),
+        meta: {
+          title: 'DigiNode — Clínica Digital llave en mano para psicólogos, coaches y terapeutas',
+          description: 'Página web profesional + 3 empleados IA que atienden a tus pacientes, gestionan tu agenda y crean tu contenido. 150€/mes, sin permanencia, tuya al completar 12 cuotas.',
+        },
+      },
+      {
+        path: 'es-para-mi',
+        name: 'es-para-mi',
+        component: () => import('@/views/home/EsParaMiView.vue'),
+      },
+      {
+        path: 'faq',
+        name: 'faq',
+        component: () => import('@/views/home/FaqView.vue'),
       },
       {
         path: 'legal/terminos',
         name: 'legal.terminos',
         component: () => import('@/views/legal/TerminosView.vue'),
+        meta: { title: 'Términos y condiciones | DigiNode' },
       },
       {
         path: 'legal/privacidad',
         name: 'legal.privacidad',
         component: () => import('@/views/legal/PrivacidadView.vue'),
+        meta: { title: 'Política de privacidad | DigiNode' },
       },
       {
         path: 'legal/aviso-legal',
         name: 'legal.aviso',
         component: () => import('@/views/legal/AvisoLegalView.vue'),
+        meta: { title: 'Aviso legal | DigiNode' },
       },
       {
         path: 'blog',
         name: 'blog.list',
         component: () => import('@/views/blog/BlogListView.vue'),
+        meta: {
+          title: 'Blog — Clínica digital para psicólogos, coaches y terapeutas | DigiNode',
+          description: 'Guías y recursos para digitalizar tu consulta: captación de pacientes, gestión de agenda y marketing ético para profesionales de la salud mental.',
+        },
       },
       {
         path: 'blog/:slug',
         name: 'blog.post',
         component: () => import('@/views/blog/BlogPostView.vue'),
       },
-      {
-        path: 'cursos/:slug',
-        name: 'course.detail',
-        component: () => import('@/views/courses/CourseDetailView.vue'),
-      },
-      {
-        path: 'bolsa-de-empleo',
-        name: 'bolsa',
-        component: () => import('@/views/home/BolsaEmpleoView.vue'),
-      },
-      {
-        path: 'plan',
-        name: 'plan',
-        component: () => import('@/views/home/OperacionSoloView.vue'),
-      },
-      {
-        path: 'operacion-solo',
-        redirect: '/plan',
-      },
-      {
-        path: 'demo',
-        name: 'demo',
-        component: () => import('@/views/home/DemoView.vue'),
-      },
-      {
-        path: 'despacho-digital',
-        redirect: '/plan',
-      },
+      // Rutas antiguas → home (mantienen vivos los enlaces indexados/compartidos)
+      { path: 'demo', redirect: '/' },
+      { path: 'plan', redirect: '/' },
+      { path: 'operacion-solo', redirect: '/' },
+      { path: 'despacho-digital', redirect: '/' },
+      { path: 'bolsa-de-empleo', redirect: '/' },
+      { path: 'cursos/:slug', redirect: '/' },
     ],
   },
 
@@ -119,16 +119,6 @@ const routes = [
         path: 'blog',
         name: 'admin.blog',
         component: () => import('@/views/admin/BlogView.vue'),
-      },
-      {
-        path: 'courses',
-        name: 'admin.courses',
-        component: () => import('@/views/admin/CoursesView.vue'),
-      },
-      {
-        path: 'packages',
-        name: 'admin.packages',
-        component: () => import('@/views/admin/PackagesView.vue'),
       },
       {
         path: 'clients',
@@ -218,6 +208,24 @@ router.beforeEach((to) => {
   }
 
   return true
+})
+
+// SEO por ruta (SPA sin SSR): título y meta description desde route.meta.
+// Las vistas con necesidades más ricas (JSON-LD) lo refinan con useSeo(),
+// que corre después (onMounted) y por tanto gana.
+const DEFAULT_TITLE = 'DigiNode — Clínica Digital llave en mano para psicólogos, coaches y terapeutas'
+const DEFAULT_DESCRIPTION = 'Página web profesional + 3 empleados IA por 150€/mes. Sin permanencia y tuya al completar 12 cuotas.'
+
+router.afterEach((to) => {
+  document.title = to.meta.title ?? DEFAULT_TITLE
+
+  let tag = document.querySelector('meta[name="description"]')
+  if (!tag) {
+    tag = document.createElement('meta')
+    tag.setAttribute('name', 'description')
+    document.head.appendChild(tag)
+  }
+  tag.setAttribute('content', to.meta.description ?? DEFAULT_DESCRIPTION)
 })
 
 export default router

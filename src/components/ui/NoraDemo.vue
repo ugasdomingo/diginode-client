@@ -1,13 +1,5 @@
 <template>
-  <div class="demo">
-    <div class="demo__intro">
-      <h1 class="demo__title">Habla con Nora ahora</h1>
-      <p class="demo__subtitle">
-        Esto es exactamente lo que vivirían tus clientes al escribirte. Nora es una
-        recepcionista con IA: pruébala y deja que te agende una demo.
-      </p>
-    </div>
-
+  <div class="nora-demo">
     <!-- Phone mockup -->
     <div class="phone">
       <div class="phone__notch" />
@@ -72,7 +64,7 @@
     </div>
 
     <!-- Suggestion cards -->
-    <div class="demo__cards">
+    <div class="nora-demo__cards">
       <button
         v-for="s in suggestions"
         :key="s.label"
@@ -85,20 +77,24 @@
       </button>
     </div>
 
-    <p v-if="capped" class="demo__capped">
-      Has alcanzado el límite de esta demo. ¿List@ para tenerla en tu negocio?
-      <RouterLink to="/operacion-solo" class="demo__capped-link">Ver el Plan Entrepreneur →</RouterLink>
+    <p v-if="capped" class="nora-demo__capped">
+      Has alcanzado el límite de esta demo. ¿List@ para tenerla en tu clínica?
+      <button type="button" class="nora-demo__capped-link" :disabled="buying" @click="buyClinica">
+        Comprar Clínica Digital →
+      </button>
     </p>
-    <p v-if="error" class="demo__error">{{ error }}</p>
+    <p v-if="error" class="nora-demo__error">{{ error }}</p>
   </div>
 </template>
 
 <script setup>
 import { ref, nextTick, onMounted } from 'vue'
 import { useApi } from '@/composables/useApi'
+import { useCheckout } from '@/composables/useCheckout'
 import { track } from '@/lib/pixel'
 
 const api = useApi()
+const { buying, buyClinica } = useCheckout()
 
 const messages = ref([])
 const draft    = ref('')
@@ -194,38 +190,26 @@ onMounted(() => {
     typing.value = true
     setTimeout(() => {
       typing.value = false
-      pushNora('¡Hola! 👋 Soy Nora, la recepcionista con IA de DigiNode. Cuéntame, ¿en qué tipo de negocio trabajas y qué tarea te quita más tiempo?')
+      pushNora('¡Hola! 👋 Soy Nora, la recepcionista con IA de DigiNode. Cuéntame, ¿en qué tipo de consulta trabajas y qué tarea te quita más tiempo?')
     }, 900)
   }, 400)
 })
 </script>
 
 <style lang="scss" scoped>
-.demo {
-  min-height: 100vh;
+.nora-demo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: $space-12 $space-4 $space-16;
-  gap: $space-8;
+  gap: $space-4;
+  width: 100%;
 
-  &__intro {
-    max-width: 560px;
-    text-align: center;
-  }
-
-  &__title {
-    font-family: $font-display;
-    font-size: $text-4xl;
-    font-weight: $fw-bold;
-    color: $text;
-    margin-bottom: $space-3;
-  }
-
-  &__subtitle {
-    color: $text-muted;
-    font-size: $text-lg;
-    line-height: 1.6;
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-2;
+    max-width: 420px;
   }
 
   &__capped,
@@ -235,16 +219,21 @@ onMounted(() => {
     font-size: $text-sm;
   }
 
-  &__cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: $space-3;
-    max-width: 420px;
+  &__capped { color: $text-muted; }
+
+  &__capped-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: $primary-light;
+    font-weight: $fw-semibold;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.6; cursor: wait; }
   }
 
-  &__capped { color: $text-muted; }
-  &__capped-link { color: $primary-light; font-weight: $fw-semibold; }
   &__error { color: $danger; }
 }
 
@@ -277,7 +266,9 @@ onMounted(() => {
   position: relative;
   width: 100%;
   max-width: 380px;
-  height: 640px;
+  // Fits inside the no-scroll Home hero on shorter screens, caps at phone size.
+  height: min(560px, calc(100dvh - 260px));
+  min-height: 400px;
   background: $bg-card;
   border: 1px solid $border;
   border-radius: $radius-xl;

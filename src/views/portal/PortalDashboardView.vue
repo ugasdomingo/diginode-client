@@ -91,9 +91,10 @@
         </div>
       </section>
 
-      <!-- Onboarding CTA -->
+      <!-- Onboarding CTA — solo si hay una oficina en marcha. Quien únicamente
+           compró una formación no tiene nada que configurar. -->
       <RouterLink
-        v-if="clientStore.client?.onboarding_status === 'pending_form'"
+        v-if="hasOffice && clientStore.client?.onboarding_status === 'pending_form'"
         to="/portal/onboarding"
         class="onboarding-cta"
       >
@@ -106,7 +107,7 @@
       </RouterLink>
 
       <!-- Office access -->
-      <section v-if="clientStore.office" class="office-card">
+      <section v-if="hasOffice" class="office-card">
         <div class="office-card__header">
           <div class="office-card__icon">
             <ExternalLink :size="18" />
@@ -190,6 +191,15 @@
                   · Cuota {{ purchase.installment_number }}/{{ purchase.installment_total }}
                 </template>
               </span>
+              <button
+                v-if="purchase.training"
+                type="button"
+                class="purchase-item__details"
+                @click="openDetails(purchase)"
+              >
+                <Info :size="12" />
+                Ver detalles
+              </button>
             </div>
             <div class="purchase-item__right">
               <span class="purchase-item__amount">{{ formatAmount(purchase.amount) }}</span>
@@ -225,22 +235,39 @@
       </div>
 
     </template>
+
+    <TrainingDetailsModal v-model="detailsOpen" :purchase="selectedPurchase" />
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   ShoppingBag, CalendarClock, LifeBuoy, Repeat, Bell,
   FileText, Receipt, BookOpen, Users, Wrench, ExternalLink,
-  Sparkles, ChevronRight,
+  Sparkles, ChevronRight, Info,
 } from 'lucide-vue-next'
 import { useClientStore } from '@/stores/client'
 import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
+import TrainingDetailsModal from '@/components/portal/TrainingDetailsModal.vue'
 
 const clientStore = useClientStore()
 const toast       = useToastStore()
+
+const detailsOpen      = ref(false)
+const selectedPurchase = ref(null)
+
+function openDetails(purchase) {
+  selectedPurchase.value = purchase
+  detailsOpen.value      = true
+}
+
+// `office` siempre llega como objeto; lo que distingue a un cliente con oficina
+// es que su estado haya salido de 'not_requested'.
+const hasOffice = computed(
+  () => !!clientStore.office && clientStore.office.status !== 'not_requested'
+)
 
 // Reunión directa con el propietario (misma agenda Cal que usa la web pública).
 const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
@@ -734,6 +761,25 @@ function planLabel(slug) {
     font-size: $text-xs;
     color: $text-muted;
     font-family: $font-mono;
+  }
+
+  &__details {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    align-self: flex-start;
+    margin-top: $space-1;
+    padding: 0;
+    background: none;
+    border: 0;
+    font-family: inherit;
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: $primary;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover { color: $primary-light; text-decoration: underline; }
   }
 
   &__right {

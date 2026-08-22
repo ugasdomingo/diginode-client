@@ -3,9 +3,8 @@ import { useApi } from '@/composables/useApi'
 import { useToastStore } from '@/stores/toast'
 import { track } from '@/lib/pixel'
 
-// Single-product checkout: every "Comprar Clínica Digital" button on the site
-// goes through here so the flow (pixel event → Stripe session → redirect) stays
-// identical everywhere.
+// Todo botón de compra del sitio pasa por aquí para que el flujo
+// (evento de pixel → sesión de Stripe → redirect) sea idéntico en todas partes.
 const buying = ref(false)
 
 export function useCheckout() {
@@ -26,5 +25,24 @@ export function useCheckout() {
     }
   }
 
-  return { buying, buyClinica }
+  // Formaciones puntuales (talleres). El aforo lo valida la API: si está lleno
+  // responde 409 y el mensaje llega tal cual al toast.
+  async function buyTraining(slug) {
+    if (buying.value) return
+    buying.value = true
+    track('InitiateCheckout')
+    try {
+      const res = await useApi().post(`/trainings/${slug}/checkout`)
+      if (res?.url) {
+        window.location.href = res.url
+        return
+      }
+      throw new Error('No se pudo iniciar el pago')
+    } catch (e) {
+      useToastStore().error(e.message ?? 'No se pudo iniciar el pago. Inténtalo de nuevo.')
+      buying.value = false
+    }
+  }
+
+  return { buying, buyClinica, buyTraining }
 }

@@ -69,6 +69,29 @@ const routes = [
     ],
   },
 
+  // ── Formaciones ─────────────────────────────
+  // Landing autónoma: deliberadamente fuera de PublicLayout y fuera del menú.
+  // Es una página de campaña con un solo objetivo, sin enlaces de fuga.
+  {
+    path: '/formacion/ia-para-terapeutas',
+    name: 'formacion.taller-ia',
+    component: () => import('@/views/formacion/TallerIaView.vue'),
+    meta: {
+      public: true,
+      title: 'IA para Terapeutas — Taller online en directo | DigiNode',
+      description: 'Taller online para psicólogos, coaches y terapeutas: automatiza tu gestión y tu marketing con empleados IA. 3 de octubre, plazas limitadas, 100€.',
+    },
+  },
+  {
+    path: '/formacion/:slug/gracias',
+    name: 'formacion.gracias',
+    component: () => import('@/views/formacion/GraciasView.vue'),
+    meta: {
+      public: true,
+      title: 'Pago confirmado | DigiNode',
+    },
+  },
+
   {
     path: '/login',
     name: 'login',

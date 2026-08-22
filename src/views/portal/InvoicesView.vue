@@ -117,6 +117,15 @@
                   Cuota {{ purchase.installment_number }}/{{ purchase.installment_total }}
                 </span>
                 <span v-else class="purchase-row__type-label">{{ typeLabel(purchase.type) }}</span>
+                <button
+                  v-if="purchase.training"
+                  type="button"
+                  class="purchase-row__details"
+                  @click="openDetails(purchase)"
+                >
+                  <Info :size="12" />
+                  Ver detalles
+                </button>
               </div>
             </div>
 
@@ -147,21 +156,32 @@
       </section>
 
     </template>
+
+    <TrainingDetailsModal v-model="detailsOpen" :purchase="selectedPurchase" />
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   ShoppingBag, Bell, Repeat, CalendarClock,
-  BookOpen, Users, FileText, Receipt, ExternalLink,
+  BookOpen, Users, FileText, Receipt, ExternalLink, Info,
 } from 'lucide-vue-next'
 import { useClientStore } from '@/stores/client'
 import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
+import TrainingDetailsModal from '@/components/portal/TrainingDetailsModal.vue'
 
 const clientStore = useClientStore()
 const toast       = useToastStore()
+
+const detailsOpen      = ref(false)
+const selectedPurchase = ref(null)
+
+function openDetails(purchase) {
+  selectedPurchase.value = purchase
+  detailsOpen.value      = true
+}
 
 const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
 
@@ -179,7 +199,7 @@ function typeIcon(type) {
 }
 
 function typeLabel(type) {
-  return { course: 'Curso', bolsa: 'Bolsa de empleo', subscription: 'Suscripción', manual: 'Pago manual' }[type] ?? 'Pago'
+  return { course: 'Formación', bolsa: 'Bolsa de empleo', subscription: 'Suscripción', manual: 'Pago manual' }[type] ?? 'Pago'
 }
 
 function planLabel(slug) {
@@ -445,6 +465,25 @@ function subStatusVariant(s) {
   &__type-label {
     font-size: $text-xs;
     color: $text-subtle;
+  }
+
+  &__details {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    align-self: flex-start;
+    margin-top: $space-1;
+    padding: 0;
+    background: none;
+    border: 0;
+    font-family: inherit;
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: $primary;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover { color: $primary-light; text-decoration: underline; }
   }
 
   &__date {

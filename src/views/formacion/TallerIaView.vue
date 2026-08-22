@@ -47,7 +47,19 @@
           </div>
           <div class="details__row">
             <dt>Inversión</dt>
-            <dd>{{ priceLabel }}</dd>
+            <dd class="details__price">
+              {{ priceLabel }}
+              <button
+                type="button"
+                class="details__ia-badge"
+                aria-describedby="nota-ia"
+                title="Las herramientas de IA se contratan aparte, con tu propia cuenta"
+                @click="destacarNota"
+              >
+                +25 € para IA
+                <Info :size="13" />
+              </button>
+            </dd>
           </div>
           <div class="details__row">
             <dt>Capacidad</dt>
@@ -75,7 +87,11 @@
             {{ ctaLabel }}
           </button>
 
-          <p class="details__note">
+          <p
+            id="nota-ia"
+            class="details__note"
+            :class="{ 'details__note--destacada': notaDestacada }"
+          >
             <Info :size="14" />
             {{ t.tools_cost_note }}
           </p>
@@ -115,6 +131,18 @@
         </div>
       </section>
 
+      <!-- ── Prueba en vivo ─────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="block__title">Pruébalo tú mismo</h2>
+        <p class="nora-intro">
+          Esto no es un vídeo: es Nora, una recepcionista con IA atendiendo de verdad.
+          Escríbele lo que le preguntaría un paciente tuyo y mira cómo responde.
+        </p>
+        <div class="nora-wrap">
+          <NoraDemo />
+        </div>
+      </section>
+
       <!-- ── Cierre ─────────────────────────────────────────────────── -->
       <section v-if="!isSoldOut" class="closing">
         <button
@@ -144,11 +172,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   Ticket, Check, ChevronRight, Info, Flame, Ban,
   Clock, Rocket, Users,
 } from 'lucide-vue-next'
+import NoraDemo from '@/components/ui/NoraDemo.vue'
 import { useTraining } from '@/data/trainings'
 import { useCheckout } from '@/composables/useCheckout'
 import { useSeo } from '@/composables/useSeo'
@@ -226,6 +255,17 @@ const ctaLabel = computed(() => {
 
 function benefitIcon(i) {
   return [Clock, Rocket, Users][i] ?? Check
+}
+
+// El importe grande dice 100€; el badge lleva la vista a la letra pequeña para
+// que nadie llegue al taller sin saber que las herramientas van aparte.
+const notaDestacada = ref(false)
+let notaTimer = null
+
+function destacarNota() {
+  notaDestacada.value = true
+  clearTimeout(notaTimer)
+  notaTimer = setTimeout(() => { notaDestacada.value = false }, 2200)
 }
 
 function reservar() {
@@ -520,16 +560,63 @@ function reservar() {
     }
   }
 
+  &__price {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__ia-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 2px $space-2;
+    background: $accent-subtle;
+    border: 1px solid rgba(245, 166, 35, 0.35);
+    border-radius: $radius-full;
+    font-family: inherit;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent-light;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover { background: rgba(245, 166, 35, 0.16); }
+  }
+
   &__note {
     display: flex;
     align-items: flex-start;
     gap: $space-2;
+    padding: $space-2;
+    margin: -$space-2;
+    border-radius: $radius-sm;
     font-size: $text-xs;
     color: $text-muted;
     line-height: 1.6;
+    transition: background 0.25s ease, color 0.25s ease;
 
     svg { flex-shrink: 0; margin-top: 2px; }
+
+    &--destacada {
+      background: rgba(245, 166, 35, 0.14);
+      color: $text;
+    }
   }
+}
+
+// ── Prueba en vivo de Nora ──────────────────────────────────────────────────
+.nora-intro {
+  font-size: $text-sm;
+  color: $text-muted;
+  line-height: 1.6;
+  margin-top: -$space-2;
+}
+
+.nora-wrap {
+  display: flex;
+  justify-content: center;
 }
 
 // ── Bloques de contenido ────────────────────────────────────────────────────

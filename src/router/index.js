@@ -133,6 +133,11 @@ const routes = [
         component: () => import('@/views/admin/AnalyticsView.vue'),
       },
       {
+        path: 'trainings',
+        name: 'admin.trainings',
+        component: () => import('@/views/admin/TrainingsView.vue'),
+      },
+      {
         path: 'leads',
         name: 'admin.leads',
         component: () => import('@/views/admin/LeadsView.vue'),

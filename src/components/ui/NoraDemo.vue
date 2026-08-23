@@ -172,7 +172,7 @@ async function send() {
   sending.value = true
   typing.value = true
   try {
-    const res = await api.post('/demo/message', { contact_id: contactId(), message: text })
+    const res = await api.post('/demo/message', { contact_id: contactId(), platform: 'website', message: text })
     typing.value = false
     pushNora(res.reply)
     if (res.capped) capped.value = true

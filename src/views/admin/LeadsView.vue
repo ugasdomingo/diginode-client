@@ -105,6 +105,16 @@
                   >
                     <UserCheck :size="14" />
                   </AppButton>
+
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    title="Eliminar lead"
+                    :disabled="deletingId === lead._id"
+                    @click="askDelete(lead)"
+                  >
+                    <Trash2 :size="14" />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -123,6 +133,17 @@
         </AppButton>
       </div>
     </AppCard>
+
+    <AppModal v-model="confirmOpen" title="Eliminar lead" size="sm">
+      <p class="confirm-text">
+        Se borrará <strong>{{ pendingDelete?.contact_id }}</strong> y todo su historial de
+        conversación. Esta acción no se puede deshacer.
+      </p>
+      <template #footer>
+        <AppButton variant="secondary" @click="closeConfirm">Cancelar</AppButton>
+        <AppButton variant="danger" :loading="!!deletingId" @click="doDelete">Eliminar</AppButton>
+      </template>
+    </AppModal>
   </div>
 </template>
 
@@ -130,7 +151,7 @@
 import { ref, watch, onMounted } from 'vue'
 import {
   Search, Users, Instagram, Linkedin, Twitter,
-  Monitor, UserCheck, ChevronLeft, ChevronRight,
+  Monitor, UserCheck, ChevronLeft, ChevronRight, Trash2,
 } from 'lucide-vue-next'
 import { useApi } from '@/composables/useApi'
 import { useToastStore } from '@/stores/toast'
@@ -138,6 +159,7 @@ import AppCard    from '@/components/ui/AppCard.vue'
 import AppBadge   from '@/components/ui/AppBadge.vue'
 import AppButton  from '@/components/ui/AppButton.vue'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
+import AppModal   from '@/components/ui/AppModal.vue'
 
 const api   = useApi()
 const toast = useToastStore()
@@ -146,6 +168,36 @@ const leads        = ref([])
 const loading      = ref(true)
 const updatingId   = ref(null)
 const convertingId = ref(null)
+const deletingId   = ref(null)
+const confirmOpen  = ref(false)
+const pendingDelete = ref(null)
+
+function closeConfirm() {
+  confirmOpen.value = false
+  pendingDelete.value = null
+}
+
+function askDelete(lead) {
+  pendingDelete.value = lead
+  confirmOpen.value   = true
+}
+
+async function doDelete() {
+  const lead = pendingDelete.value
+  if (!lead) return
+  deletingId.value = lead._id
+  try {
+    await api.del(`/admin/leads/${lead._id}`)
+    toast.success('Lead eliminado')
+    confirmOpen.value = false
+    await fetchLeads()
+  } catch (e) {
+    toast.error(e.message ?? 'No se pudo eliminar el lead')
+  } finally {
+    deletingId.value = null
+    pendingDelete.value = null
+  }
+}
 const search       = ref('')
 const selectedStatus = ref('')
 const page         = ref(1)
@@ -505,5 +557,35 @@ onMounted(fetchLeads)
     color: $text-muted;
     font-variant-numeric: tabular-nums;
   }
+}
+
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-subtle;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: rgba(255, 107, 107, 0.4);
+    color: $danger;
+    background: $danger-bg;
+  }
+
+  &:disabled { opacity: 0.5; cursor: wait; }
+}
+
+.confirm-text {
+  font-size: $text-sm;
+  color: $text-muted;
+  line-height: 1.7;
+
+  strong { color: $text; font-family: $font-mono; font-size: $text-xs; }
 }
 </style>

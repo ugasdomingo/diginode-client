@@ -49,6 +49,8 @@ import {
   LayoutGrid,
   BarChart3,
   Eye,
+  Server,
+  GraduationCap,
   FileText,
   LifeBuoy,
   LogOut,
@@ -79,6 +81,8 @@ const adminNav = [
   { to: '/admin/sales',     label: 'Análisis',    icon: BarChart3 },
   { to: '/admin/blog',      label: 'Blog',         icon: BookOpen },
   { to: '/admin/clients',         label: 'Clientes',        icon: CreditCard },
+  { to: '/admin/trainings',       label: 'Formaciones',     icon: GraduationCap },
+  { to: '/admin/offices',         label: 'Oficinas',        icon: Server },
   { to: '/admin/knowledge',       label: 'Conocimiento',    icon: Brain },
   { to: '/admin/conversaciones',  label: 'Conversaciones',  icon: MessageCircle },
 ]

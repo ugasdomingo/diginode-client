@@ -54,12 +54,16 @@ import AppButton from '@/components/ui/AppButton.vue'
 const api   = useApi()
 const toast = useToastStore()
 
+// Solo se ofrece la base que Nora usa de verdad hoy. La antigua clave
+// 'recepcionista' seguía editable aquí pero ya no la lee el código: solo la
+// consumía un escenario de Make.com por webhook. Su contenido sigue en la base
+// de datos y el webhook sigue sirviéndolo; simplemente deja de confundir en el
+// panel, donde parecía que editarla cambiaba lo que Nora responde.
 const bases = [
-  { key: 'recepcionista', label: 'La Recepcionista (prospectos)' },
-  { key: 'nora_demo',     label: 'Nora — Demo / FAQ' },
+  { key: 'nora_demo', label: 'Nora — lo que responde a los visitantes' },
 ]
 
-const activeKey = ref('recepcionista')
+const activeKey = ref('nora_demo')
 const content   = ref('')
 const loading   = ref(true)
 const saving    = ref(false)

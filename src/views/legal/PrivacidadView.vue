@@ -115,8 +115,9 @@
         </section>
 
         <section class="legal-section">
-          <h2>8. Cookies</h2>
-          <p>Este sitio web puede utilizar cookies técnicas necesarias para su funcionamiento. Se recomienda consultar la política de cookies específica para más información.</p>
+          <h2>8. Cookies y medición de visitas</h2>
+          <p><strong>Este sitio web no utiliza cookies</strong>, ni propias ni de terceros, y tampoco almacena información en el navegador del usuario mediante tecnologías equivalentes de carácter persistente.</p>
+          <p>Para conocer cuántas personas visitan la web y qué contenidos resultan de interés, Diginode emplea un sistema de medición propio, agregado y anónimo, que no permite identificar a ninguna persona. Puedes consultar el detalle en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>.</p>
           <p class="legal-note">⚠️ Nota: Este documento es un borrador informativo generado para tu revisión. Se recomienda su validación por un profesional del derecho (Delegado de Protección de Datos o abogado especialista en privacidad) antes de su publicación.</p>
         </section>
 

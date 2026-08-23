@@ -164,6 +164,7 @@
         <nav class="taller__footer-links">
           <RouterLink to="/legal/terminos">Términos</RouterLink>
           <RouterLink to="/legal/privacidad">Privacidad</RouterLink>
+          <RouterLink to="/legal/cookies">Cookies</RouterLink>
           <RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink>
         </nav>
       </footer>

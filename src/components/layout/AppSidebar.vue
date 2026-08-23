@@ -48,6 +48,7 @@ import {
   Filter,
   LayoutGrid,
   BarChart3,
+  Eye,
   FileText,
   LifeBuoy,
   LogOut,
@@ -71,6 +72,7 @@ const router      = useRouter()
 
 const adminNav = [
   { to: '/admin/dashboard', label: 'Dashboard',  icon: LayoutDashboard },
+  { to: '/admin/analytics', label: 'Visitas',     icon: Eye },
   { to: '/admin/leads',     label: 'Leads',       icon: Users },
   { to: '/admin/funnel',    label: 'Funnel',      icon: Filter },
   { to: '/admin/content',   label: 'Contenido',   icon: LayoutGrid },

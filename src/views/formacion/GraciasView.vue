@@ -52,6 +52,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useToastStore } from '@/stores/toast'
 import AppSpinner from '@/components/ui/AppSpinner.vue'
 import { track } from '@/lib/pixel'
+import { trackEvent } from '@/lib/analytics'
 
 const route  = useRoute()
 const router = useRouter()
@@ -72,6 +73,7 @@ onMounted(async () => {
   // El evento de compra se registra en cuanto Stripe nos devuelve aquí, sin
   // depender de que el acceso automático funcione.
   track('Purchase')
+  trackEvent('purchase')
 
   if (!sessionId) {
     state.value = 'error'

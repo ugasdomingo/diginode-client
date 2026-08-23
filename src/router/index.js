@@ -40,6 +40,15 @@ const routes = [
         meta: { title: 'Política de privacidad | DigiNode' },
       },
       {
+        path: 'legal/cookies',
+        name: 'legal.cookies',
+        component: () => import('@/views/legal/CookiesView.vue'),
+        meta: {
+          title: 'Política de cookies | DigiNode',
+          description: 'Esta web no utiliza cookies. La medición de visitas es propia, agregada y anónima, y no permite identificar a ninguna persona.',
+        },
+      },
+      {
         path: 'legal/aviso-legal',
         name: 'legal.aviso',
         component: () => import('@/views/legal/AvisoLegalView.vue'),
@@ -117,6 +126,11 @@ const routes = [
         path: 'dashboard',
         name: 'admin.dashboard',
         component: () => import('@/views/admin/DashboardView.vue'),
+      },
+      {
+        path: 'analytics',
+        name: 'admin.analytics',
+        component: () => import('@/views/admin/AnalyticsView.vue'),
       },
       {
         path: 'leads',

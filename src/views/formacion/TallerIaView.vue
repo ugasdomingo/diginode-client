@@ -98,15 +98,27 @@
         </div>
       </section>
 
-      <!-- ── Qué incluye ────────────────────────────────────────────── -->
+      <!-- ── Qué obtendrás ──────────────────────────────────────────── -->
       <section v-if="t.includes?.length" class="block">
-        <h2 class="block__title">Qué incluye</h2>
+        <h2 class="block__title">Qué obtendrás</h2>
         <ul class="block__list">
           <li v-for="item in t.includes" :key="item">
             <Check :size="16" />
             <span>{{ item }}</span>
           </li>
         </ul>
+      </section>
+
+      <!-- ── Prueba en vivo ─────────────────────────────────────────── -->
+      <section class="block">
+        <h2 class="block__title">Pruébalo tú mismo</h2>
+        <p class="nora-intro">
+          Esto no es un vídeo: es Nora, una recepcionista con IA atendiendo de verdad.
+          Escríbele lo que le preguntaría un paciente tuyo y mira cómo responde.
+        </p>
+        <div class="nora-wrap">
+          <NoraDemo />
+        </div>
       </section>
 
       <!-- ── Requisitos ─────────────────────────────────────────────── -->
@@ -128,18 +140,6 @@
             <summary class="faq__q">{{ item.q }}</summary>
             <p class="faq__a">{{ item.a }}</p>
           </details>
-        </div>
-      </section>
-
-      <!-- ── Prueba en vivo ─────────────────────────────────────────── -->
-      <section class="block">
-        <h2 class="block__title">Pruébalo tú mismo</h2>
-        <p class="nora-intro">
-          Esto no es un vídeo: es Nora, una recepcionista con IA atendiendo de verdad.
-          Escríbele lo que le preguntaría un paciente tuyo y mira cómo responde.
-        </p>
-        <div class="nora-wrap">
-          <NoraDemo />
         </div>
       </section>
 

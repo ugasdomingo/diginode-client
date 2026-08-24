@@ -64,7 +64,7 @@
       <section v-if="training.includes?.length" class="training-details__section">
         <h4 class="training-details__heading">
           <Package :size="15" />
-          Qué incluye
+          Qué obtendrás
         </h4>
         <ul class="training-details__list">
           <li v-for="item in training.includes" :key="item">

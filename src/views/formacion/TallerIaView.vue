@@ -48,7 +48,7 @@
           <div class="details__row">
             <dt>Inversión</dt>
             <dd class="details__price">
-              {{ priceLabel }}
+              <span :class="{ 'details__free': esGratis }">{{ priceLabel }}</span>
               <button
                 type="button"
                 class="details__ia-badge"
@@ -56,7 +56,7 @@
                 title="Las herramientas de IA se contratan aparte, con tu propia cuenta"
                 @click="destacarNota"
               >
-                +25 € para IA
+                {{ esGratis ? 'salvo 25 € de herramientas' : '+25 € para IA' }}
                 <Info :size="13" />
               </button>
             </dd>
@@ -80,7 +80,7 @@
           <button
             type="button"
             class="details__button"
-            :disabled="buying || isSoldOut || loading"
+            :disabled="(buying && !esGratis) || isSoldOut || loading"
             @click="reservar"
           >
             <Ticket :size="18" />
@@ -148,16 +148,20 @@
         <button
           type="button"
           class="details__button"
-          :disabled="buying || loading"
+          :disabled="(buying && !esGratis) || loading"
           @click="reservar"
         >
           <Ticket :size="18" />
           {{ ctaLabel }}
         </button>
         <p class="closing__reassurance">
-          Pago seguro con Stripe. Al confirmar recibirás tu acceso al panel por correo.
+          {{ esGratis
+            ? 'Sin pagos ni tarjeta. Al reservar recibes por correo el acceso a tu panel con todos los detalles.'
+            : 'Pago seguro con Stripe. Al confirmar recibirás tu acceso al panel por correo.' }}
         </p>
       </section>
+
+      <InscripcionForm v-model="formAbierto" :slug="SLUG" @inscrito="load" />
 
       <footer class="taller__footer">
         <span>© {{ year }} DigiNode</span>
@@ -179,6 +183,7 @@ import {
   Clock, Rocket, Users,
 } from 'lucide-vue-next'
 import NoraDemo from '@/components/ui/NoraDemo.vue'
+import InscripcionForm from '@/views/formacion/InscripcionForm.vue'
 import { useTraining } from '@/data/trainings'
 import { useCheckout } from '@/composables/useCheckout'
 import { useSeo } from '@/composables/useSeo'
@@ -233,13 +238,17 @@ const dateLabel = computed(() => {
   return parts.join(' ')
 })
 
-const priceLabel = computed(() =>
-  new Intl.NumberFormat('es-ES', {
+// Precio 0 en el catálogo = inscripción por formulario, sin pasar por pago.
+const esGratis = computed(() => Number(t.value.price) === 0)
+
+const priceLabel = computed(() => {
+  if (esGratis.value) return 'Gratis'
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: t.value.currency ?? 'EUR',
     minimumFractionDigits: 0,
-  }).format(t.value.price),
-)
+  }).format(t.value.price)
+})
 
 const capacityLabel = computed(() => {
   if (isSoldOut.value) return 'Plazas agotadas'
@@ -248,9 +257,12 @@ const capacityLabel = computed(() => {
   return `${seatsLeft.value} de ${t.value.capacity} plazas disponibles`
 })
 
+const formAbierto = ref(false)
+
 const ctaLabel = computed(() => {
   if (isSoldOut.value) return 'Plazas agotadas'
-  if (buying.value) return 'Abriendo pago…'
+  if (esGratis.value)  return 'Reservar mi plaza gratis'
+  if (buying.value)    return 'Abriendo pago…'
   return 'Reservar mi plaza'
 })
 
@@ -270,6 +282,12 @@ function destacarNota() {
 }
 
 function reservar() {
+  // Gratuito: formulario. Con precio: checkout de Stripe, que sigue intacto
+  // por si una convocatoria futura vuelve a cobrarse.
+  if (esGratis.value) {
+    formAbierto.value = true
+    return
+  }
   buyTraining(SLUG)
 }
 </script>
@@ -566,6 +584,11 @@ function reservar() {
     align-items: center;
     gap: $space-3;
     flex-wrap: wrap;
+  }
+
+  &__free {
+    color: $success;
+    font-weight: $fw-bold;
   }
 
   &__ia-badge {

@@ -60,6 +60,38 @@
         </div>
       </div>
 
+      <!-- Oferta de la Clínica Digital — solo a quien todavía no la tiene -->
+      <section v-if="mostrarOferta" class="promo">
+        <div class="promo__body">
+          <span class="promo__tag">Tu siguiente paso</span>
+          <h3 class="promo__title">Que no tengas que montártelo tú</h3>
+          <p class="promo__text">
+            En el taller aprendes a hacerlo con tus manos. La Clínica Digital es lo
+            mismo, ya montado y funcionando: tu página web profesional y tres
+            empleados con IA que atienden, vigilan y crean contenido por ti,
+            configurados para tu consulta en unos 7 días.
+          </p>
+          <ul class="promo__list">
+            <li><Check :size="14" /> Nora atiende WhatsApp e Instagram 24/7 y agenda tus citas</li>
+            <li><Check :size="14" /> Alex vigila que todo siga funcionando</li>
+            <li><Check :size="14" /> Valeria crea el contenido de tus redes</li>
+          </ul>
+          <p class="promo__price">
+            <strong>{{ precioClinica }}/mes</strong>
+            <span>sin permanencia · tuya al completar 12 cuotas</span>
+          </p>
+        </div>
+        <div class="promo__actions">
+          <button type="button" class="promo__cta" :disabled="buying" @click="buyClinica">
+            <Sparkles :size="16" />
+            {{ buying ? 'Abriendo pago…' : 'Quiero mi Clínica Digital' }}
+          </button>
+          <a :href="calLink" target="_blank" rel="noopener noreferrer" class="promo__secondary">
+            Prefiero hablarlo antes
+          </a>
+        </div>
+      </section>
+
       <!-- Subscription card -->
       <section v-if="clientStore.subscription" class="sub-card">
         <div class="sub-card__header">
@@ -245,12 +277,14 @@ import { computed, onMounted, ref } from 'vue'
 import {
   ShoppingBag, CalendarClock, LifeBuoy, Repeat, Bell,
   FileText, Receipt, BookOpen, Users, Wrench, ExternalLink,
-  Sparkles, ChevronRight, Info,
+  Sparkles, ChevronRight, Info, Check,
 } from 'lucide-vue-next'
 import { useClientStore } from '@/stores/client'
 import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import TrainingDetailsModal from '@/components/portal/TrainingDetailsModal.vue'
+import { useCheckout } from '@/composables/useCheckout'
+import { usePlans } from '@/data/plans'
 
 const clientStore = useClientStore()
 const toast       = useToastStore()
@@ -262,6 +296,19 @@ function openDetails(purchase) {
   selectedPurchase.value = purchase
   detailsOpen.value      = true
 }
+
+const { buying, buyClinica } = useCheckout()
+const { load: loadPlans, flagship } = usePlans()
+
+const precioClinica = computed(() => `${flagship().monthly} €`)
+
+// La oferta se muestra a quien aún no tiene la Clínica Digital: enseñársela a
+// quien ya la paga sería absurdo y molesto.
+const mostrarOferta = computed(() =>
+  clientStore.loaded &&
+  !clientStore.subscription &&
+  clientStore.client?.plan !== 'clinica'
+)
 
 // `office` siempre llega como objeto; lo que distingue a un cliente con oficina
 // es que su estado haya salido de 'not_requested'.
@@ -276,6 +323,7 @@ const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
 
 // Load lazily if user navigated directly (token in localStorage, no login flow)
 onMounted(async () => {
+  loadPlans()
   if (!clientStore.loaded) {
     try {
       await clientStore.load()
@@ -872,5 +920,143 @@ function planLabel(slug) {
 @keyframes shimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+// ── Oferta de la Clínica Digital ───────────────────────────────────────────
+.promo {
+  display: flex;
+  gap: $space-6;
+  padding: $space-6;
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.10) 0%, rgba(245, 166, 35, 0.07) 100%);
+  border: 1px solid $border-hover;
+  border-radius: $radius-lg;
+  align-items: center;
+
+  @media (max-width: $bp-md) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: $space-5;
+    gap: $space-5;
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    min-width: 0;
+  }
+
+  &__tag {
+    align-self: flex-start;
+    padding: 2px $space-3;
+    background: $accent-subtle;
+    border: 1px solid rgba(245, 166, 35, 0.35);
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: $accent-light;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: $text;
+    line-height: 1.25;
+  }
+
+  &__text {
+    font-size: $text-sm;
+    color: $text-muted;
+    line-height: 1.7;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: $space-2;
+      font-size: $text-sm;
+      color: $text;
+      line-height: 1.5;
+
+      svg { flex-shrink: 0; margin-top: 3px; color: $primary-light; }
+    }
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    flex-wrap: wrap;
+    margin-top: $space-1;
+
+    strong {
+      font-family: $font-display;
+      font-size: $text-2xl;
+      font-weight: $fw-bold;
+      color: $text;
+    }
+
+    span {
+      font-size: $text-xs;
+      color: $text-muted;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    flex-shrink: 0;
+    width: 240px;
+
+    @media (max-width: $bp-md) { width: 100%; }
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 48px;
+    padding: 0 $space-5;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    color: $text;
+    font-family: inherit;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    border: 0;
+    border-radius: $radius;
+    cursor: pointer;
+    transition: $transition;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(30, 144, 255, 0.35);
+    }
+
+    &:disabled { opacity: 0.6; cursor: wait; }
+  }
+
+  &__secondary {
+    text-align: center;
+    font-size: $text-xs;
+    color: $text-muted;
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover { color: $primary-light; text-decoration: underline; }
+  }
 }
 </style>

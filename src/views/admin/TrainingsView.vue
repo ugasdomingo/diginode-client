@@ -91,6 +91,7 @@
               <th class="num">Importe</th>
               <th>Inscrito</th>
               <th>Acceso</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -111,17 +112,44 @@
                   sin entrar
                 </span>
               </td>
+              <td class="col-accion">
+                <button
+                  type="button"
+                  class="delete-btn"
+                  title="Eliminar inscripción y liberar la plaza"
+                  :disabled="borrandoId === e.id"
+                  @click="pedirBorrado(t, e)"
+                >
+                  <Trash2 :size="14" />
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </template>
     </section>
+
+    <AppModal v-model="confirmarAbierto" title="Eliminar inscripción" size="sm">
+      <p class="confirm-text">
+        Se eliminará la inscripción de <strong>{{ pendiente?.enrollment?.email }}</strong>
+        y se liberará su plaza en «{{ pendiente?.training?.name }}».
+      </p>
+      <p class="confirm-note">
+        Su cuenta de cliente no se borra: si también quieres eliminarla, hazlo desde Clientes.
+      </p>
+      <template #footer>
+        <AppButton variant="secondary" @click="cerrarConfirmacion">Cancelar</AppButton>
+        <AppButton variant="danger" :loading="!!borrandoId" @click="borrar">Eliminar</AppButton>
+      </template>
+    </AppModal>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { GraduationCap, Users, Copy, AlertTriangle } from 'lucide-vue-next'
+import { GraduationCap, Users, Copy, AlertTriangle, Trash2 } from 'lucide-vue-next'
+import AppModal from '@/components/ui/AppModal.vue'
+import AppButton from '@/components/ui/AppButton.vue'
 import { useApi } from '@/composables/useApi'
 import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
@@ -133,7 +161,40 @@ const trainings  = ref([])
 const loading    = ref(true)
 const copiedSlug = ref(null)
 
-onMounted(async () => {
+const confirmarAbierto = ref(false)
+const pendiente        = ref(null)
+const borrandoId       = ref(null)
+
+function pedirBorrado(training, enrollment) {
+  pendiente.value        = { training, enrollment }
+  confirmarAbierto.value = true
+}
+
+function cerrarConfirmacion() {
+  confirmarAbierto.value = false
+  pendiente.value        = null
+}
+
+async function borrar() {
+  const item = pendiente.value
+  if (!item) return
+  borrandoId.value = item.enrollment.id
+  try {
+    await api.del(`/admin/trainings/enrollments/${item.enrollment.id}`)
+    toast.success('Inscripción eliminada y plaza liberada')
+    confirmarAbierto.value = false
+    pendiente.value        = null
+    await cargar()
+  } catch (e) {
+    toast.error(e.message ?? 'No se pudo eliminar la inscripción')
+  } finally {
+    borrandoId.value = null
+  }
+}
+
+onMounted(cargar)
+
+async function cargar() {
   try {
     const res = await api.get('/admin/trainings')
     trainings.value = res.data ?? []
@@ -142,7 +203,7 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
 
 // Para pegar en el «Para» del correo con el enlace de la sesión.
 async function copyEmails(t) {
@@ -431,5 +492,44 @@ function formatDate(d, short = false) {
   &--warn   { background: $warning-bg; color: $warning; margin-left: 0; }
   &--danger { background: $danger-bg;  color: $danger; }
   &--muted  { background: rgba(255,255,255,0.06); color: $text-subtle; }
+}
+
+.col-accion { width: 40px; text-align: right; }
+
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-subtle;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: rgba(255, 107, 107, 0.4);
+    color: $danger;
+    background: $danger-bg;
+  }
+
+  &:disabled { opacity: 0.5; cursor: wait; }
+}
+
+.confirm-text {
+  font-size: $text-sm;
+  color: $text-muted;
+  line-height: 1.7;
+
+  strong { color: $text; }
+}
+
+.confirm-note {
+  margin-top: $space-3;
+  font-size: $text-xs;
+  color: $text-subtle;
+  line-height: 1.6;
 }
 </style>

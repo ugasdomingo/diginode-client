@@ -1,0 +1,71 @@
+:root { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e9eef6; background: #0c1420; font-synthesis: none; line-height: 1.5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button { background: #8de0bd; color: #10241e; border: 1px solid transparent; border-radius: 10px; padding: 10px 16px; font-weight: 650; cursor: pointer; }
+button:hover:not(:disabled) { background: #aceed2; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #86afff; outline-offset: 3px; }
+input, select, textarea { width: 100%; color: #e9eef6; background: #0c1625; border: 1px solid #35435a; border-radius: 9px; padding: 10px 12px; margin-top: 6px; }
+textarea { resize: vertical; line-height: 1.6; }
+label { display: block; color: #c3cfdf; font-size: 14px; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -.03em; }
+h2 { font-size: 21px; line-height: 1.35; margin-bottom: 12px; }
+h3 { font-size: 16px; }
+h2 small { font-size: 15px; color: #a5b3c7; }
+p + p { margin-top: 10px; }
+code { background: #22334c; border-radius: 4px; padding: 2px 5px; }
+.lab-shell { max-width: 1440px; margin: auto; }
+.lab-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 36px; border-bottom: 1px solid #26364d; gap: 20px; }
+.brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 700; color: #f5f7fc; text-decoration: none; }
+.brand img { width: 38px; height: 38px; object-fit: contain; }
+.brand small { display: block; font-size: 12px; color: #a5b3c7; font-weight: 450; }
+.profile-switch { min-width: 220px; }
+.sandbox-banner { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 36px; background: #1b2b27; color: #bfdbc9; font-size: 13px; }
+main { padding: 30px 36px; }
+.page-heading, .section-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
+.section-heading h2 { margin-bottom: 0; }
+.eyebrow { color: #8de0bd; text-transform: uppercase; letter-spacing: .13em; font-size: 11px; font-weight: 650; margin-bottom: 8px; }
+.muted { color: #a9b8cc; font-size: 14px; }
+.tabs { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 20px; margin-bottom: 4px; }
+.tabs button { white-space: nowrap; color: #a9b8cc; background: transparent; border: 1px solid transparent; }
+.tabs button.active { color: #91e7c1; background: #18382f; border-color: #376a57; }
+.tabs button:hover:not(:disabled) { background: #1b2a3d; }
+.lab-panel { background: #132034; border: 1px solid #2a3b53; border-radius: 16px; padding: 24px; min-width: 0; }
+.stack { display: grid; gap: 18px; }
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.metrics strong { display: block; font-size: 36px; font-weight: 650; margin-top: 4px; }
+.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; }
+.inline, .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.inline label { flex: 1; }
+.spread { justify-content: space-between; }
+.actions { margin-top: 14px; }
+.page-heading .actions { margin-top: 0; }
+.secondary { background: transparent; color: #d8e5f8; border-color: #45617f; }
+.secondary:hover:not(:disabled) { background: #263c58; }
+.pill { display: inline-block; border: 1px solid #40536d; background: #1d2e47; color: #b7cde9; padding: 5px 10px; border-radius: 999px; font-size: 11px; white-space: nowrap; }
+.pill--green { background: #1b3f33; color: #9be6c5; border-color: #36755b; }
+.steps { padding-left: 20px; color: #c3cfdf; }
+.steps li { padding: 6px 0; }
+.list-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid #2b3c54; padding: 16px 0; }
+.list-row:first-of-type { margin-top: 12px; }
+.delivery-copy { font-size: 13px; white-space: pre-wrap; max-width: 650px; }
+.notice { display: flex; justify-content: space-between; gap: 16px; border: 1px solid #316650; background: #18392d; color: #b7efce; padding: 12px 16px; border-radius: 10px; margin-bottom: 18px; }
+.notice--error { background: #41242d; border-color: #754456; color: #ffc6cf; }
+.text-button { background: transparent; color: inherit; padding: 0; }
+.empty { padding: 24px; text-align: center; color: #a9b8cc; }
+.empty button { margin-top: 16px; }
+.check { display: flex; align-items: center; gap: 8px; }
+.check input { width: 18px; margin: 0; accent-color: #8de0bd; }
+.chat-log { display: grid; gap: 14px; margin: 24px 0; max-height: 420px; overflow-y: auto; }
+.chat-message { background: #203149; border-radius: 12px; padding: 14px; white-space: pre-wrap; font-size: 14px; margin-bottom: 10px; }
+.chat-message--user { background: #204538; color: #c5f0dd; margin-left: 28px; }
+.content-grid, .plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 20px; }
+.content-card textarea { margin-top: 8px; }
+.content-card .muted { margin-bottom: 12px; }
+footer { color: #8094af; font-size: 12px; padding: 20px 36px; border-top: 1px solid #26364d; }
+@media (max-width: 1000px) { .content-grid { grid-template-columns: 1fr; } .two-columns { grid-template-columns: 1fr; } .metrics { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .lab-header { padding: 16px; align-items: flex-start; flex-direction: column; } .profile-switch { width: 100%; } main { padding: 22px 16px; } .sandbox-banner { padding: 12px 16px; } .page-heading { align-items: flex-start; flex-direction: column; } .lab-panel { padding: 18px; } .form-grid, .plan-grid { grid-template-columns: 1fr; } .list-row { align-items: flex-start; flex-direction: column; } .section-heading { align-items: flex-start; flex-wrap: wrap; } .metrics { gap: 10px; } footer { padding: 20px 16px; } }

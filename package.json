@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lab": "vite --config vite.lab.config.js",
+    "lab:build": "vite build --config vite.lab.config.js",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{js,vue}\""
   },

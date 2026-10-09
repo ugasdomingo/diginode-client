@@ -1,6 +1,6 @@
 # Plan de implementación — Diginode operada por una persona
 
-Fecha: 2026-10-09. Estado: planificación y ramas preparadas; implementación funcional pendiente.
+Fecha: 2026-10-09. Estado: baseline comprobada y laboratorio local implementado; staging conectado y piloto real pendientes.
 
 ## 1. Objetivo y alcance aprobado
 
@@ -55,7 +55,7 @@ Crear una rama no demuestra aislamiento de servicios externos. U0 debe confirmar
 
 - [x] U0-T1 — Crear ramas desde el estado actual y documentar cambios locales existentes. 2026-10-09.
 - [x] U0-T2 — Guardar definición del producto, plan y referencias desde documentos anteriores. 2026-10-09.
-- [ ] U0-T3 — Verificar `npm run build` y `npm run lint` en client; `npm test` y `npm run lint` en API; `pnpm check` en plantilla. Registrar fallos previos por separado. Inspeccionar scripts y conexiones antes de ejecutar para evitar efectos externos.
+- [x] U0-T3 — 2026-10-09: client build/lint pasan; API: 39 pruebas iniciales y lint sin errores; plantilla: `pnpm check`, cinco tareas correctas. Advertencias anteriores: cuatro de lint en client, una en API, deprecación Sass y caché de Next. El sandbox impidió inicialmente resolver archivos de Vite; comprobación repetida fuera del sandbox correctamente.
 - [ ] U0-T4 — Confirmar proyecto/base de pruebas y configuración de previews, correo, canales y Stripe. Inventariar nombres y disponibilidad de variables sin revelar valores.
 - [ ] U0-T5 — Validar migraciones de la plantilla, permisos y aislamiento con dos negocios en un entorno desechable. Resolver acceso del widget anónimo.
 
@@ -174,4 +174,21 @@ Rollback: pausar nuevas tareas/publicaciones, desactivar capacidades nuevas y re
 
 Leer este plan y el documento de producto; comprobar rama y `git status` en cada repositorio. Elegir la primera tarea pendiente con dependencias cumplidas. Implementar una unidad verificable, ejecutar su prueba, registrar evidencia y hacer commit solo de los archivos propios de esa tarea.
 
-Siguiente tarea técnica: **U0-T3**, comprobaciones iniciales e inventario de la plantilla. Este encargo prepara el plan y las ramas; no declara implementadas las funciones ni configurado el entorno staging.
+Siguiente dependencia para staging/piloto: **U0-T4/U0-T5**, entorno y base de pruebas. Mientras se resuelven, el laboratorio descrito abajo permite aceptar o corregir el recorrido funcional sin usar cuentas de producción.
+
+## 10. Registro de ejecución — laboratorio local
+
+2026-10-09: el usuario autorizó ejecutar el plan hasta dejar una prueba utilizable. No hay base Supabase de staging configurada en los archivos de la plantilla ni Docker/psql disponibles en PATH. Se conserva el núcleo candidato y su trabajo previo. La API comercial tiene un `.env` existente; no se usa para el laboratorio ni se muestran sus valores.
+
+Se avanzó con un adaptador local independiente para validar el recorrido mientras U0-T4/U0-T5 siguen pendientes. Esto no completa ni evita las pruebas de aislamiento RLS o las integraciones externas exigidas por el plan.
+
+- [x] UL-T1 — Núcleo local en `diginode-api/src/operations`: configuración validada, catálogo en céntimos, dos negocios aislados, registro, recepción determinista, pausa/derivación, cuotas, agenda con conflictos e idempotencia, incorporación y pagos simulados, contenido con aprobación por revisión, trabajos persistentes y exportación.
+- [x] UL-T2 — Interfaz independiente en `diginode-client/src/lab`, entrada `lab.html`, configuración Vite sin `.env` ni analítica; panel de departamentos, recorridos y estados de simulación explícitos.
+- [x] UL-T3 — Prueba de navegador: interesado → respuesta de precios → reserva → contratación/incorporación/activación simuladas → tres borradores → aprobación → entrega sandbox. Consulta de prueba muestra cero registros de Diginode y recargar recupera los datos guardados. Consola sin errores durante ese recorrido.
+- [x] UL-T4 — Guía `PRUEBA_DIGINODE.md` y documentación API `LOCAL_LAB.md`. Datos de prueba ignorados por Git; los cambios locales previos de la plantilla se conservan sin incorporarlos a commits propios.
+
+**Verificación final:** API: 60 tests correctos en ocho archivos (21 del núcleo nuevo), lint sin errores; frontend: compilación comercial y `lab:build` correctas, lint sin errores. Solo quedan las advertencias anteriores enumeradas en U0-T3. La compilación comercial conserva su entrada y no incluye el laboratorio.
+
+**Alcance alcanzado:** prototipo funcional local de partes de U1–U6. Los checkboxes de esas fases permanecen pendientes hasta validar sus proveedores y condiciones de salida. La recepción y el contenido del laboratorio usan reglas/plantillas, no IA. Las entregas no son publicaciones o correos reales; el pago no es un checkout Stripe.
+
+**Bloqueos externos concretos:** base de staging, calendario del fundador, Stripe test con webhook separado y cuentas/destinatarios de prueba para IA, correo y canales. País, servicios y materiales de la psicóloga pendientes de respuesta. Ningún cambio enviado a main ni a producción.

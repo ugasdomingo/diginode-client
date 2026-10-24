@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "lab": "vite --config vite.lab.config.js",
     "lab:build": "vite build --config vite.lab.config.js",
     "lint": "eslint .",
-    "format": "prettier --write \"src/**/*.{js,vue}\""
+    "format": "prettier --write \"src/**/*.{js,vue}\"",
+    "review:build": "node scripts/review-build.mjs",
+    "review": "node scripts/review-static.mjs",
+    "test:static": "node scripts/verify-static.mjs"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^6.3.0",
@@ -23,6 +26,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/server-renderer": "^3.5.29",
     "eslint": "^10.4.1",
     "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.6.0",

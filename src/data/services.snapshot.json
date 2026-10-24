@@ -1,0 +1,37 @@
+{
+  "privacy_version": "2026-10",
+  "services": [
+    {
+      "id": "brand_management",
+      "name": "Gestión de marca y marketing",
+      "path": "/",
+      "pricing": "Propuesta según tu operación",
+      "scales": [
+        {
+          "id": "micro",
+          "name": "Microempresa",
+          "description": "Un decisor y coordinación sencilla. Reunión estratégica mensual."
+        },
+        {
+          "id": "sme",
+          "name": "Pyme",
+          "description": "Equipo, varias líneas o sedes. Reunión estratégica quincenal."
+        }
+      ]
+    },
+    {
+      "id": "web_project",
+      "name": "Webs y aplicaciones",
+      "path": "/webs-y-aplicaciones",
+      "pricing": "Presupuesto según alcance"
+    },
+    {
+      "id": "digital_clinic",
+      "name": "Clínica Digital",
+      "path": "/clinica-digital",
+      "monthly": 150,
+      "currency": "EUR",
+      "setup": 0
+    }
+  ]
+}

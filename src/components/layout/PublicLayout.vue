@@ -1,699 +1,266 @@
 <template>
   <div class="public-layout">
-    <!-- Navbar -->
-    <header class="navbar" :class="{ 'navbar--scrolled': isScrolled }">
-      <div class="navbar__inner">
-        <RouterLink to="/" class="navbar__logo">
-          <img src="/logo.png" alt="DigiNode" class="navbar__logo-img" />
-          <span class="navbar__logo-text">DigiNode</span>
-        </RouterLink>
-
-        <nav class="navbar__nav" aria-label="Navegacion principal">
-          <RouterLink to="/es-para-mi" class="navbar__link">¿Es para mí?</RouterLink>
-          <RouterLink to="/faq" class="navbar__link">FAQ</RouterLink>
-          <RouterLink to="/blog" class="navbar__link">Blog</RouterLink>
-        </nav>
-
-        <div class="navbar__actions">
-          <RouterLink :to="clientLink" class="navbar__cta-secondary">
-            Soy cliente
-          </RouterLink>
-          <button type="button" class="navbar__cta" :disabled="buying" @click="buyClinica">
-            <ShoppingBag :size="16" />
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
+    <header class="public-nav">
+      <div class="public-nav__inner">
+        <RouterLink to="/" class="public-brand" aria-label="Diginode, inicio"
+          ><img src="/logo.png" alt="" /><span>DigiNode</span></RouterLink
+        >
+        <button
+          type="button"
+          class="public-nav__toggle"
+          aria-controls="public-menu"
+          :aria-expanded="mobileOpen"
+          aria-label="Abrir menú"
+          @click="mobileOpen = !mobileOpen"
+        >
+          {{ mobileOpen ? 'Cerrar ✕' : 'Menú ☰' }}
+        </button>
+        <nav id="public-menu" :class="{ open: mobileOpen }" aria-label="Navegación principal">
+          <RouterLink to="/" @click="mobileOpen = false">Gestión de marca</RouterLink
+          ><RouterLink to="/webs-y-aplicaciones" @click="mobileOpen = false"
+            >Webs y aplicaciones</RouterLink
+          ><RouterLink to="/clinica-digital" @click="mobileOpen = false">Clínica Digital</RouterLink
+          ><RouterLink :to="clientLink" @click="mobileOpen = false">Soy cliente</RouterLink>
+          <button
+            v-if="isClinic"
+            type="button"
+            class="commercial-button"
+            :disabled="buying"
+            @click="buyClinica"
+          >
             {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
           </button>
-        </div>
-
-        <!-- Mobile menu toggle -->
-        <button
-          class="navbar__burger"
-          @click="mobileOpen = !mobileOpen"
-          :aria-expanded="mobileOpen"
-          aria-label="Menu"
-        >
-          <component :is="mobileOpen ? X : Menu" :size="22" />
-        </button>
-      </div>
-
-      <!-- Mobile nav -->
-      <Transition name="mobile-nav">
-        <div v-if="mobileOpen" class="navbar__mobile">
-          <RouterLink to="/es-para-mi" class="navbar__mobile-link" @click="mobileOpen = false">¿Es para mí?</RouterLink>
-          <RouterLink to="/faq" class="navbar__mobile-link" @click="mobileOpen = false">FAQ</RouterLink>
-          <RouterLink to="/blog" class="navbar__mobile-link" @click="mobileOpen = false">Blog</RouterLink>
-          <div class="navbar__mobile-actions">
-            <RouterLink
-              :to="clientLink"
-              class="navbar__mobile-cta-secondary"
-              @click="mobileOpen = false"
-            >
-              Soy cliente
-            </RouterLink>
-            <button
-              type="button"
-              class="navbar__mobile-cta"
-              :disabled="buying"
-              @click="mobileOpen = false; buyClinica()"
-            >
-              <ShoppingBag :size="16" />
-              {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
-            </button>
-          </div>
-        </div>
-      </Transition>
-    </header>
-
-    <!-- Content -->
-    <main>
-      <RouterView />
-    </main>
-
-    <!-- Footer (oculto en Home para respetar el no-scroll) -->
-    <footer v-if="showFooter" class="footer">
-      <div class="footer__inner">
-        <div class="footer__top">
-          <div class="footer__brand">
-            <RouterLink to="/" class="footer__logo">
-              <img src="/logo.png" alt="DigiNode" class="footer__logo-img" />
-              <span>DigiNode</span>
-            </RouterLink>
-            <p class="footer__tagline">Clínica digital llave en mano para psicólogos, coaches y terapeutas.</p>
-          </div>
-
-          <div class="footer__links-group">
-            <h4>Producto</h4>
-            <nav class="footer__links">
-              <RouterLink to="/">Habla con Nora</RouterLink>
-              <RouterLink to="/es-para-mi">¿Es para mí?</RouterLink>
-              <RouterLink to="/faq">FAQ</RouterLink>
-              <RouterLink to="/blog">Blog</RouterLink>
-            </nav>
-          </div>
-
-          <div class="footer__links-group">
-            <h4>Legal</h4>
-            <nav class="footer__links">
-              <RouterLink to="/legal/terminos">Terminos</RouterLink>
-              <RouterLink to="/legal/privacidad">Privacidad</RouterLink>
-              <RouterLink to="/legal/cookies">Cookies</RouterLink>
-              <RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink>
-            </nav>
-          </div>
-
-          <div class="footer__links-group">
-            <h4>Contacto</h4>
-            <nav class="footer__links">
-              <a :href="calLink" target="_blank" rel="noopener noreferrer">Agendar demo</a>
-              <a :href="telegramLink" target="_blank" rel="noopener noreferrer">Telegram</a>
-              <a href="https://ig.me/m/midiginode" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a :href="emailLink" target="_blank" rel="noopener noreferrer">Correo</a>
-            </nav>
-          </div>
-        </div>
-
-        <div class="footer__bottom">
-          <p class="footer__copy">&copy; {{ year }} DigiNode. Todos los derechos reservados.</p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Contact floating button -->
-    <div class="contact-fab" @click.stop>
-      <Transition name="contact-menu">
-        <div
-          v-if="contactOpen"
-          class="contact-fab__menu"
-          role="menu"
-          aria-label="Elige un canal de contacto"
-        >
           <RouterLink
-            v-for="option in internalOptions"
-            :key="option.label"
-            :to="option.route"
-            class="contact-fab__option"
-            role="menuitem"
-            @click="contactOpen = false"
+            v-else
+            to="/#contacto"
+            class="commercial-button"
+            @click="requestReview"
+            >Revisar mi negocio ↗</RouterLink
           >
-            <component :is="option.icon" :size="18" />
-            <span>{{ option.label }}</span>
-          </RouterLink>
-          <a
-            v-for="option in externalOptions"
-            :key="option.label"
-            :href="option.href"
+        </nav>
+      </div>
+    </header>
+    <main id="main-content"><RouterView /></main>
+    <footer class="public-footer">
+      <div class="public-footer__inner">
+        <div>
+          <RouterLink to="/" class="public-brand"
+            ><img src="/logo.png" alt="" /><span>DigiNode</span></RouterLink
+          >
+          <p>Descansa, nosotros nos encargamos de todo.</p>
+          <p>Marca, marketing y herramientas para tu negocio.</p>
+        </div>
+        <nav aria-label="Servicios">
+          <strong>Tu siguiente paso</strong
+          ><RouterLink to="/#contacto">Revisar mi negocio</RouterLink
+          ><RouterLink to="/webs-y-aplicaciones">Webs y aplicaciones</RouterLink
+          ><RouterLink to="/clinica-digital">Clínica Digital</RouterLink
+          ><RouterLink to="/clinica-digital#demo-nora">Demo para tu consulta</RouterLink
+          ><RouterLink to="/es-para-mi">Clínica: ¿es para mí?</RouterLink
+          ><RouterLink to="/faq">Dudas de Clínica Digital</RouterLink
+          ><RouterLink to="/blog">Blog</RouterLink>
+        </nav>
+        <nav aria-label="Información legal">
+          <strong>Información</strong><RouterLink to="/legal/terminos">Términos</RouterLink
+          ><RouterLink to="/legal/privacidad">Privacidad</RouterLink
+          ><RouterLink to="/legal/cookies">Cookies y medición</RouterLink
+          ><RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink
+          ><a href="mailto:info@midiginode.com">info@midiginode.com</a
+          ><a
+            v-if="bookingUrl"
+            :href="bookingUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="contact-fab__option"
-            role="menuitem"
-            @click="contactOpen = false"
+            @click="trackEvent('booking_click')"
+            >Concertar una reunión real ↗</a
           >
-            <component :is="option.icon" :size="18" />
-            <span>{{ option.label }}</span>
-          </a>
-        </div>
-      </Transition>
-
-      <button
-        type="button"
-        class="contact-fab__button"
-        :aria-expanded="contactOpen"
-        aria-haspopup="menu"
-        aria-label="Elegir canal de contacto"
-        @click="contactOpen = !contactOpen"
-      >
-        <MessageCircle class="contact-fab__icon" :size="24" />
-        <span class="contact-fab__label">¿Hablamos?</span>
-      </button>
-    </div>
+        </nav>
+      </div>
+      <p class="public-footer__bottom">© {{ year }} Diginode</p>
+    </footer>
   </div>
 </template>
-
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Menu, X, Mail, MessageCircle, Bot, ShoppingBag } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useCheckout } from '@/composables/useCheckout'
-
-const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
-const telegramLink = 'https://t.me/+34614770015?text=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.'
-const emailLink = 'https://mail.google.com/mail/?view=cm&fs=1&to=info@midiginode.com&su=Hola%20DigiNode&body=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20DigiNode.'
-const mobileOpen = ref(false)
-const contactOpen = ref(false)
-const isScrolled = ref(false)
-const year = new Date().getFullYear()
-
-// The Nora demo now lives on the Home hero, so the FAB points there.
-const internalOptions = [
-  { label: 'Habla con Nora', route: '/', icon: Bot },
-]
-
-const externalOptions = [
-  { label: 'Correo', href: emailLink, icon: Mail },
-]
-
-const route = useRoute()
-const showFooter = computed(() => route.name !== 'home')
-
-const auth = useAuthStore()
-const clientLink = computed(() => {
-  if (!auth.isAuthenticated) return '/login'
-  return auth.isAdmin ? '/admin' : '/portal'
-})
-
+import { useServices } from '@/data/services'
+import { trackEvent } from '@/lib/analytics'
+const mobileOpen = ref(false),
+  route = useRoute(),
+  auth = useAuthStore()
 const { buying, buyClinica } = useCheckout()
-
-function handleScroll() {
-  isScrolled.value = window.scrollY > 20
+const { bookingUrl, load } = useServices()
+function requestReview() {
+  mobileOpen.value = false
+  trackEvent('lead_cta_click')
 }
-
-function closeContactMenu() {
-  contactOpen.value = false
-}
-
-function handleKeydown(event) {
-  if (event.key === 'Escape') {
-    closeContactMenu()
+const isClinic = computed(() => ['clinica', 'faq', 'es-para-mi'].includes(route.name))
+const clientLink = computed(() =>
+  !auth.isAuthenticated ? '/login' : auth.isAdmin ? '/admin' : '/portal'
+)
+const year = new Date().getFullYear()
+watch(
+  () => route.fullPath,
+  () => {
+    mobileOpen.value = false
+  }
+)
+onMounted(load)
+</script>
+<style scoped lang="scss">
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 10px;
+  padding: 1rem;
+  background: #ffb94d;
+  color: #050a0f;
+  z-index: 200;
+  &:focus {
+    top: 10px;
   }
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  window.addEventListener('click', closeContactMenu)
-  window.addEventListener('keydown', handleKeydown)
-  handleScroll()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('click', closeContactMenu)
-  window.removeEventListener('keydown', handleKeydown)
-})
-</script>
-
-<style lang="scss" scoped>
 .public-layout {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  padding-top: 80px;
 }
-
-// ── Navbar ──────────────────────────────
-.navbar {
+.public-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba($bg, 0.7);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid transparent;
-  transition: $transition;
-
-  &--scrolled {
-    background: rgba($bg, 0.95);
-    border-bottom-color: $border;
-  }
-
+  background: #050a0ff5;
+  border-bottom: 1px solid #1b2b3d;
+  backdrop-filter: blur(12px);
   &__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 $space-6;
-    height: 72px;
+    min-height: 80px;
+    max-width: 1320px;
+    margin: auto;
+    padding: 12px 24px;
     display: flex;
     align-items: center;
-    gap: $space-8;
-
-    @media (max-width: $bp-md) {
-      padding: 0 $space-4;
-    }
+    justify-content: space-between;
+    gap: 2rem;
   }
-
-  &__logo {
+  nav {
     display: flex;
     align-items: center;
-    gap: $space-3;
-    text-decoration: none;
-    flex-shrink: 0;
-
-    &-img {
-      width: 36px;
-      height: 36px;
-      object-fit: contain;
-    }
-
-    &-text {
-      font-family: $font-display;
-      font-size: $text-xl;
-      font-weight: $fw-bold;
-      color: $text;
-      letter-spacing: -0.02em;
+    gap: 1.5rem;
+  }
+  nav a:not(.commercial-button) {
+    color: #b5c3d4;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    &:hover,
+    &.router-link-exact-active {
+      color: #fff;
     }
   }
-
-  &__nav {
+  .commercial-button {
+    font-size: 0.8rem;
+    min-height: 44px;
+    padding: 0.7rem 1rem;
+  }
+  &__toggle {
     display: none;
-    align-items: center;
-    gap: $space-1;
-    flex: 1;
-
-    @media (min-width: $bp-md) {
-      display: flex;
-    }
-  }
-
-  &__link {
-    padding: $space-2 $space-4;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $text-muted;
-    text-decoration: none;
-    border-radius: $radius;
-    transition: $transition-fast;
-
-    &:hover {
-      color: $text;
-      background: $primary-subtle;
-    }
-
-    &.router-link-active {
-      color: $primary-light;
-    }
-  }
-
-  &__actions {
-    display: none;
-    align-items: center;
-    gap: $space-3;
-    margin-left: auto;
-
-    @media (min-width: $bp-md) {
-      display: flex;
-    }
-  }
-
-  &__cta-secondary {
-    display: inline-flex;
-    align-items: center;
-    height: 40px;
-    padding: 0 $space-4;
-    border: 1px solid $border;
-    border-radius: $radius;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $text-muted;
-    text-decoration: none;
-    transition: $transition-fast;
-
-    &:hover {
-      border-color: $primary;
-      color: $primary-light;
-      background: $primary-subtle;
-    }
-  }
-
-  &__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    height: 40px;
-    padding: 0 $space-5;
-    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-    color: $text-inverse;
-    font-family: inherit;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    border: 0;
-    border-radius: $radius;
-    text-decoration: none;
-    cursor: pointer;
-    transition: $transition;
-    box-shadow: 0 4px 16px rgba($primary, 0.25);
-
-    &:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba($primary, 0.35);
-      color: $text-inverse;
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-  }
-
-  &__burger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 1px solid $border;
-    color: $text;
-    border-radius: $radius;
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    margin-left: auto;
-    transition: $transition-fast;
-
-    @media (min-width: $bp-md) {
-      display: none;
-    }
-
-    &:hover {
-      border-color: $primary;
-      background: $primary-subtle;
-    }
-  }
-
-  &__mobile {
-    border-top: 1px solid $border;
-    padding: $space-4 $space-6;
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-    background: $bg;
-
-    @media (min-width: $bp-md) {
-      display: none;
-    }
-  }
-
-  &__mobile-link {
-    padding: $space-3 $space-4;
-    font-size: $text-base;
-    font-weight: $fw-medium;
-    color: $text-muted;
-    text-decoration: none;
-    border-radius: $radius;
-    transition: $transition-fast;
-
-    &:hover {
-      color: $text;
-      background: $primary-subtle;
-    }
-  }
-
-  &__mobile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: $space-3;
-    padding-top: $space-4;
-    border-top: 1px solid $border;
-    margin-top: $space-3;
-  }
-
-  &__mobile-cta-secondary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 48px;
-    padding: 0 $space-4;
-    border: 1px solid $border;
-    border-radius: $radius;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    color: $text-muted;
-    text-decoration: none;
-  }
-
-  &__mobile-cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: 48px;
-    padding: 0 $space-5;
-    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-    color: $text-inverse;
-    font-family: inherit;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    border: 0;
-    border-radius: $radius;
-    text-decoration: none;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
   }
 }
-
-// Mobile nav transition
-.mobile-nav-enter-active,
-.mobile-nav-leave-active {
-  transition: all 0.25s ease;
+.public-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #f8fafc;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+  }
 }
-.mobile-nav-enter-from,
-.mobile-nav-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-// ── Main content spacer for fixed navbar ──
-main {
-  padding-top: 72px;
-}
-
-// ── Footer ──────────────────────────────
-.footer {
-  margin-top: auto;
-  border-top: 1px solid $border;
-  background: $bg-surface;
-
+.public-footer {
+  border-top: 1px solid #1b2b3d;
+  background: #080e16;
+  padding: 60px 24px 20px;
   &__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: $space-16 $space-6;
-
-    @media (max-width: $bp-md) {
-      padding: $space-10 $space-4;
-    }
-  }
-
-  &__top {
+    max-width: 1160px;
+    margin: auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: $space-10;
-    margin-bottom: $space-10;
-
-    @media (max-width: $bp-lg) {
-      grid-template-columns: 1fr 1fr;
-      gap: $space-8;
-    }
-
-    @media (max-width: $bp-sm) {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 3rem;
   }
-
-  &__brand {
-    @media (max-width: $bp-lg) {
-      grid-column: span 2;
-    }
-
-    @media (max-width: $bp-sm) {
-      grid-column: span 1;
-    }
+  p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    line-height: 1.7;
   }
-
-  &__logo {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    font-family: $font-display;
-    font-weight: $fw-bold;
-    font-size: $text-xl;
-    color: $text;
-    text-decoration: none;
-    margin-bottom: $space-3;
-
-    &-img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-  }
-
-  &__tagline {
-    font-size: $text-sm;
-    color: $text-muted;
-    max-width: 280px;
-    line-height: 1.6;
-  }
-
-  &__links-group {
-    h4 {
-      font-size: $text-sm;
-      font-weight: $fw-semibold;
-      color: $text;
-      margin-bottom: $space-4;
-    }
-  }
-
-  &__links {
+  nav {
     display: flex;
     flex-direction: column;
-    gap: $space-2;
-
+    gap: 0.9rem;
     a {
-      font-size: $text-sm;
-      color: $text-muted;
-      text-decoration: none;
-      transition: $transition-fast;
-
-      &:hover {
-        color: $primary-light;
+      color: #a9b9cc;
+      font-size: 0.85rem;
+    }
+    strong {
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+  }
+  &__bottom {
+    max-width: 1160px;
+    margin: 3rem auto 0 !important;
+    border-top: 1px solid #1b2b3d;
+    padding-top: 1.5rem;
+  }
+}
+:focus-visible {
+  outline: 2px solid #ffb94d;
+  outline-offset: 5px;
+}
+@media (max-width: 1100px) {
+  .public-nav {
+    &__toggle {
+      display: block;
+      border: 1px solid #29476a;
+      color: #f8fafc;
+      background: transparent;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      font: inherit;
+      cursor: pointer;
+    }
+    nav {
+      display: none;
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      background: #0a1018;
+      border-bottom: 1px solid #29476a;
+      max-height: calc(100dvh - 80px);
+      overflow-y: auto;
+      &.open {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      a {
+        padding: 0.5rem;
       }
     }
   }
-
-  &__bottom {
-    padding-top: $space-8;
-    border-top: 1px solid $border;
-  }
-
-  &__copy {
-    font-size: $text-sm;
-    color: $text-subtle;
-  }
 }
-
-// ── Contact floating button ──────────────────────
-.contact-fab {
-  position: fixed;
-  bottom: $space-6;
-  right: $space-6;
-  z-index: 500;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: $space-3;
-
-  @media (max-width: $bp-sm) {
-    bottom: $space-4;
-    right: $space-4;
+@media (max-width: 650px) {
+  .public-footer__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
-
-  &__menu {
-    min-width: 190px;
-    padding: $space-2;
-    background: rgba($bg-card, 0.96);
-    border: 1px solid $border-hover;
-    border-radius: $radius;
-    box-shadow: $shadow-lg, 0 0 28px rgba($primary, 0.16);
-    backdrop-filter: blur(18px);
-  }
-
-  &__option {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-    width: 100%;
-    padding: $space-3;
-    color: $text;
-    border-radius: $radius-sm;
-    font-size: $text-sm;
-    font-weight: $fw-medium;
-    text-decoration: none;
-    transition: $transition-fast;
-
-    &:hover {
-      background: $primary-subtle;
-      color: $primary-light;
-    }
-  }
-
-  &__button {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    height: 52px;
-    padding: 0 $space-5;
-    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-    border: 0;
-    color: $text-inverse;
-    border-radius: $radius-full;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: $text-sm;
-    font-weight: $fw-semibold;
-    box-shadow: 0 4px 20px rgba($primary, 0.32);
-    transition: $transition;
-
-    @media (max-width: $bp-sm) {
-      padding: 0 $space-4;
-      height: 48px;
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba($primary, 0.42);
-      color: $text-inverse;
-    }
-  }
-
-  &__icon {
-    flex-shrink: 0;
-  }
-
-  &__label {
-    @media (max-width: 480px) {
-      display: none;
-    }
-  }
-}
-
-.contact-menu-enter-active,
-.contact-menu-leave-active {
-  transition: all 0.18s ease;
-}
-
-.contact-menu-enter-from,
-.contact-menu-leave-to {
-  opacity: 0;
-  transform: translateY(8px);
 }
 </style>

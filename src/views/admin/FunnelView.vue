@@ -3,7 +3,7 @@
     <header class="funnel__head">
       <div>
         <h1 class="funnel__title">Funnel</h1>
-        <p class="funnel__sub">Demos → leads identificados → ventas</p>
+        <p class="funnel__sub">Solicitudes → revisión → reuniones confirmadas → contratos</p>
       </div>
       <div class="funnel__period">
         <button :class="{ active: period === 'week' }"  @click="setPeriod('week')">7 días</button>
@@ -13,6 +13,8 @@
 
     <p v-if="error" class="funnel__error">{{ error }}</p>
 
+    <div v-if="data" class="funnel__metrics"><div class="metric"><span class="metric__value">{{ data.requests_received ?? 0 }}</span><span class="metric__label">Solicitudes recibidas</span></div><div class="metric"><span class="metric__value">{{ data.qualified_requests ?? 0 }}</span><span class="metric__label">Solicitudes cualificadas</span></div><div class="metric"><span class="metric__value">{{ data.meetings_confirmed ?? 0 }}</span><span class="metric__label">Reservas verificadas</span></div><div class="metric"><span class="metric__value">{{ data.contracts_won ?? 0 }}</span><span class="metric__label">Contratos ganados</span></div></div>
+    <div v-if="data" class="funnel__breakdown"><h2>Por oferta</h2><ul><li v-for="service in data.by_service" :key="service._id"><span>{{ serviceLabel(service._id) }}</span><strong>{{ service.requests }} solicitudes · {{ service.won }} ganados</strong></li></ul></div>
     <div v-if="data" class="funnel__metrics">
       <div class="metric">
         <span class="metric__value">{{ data.demos_started }}</span>
@@ -55,6 +57,7 @@ const data   = ref(null)
 const error  = ref('')
 const period = ref('week')
 
+const serviceLabel = id => ({ brand_management: 'Gestión de marca', web_project: 'Webs y aplicaciones', digital_clinic: 'Clínica Digital', undecided: 'Por orientar' }[id] || 'Sin clasificar')
 const SOURCE_LABELS = {
   demo_whatsapp: 'Demo (WhatsApp/web)',
   organic:       'Orgánico',

@@ -1,346 +1,448 @@
 <template>
-  <div class="home">
-    <!-- Ambient background -->
-    <div class="home__bg" aria-hidden="true">
-      <div class="home__glow home__glow--primary" />
-      <div class="home__glow home__glow--accent" />
-    </div>
-
-    <div class="home__inner">
-      <!-- Left: pitch -->
-      <div class="home__pitch">
-        <div class="home__badge">
-          <Sparkles :size="14" />
-          Para psicólogos, coaches y terapeutas
-        </div>
-
-        <h1 class="home__title">
-          Tu clínica digital<br />
-          <span class="home__title-gradient">llave en mano</span>
-        </h1>
-
-        <p class="home__subtitle">
-          Página web profesional + 3 empleados IA que atienden a tus pacientes,
-          gestionan tu agenda y crean tu contenido, 24/7. Tú solo pasas consulta.
+  <div class="commercial-page agency-home">
+    <section class="section agency-hero">
+      <div>
+        <span class="eyebrow">Gestión de marca y marketing · Microempresas y pymes</span>
+        <h1>Tu empresa necesita marketing.<br /><span>Tú no necesitas otro trabajo.</span></h1>
+        <p class="intro">
+          Dirigimos y ejecutamos tu comunicación, tu web y tus campañas para atraer oportunidades y
+          ayudarte a convertirlas en clientes. Tú decides el rumbo y el presupuesto; nosotros nos
+          encargamos del trabajo.
         </p>
-
-        <ul class="home__features">
-          <li><MessageCircle :size="16" /> Recepcionista que responde y agenda por ti</li>
-          <li><Wrench :size="16" /> Auxiliar técnico que mantiene todo funcionando</li>
-          <li><PenLine :size="16" /> Creador de contenido para tus redes y blog</li>
-        </ul>
-
-        <div class="home__price">
-          <span class="home__price-amount">{{ price }}€<small>/mes</small></span>
-          <span class="home__price-note">Sin permanencia · Tuya al completar 12 cuotas</span>
+        <div class="commercial-actions">
+          <a href="#contacto" class="commercial-button" @click="trackEvent('lead_cta_click')"
+            >Revisar mi negocio ↗</a
+          ><a href="#demo-nora" class="commercial-link">Probar a Nora ↓</a>
         </div>
-
-        <div class="home__actions">
-          <button type="button" class="home__cta" :disabled="buying" @click="buyClinica">
-            <ShoppingBag :size="18" />
-            {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
-          </button>
-          <RouterLink to="/es-para-mi" class="home__cta-secondary">
-            ¿Es para mí?
-          </RouterLink>
+        <p class="agency-signature">Descansa, nosotros nos encargamos de todo.</p>
+      </div>
+      <aside class="agency-board" aria-label="Cómo conectamos el marketing con tu negocio">
+        <div class="agency-board__top">
+          <span>EL TRABAJO, CONECTADO</span><span class="agency-board__dot" />
         </div>
-
-        <p class="home__trust">
-          Tu dominio y los datos de tus pacientes son tuyos desde el día 1.
+        <div class="agency-board__step">
+          <span>01 / DIRECCIÓN</span><strong>Una marca que se entiende.</strong>
+          <p>Prioridades claras, mensaje coherente.</p>
+        </div>
+        <div class="agency-board__step">
+          <span>02 / CAPTACIÓN</span><strong>Un camino hasta la consulta.</strong>
+          <p>Contenido, web y campañas conectados.</p>
+        </div>
+        <div class="agency-board__step">
+          <span>03 / ATENCIÓN</span><strong>Cada oportunidad, atendida.</strong>
+          <p>Respuestas, contexto y seguimiento.</p>
+        </div>
+        <div class="agency-board__bottom">TU NEGOCIO AL MANDO. DIGINODE EN LA EJECUCIÓN.</div>
+      </aside>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <span class="eyebrow">Menos piezas sueltas. Más dirección.</span>
+        <h2>El marketing tiene que ayudar al negocio.<br />Y caber en tu día.</h2>
+      </div>
+      <div class="commercial-grid">
+        <article v-for="(item, index) in values" :key="item.title" class="commercial-card">
+          <span class="commercial-number">0{{ index + 1 }} — {{ item.label }}</span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+      </div>
+    </section>
+    <section id="metodo" class="section">
+      <div class="section-head">
+        <span class="eyebrow">Cómo delegas</span>
+        <h2>Un rumbo compartido.<br />El trabajo, en nuestras manos.</h2>
+      </div>
+      <div class="commercial-grid">
+        <article v-for="(item, index) in method" :key="item.title">
+          <span class="commercial-number">0{{ index + 1 }} / {{ item.label }}</span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+      </div>
+      <p class="agency-first-month">
+        <strong>El primer mes:</strong> accesos, punto de partida, correcciones prioritarias y
+        primer calendario de trabajo.
+      </p>
+    </section>
+    <section class="section split">
+      <div>
+        <span class="eyebrow">Delegar sin perder el control</span>
+        <h2>Tu marca sigue siendo tuya.<br />También las decisiones.</h2>
+        <p class="intro">
+          Contenido preparado con 15 días de anticipación, aprobación por lotes y presupuesto
+          autorizado. Lo nuevo espera tu aprobación; las mejoras rutinarias siguen los límites que
+          acordemos.
+        </p>
+        <a href="#contacto" class="commercial-link" @click="trackEvent('lead_cta_click')"
+          >Revisar mi negocio ↗</a
+        >
+      </div>
+      <div class="agency-control">
+        <div><span>VISIBILIDAD</span><strong>Sabes qué estamos preparando.</strong></div>
+        <div><span>RESPONSABILIDAD</span><strong>Un responsable identificable.</strong></div>
+        <div><span>RITMO</span><strong>Reunión mensual o quincenal.</strong></div>
+        <p>
+          Calendario y revisiones compartidos por los canales acordados. Sin tener que aprender un
+          nuevo portal.
         </p>
       </div>
-
-      <!-- Right: live Nora demo -->
-      <div class="home__demo">
-        <NoraDemo />
+    </section>
+    <section id="demo-nora" class="section split">
+      <div>
+        <span class="eyebrow">Pruébalo con tu negocio</span>
+        <h2>Así puede empezar una consulta bien atendida.</h2>
+        <p class="intro">
+          Habla con Nora, nuestra asistente con IA, sin registrarte. Explícale tu caso, pídele un
+          resumen o mira una agenda de ejemplo.
+        </p>
+        <p>
+          Las respuestas del chat usan IA. La agenda es simulada; no reserva citas. El correo solo
+          se envía después de revisar y confirmar destinatario y resumen. Una reunión real se
+          concierta por el enlace de agenda, cuando esté disponible.
+        </p>
+        <p>
+          ¿Prefieres una persona?
+          <a href="#contacto" class="commercial-link">Cuéntanos tu necesidad ↗</a>
+        </p>
       </div>
-    </div>
+      <LazyNora context="agency" />
+    </section>
+    <section id="acompanamiento" class="section">
+      <div class="section-head">
+        <span class="eyebrow">A la medida de tu operación</span>
+        <h2>La misma responsabilidad.<br />Dos escalas de acompañamiento.</h2>
+        <p class="intro">
+          El alcance depende de la complejidad y la coordinación, no de una cuota de publicaciones.
+        </p>
+      </div>
+      <div class="agency-scales">
+        <article v-for="scale in management.scales" :key="scale.id" class="commercial-card">
+          <span class="eyebrow">GESTIÓN CONTINUADA</span>
+          <h3>{{ scale.name }}</h3>
+          <p>{{ scale.description }}</p>
+          <p>
+            Dirección de marca, comunicación, canales, campañas, web existente, reputación y
+            seguimiento dentro del alcance acordado.
+          </p>
+          <strong class="agency-price">{{ management.pricing }}</strong
+          ><a href="#contacto" class="commercial-button" @click="selectScale(scale.id)"
+            >Solicitar propuesta ↗</a
+          >
+        </article>
+      </div>
+      <p class="intro">
+        Publicidad, producción externa y nuevas webs o aplicaciones se presupuestan aparte.
+        Acordamos entregas, condiciones y costes antes de contratar. Las mejoras ordinarias de la
+        web existente entran según el alcance.
+      </p>
+    </section>
+    <section class="section split">
+      <div>
+        <span class="eyebrow">Webs y aplicaciones</span>
+        <h2>Una web que ayuda a vender.<br />Una aplicación que facilita trabajar.</h2>
+        <p class="intro">
+          Una web comercial, un catálogo para pedir presupuestos o una herramienta que conecta a tu
+          equipo. Proyectos con alcance y entrega propios, también sin suscripción de marketing.
+        </p>
+        <RouterLink
+          to="/webs-y-aplicaciones"
+          class="commercial-link"
+          @click="trackEvent('web_project_click')"
+          >Ver webs y aplicaciones ↗</RouterLink
+        >
+      </div>
+      <div class="agency-example">
+        <span class="eyebrow">Ejemplo de recorrido</span
+        ><strong>Catálogo → Solicitud → Presupuesto</strong>
+        <p>Del producto que interesa a una consulta que tu equipo puede trabajar.</p>
+        <span>Demostración de proceso. Sin datos ni resultados de clientes.</span>
+      </div>
+    </section>
+    <section class="section split">
+      <div>
+        <span class="eyebrow">Clínica Digital</span>
+        <h2>¿Tienes una consulta?<br />Tenemos un recorrido para ti.</h2>
+        <p class="intro">
+          Web profesional y tres empleados con IA para psicólogos, coaches y terapeutas. Conoce el
+          producto, prueba a Nora en ese contexto y consulta sus condiciones.
+        </p>
+        <RouterLink
+          to="/clinica-digital"
+          class="commercial-link"
+          @click="trackEvent('digital_clinic_click')"
+          >Ver Clínica Digital ↗</RouterLink
+        >
+      </div>
+      <div class="agency-clinic">
+        <span>N / A / V</span>
+        <h3>Nora, Alex y Valeria.</h3>
+        <p>
+          Atención administrativa, apoyo técnico y contenido para tu consulta. El criterio clínico
+          sigue en tus manos.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <span class="eyebrow">Una relación clara desde el principio</span>
+        <h2>Lo que conviene saber.</h2>
+      </div>
+      <details v-for="item in questions" :key="item.q">
+        <summary>{{ item.q }}</summary>
+        <p>{{ item.a }}</p>
+      </details>
+    </section>
+    <section id="contacto" class="section split contact-section">
+      <div class="contact-copy">
+        <span class="eyebrow">El siguiente paso</span>
+        <h2>Cuéntanos dónde está tu negocio.<br />Y qué te está frenando.</h2>
+        <p class="intro">
+          Revisamos tu caso y acordamos una conversación para valorar el encaje. Después, una
+          propuesta con alcance y prioridades.
+        </p>
+        <p>
+          También puedes escribir a <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
+        </p>
+      </div>
+      <LeadForm :scale="selectedScale" />
+    </section>
   </div>
 </template>
-
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { Sparkles, ShoppingBag, MessageCircle, Wrench, PenLine } from 'lucide-vue-next'
-import NoraDemo from '@/components/ui/NoraDemo.vue'
-import { useCheckout } from '@/composables/useCheckout'
-import { usePlans } from '@/data/plans'
-import { useSeo } from '@/composables/useSeo'
-import { useToastStore } from '@/stores/toast'
-import { track } from '@/lib/pixel'
-
-const { buying, buyClinica } = useCheckout()
-
-useSeo({
-  jsonLd: {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'Clínica Digital',
-    description: 'Página web profesional + 3 empleados IA (recepcionista, auxiliar técnico y creador de contenido) para psicólogos, coaches y terapeutas.',
-    brand: { '@type': 'Brand', name: 'DigiNode' },
-    offers: {
-      '@type': 'Offer',
-      price: '150',
-      priceCurrency: 'EUR',
-      url: 'https://midiginode.com/',
-      availability: 'https://schema.org/InStock',
-    },
+import { computed, onMounted, ref } from 'vue'
+import LeadForm from '@/components/public/LeadForm.vue'
+import LazyNora from '@/components/public/LazyNora.vue'
+import { useServices } from '@/data/services'
+import { trackEvent } from '@/lib/analytics'
+const { services, load } = useServices()
+const management = computed(() =>
+  services.value.find((service) => service.id === 'brand_management')
+)
+const selectedScale = ref('pending')
+function selectScale(value) {
+  selectedScale.value = value
+  trackEvent('lead_cta_click')
+}
+const values = [
+  {
+    label: 'MARCA',
+    title: 'Que se entienda por qué elegirte.',
+    text: 'Ordenamos tu oferta y unificamos el mensaje en tu web, redes y materiales. La comunicación empieza en lo que tu empresa hace bien.',
   },
-})
-
-const { load, flagship } = usePlans()
-const price = computed(() => flagship().monthly)
-
-const route = useRoute()
-const router = useRouter()
-
-onMounted(() => {
-  load()
-
-  // Stripe success redirect lands here with ?compra=ok.
-  if (route.query.compra === 'ok') {
-    track('Purchase')
-    useToastStore().success('¡Pago completado! Revisa tu correo: te hemos enviado el acceso a tu panel.')
-    router.replace({ query: {} })
-  }
-})
+  {
+    label: 'OPORTUNIDADES',
+    title: 'Que preguntar sea fácil.',
+    text: 'Conectamos campañas, contenido y formularios para que cada consulta llegue con el contexto necesario y pueda recibir seguimiento.',
+  },
+  {
+    label: 'TU TIEMPO',
+    title: 'Que no tengas que coordinarlo todo.',
+    text: 'Un responsable lleva las prioridades y la ejecución. Revisamos consultas, origen de oportunidades y decisiones contigo, sin prometer ventas.',
+  },
+]
+const method = [
+  {
+    label: 'ACORDAMOS',
+    title: 'Prioridades antes que canales.',
+    text: 'Entendemos tu operación y fijamos alcance, entregas y presupuesto. Empezamos por lo que necesita el negocio.',
+  },
+  {
+    label: 'EJECUTAMOS',
+    title: 'De la idea a la entrega.',
+    text: 'Preparamos contenidos y mejoras, conectamos herramientas y ejecutamos dentro de lo aprobado. La IA apoya el trabajo; hay una persona responsable.',
+  },
+  {
+    label: 'REVISAMOS',
+    title: 'Decisiones con contexto.',
+    text: 'Revisamos oportunidades, acciones y próximos pasos. Ajustamos prioridades al ritmo y a la capacidad de tu equipo.',
+  },
+]
+const questions = [
+  {
+    q: '¿Quién se encarga y cómo empezamos?',
+    a: 'La persona responsable de Diginode revisa tu solicitud y acuerda contigo una conversación. Antes de contratar tendrás un interlocutor identificado, alcance, prioridades, entregas y presupuesto por escrito.',
+  },
+  {
+    q: '¿Tengo que cambiar de web o de herramientas?',
+    a: 'Primero revisamos lo que ya funciona. Mejoramos la web existente cuando el alcance lo permite. Una nueva web o aplicación se acuerda como proyecto independiente.',
+  },
+  {
+    q: '¿De quién son las cuentas, los materiales y los datos?',
+    a: 'Dejamos por escrito la propiedad y los accesos del cliente, las licencias de terceros y los componentes reutilizados. La salida y la entrega se documentan antes de empezar.',
+  },
+  {
+    q: '¿Cómo sabremos si avanzamos?',
+    a: 'Revisamos consultas válidas, origen de oportunidades, presupuestos y ventas registradas, con los datos que aporte tu operación. Un clic o una conversación no equivalen a una venta.',
+  },
+  {
+    q: '¿Hay una garantía de ventas?',
+    a: 'No publicamos ingresos prometidos ni garantías sin condiciones acordadas. Definimos objetivos, responsabilidades y cómo medirlos antes de comprometer el trabajo.',
+  },
+]
+onMounted(load)
 </script>
-
-<style lang="scss" scoped>
-.home {
-  position: relative;
-  // Fill the viewport minus the fixed navbar → landing sin scroll en desktop.
-  min-height: calc(100dvh - 72px);
-  display: flex;
+<style scoped lang="scss">
+.agency-hero {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
   align-items: center;
-  overflow: hidden;
-
-  &__bg {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+  gap: 4rem;
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
+  min-height: 690px;
+  h1 span {
+    color: #87bcf4;
   }
-
-  &__glow {
-    position: absolute;
+  .eyebrow {
+    max-width: 470px;
+    line-height: 1.8;
+  }
+}
+.agency-signature {
+  font-size: 0.85rem;
+  margin-top: 1.8rem;
+  color: #a7b8cc;
+}
+.agency-board {
+  background: linear-gradient(145deg, #10233b, #0b1421);
+  border: 1px solid #29476a;
+  border-radius: 18px;
+  padding: 1.8rem;
+  transform: rotate(1deg);
+  box-shadow: 0 30px 80px #0005;
+  &__top,
+  &__bottom {
+    font-size: 0.59rem;
+    letter-spacing: 0.13em;
+    color: #a3b8d0;
+  }
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+  }
+  &__dot {
+    background: #ffb94d;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.35;
-
-    &--primary {
-      width: 480px;
-      height: 480px;
-      background: $primary;
-      top: -160px;
-      left: -120px;
+  }
+  &__step {
+    border-top: 1px solid #29415c;
+    padding: 1.6rem 0;
+    span {
+      display: block;
+      color: #60b0ff;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.7rem;
     }
-
-    &--accent {
-      width: 420px;
-      height: 420px;
-      background: $primary-dark;
-      bottom: -140px;
-      right: -100px;
-      opacity: 0.25;
+    strong {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    p {
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
     }
   }
-
-  &__inner {
-    position: relative;
-    max-width: 1280px;
-    width: 100%;
-    margin: 0 auto;
-    padding: $space-8 $space-6;
+  &__bottom {
+    padding-top: 1rem;
+    border-top: 1px solid #29415c;
+    line-height: 1.8;
+  }
+}
+.agency-first-month {
+  padding: 1.5rem;
+  border-left: 2px solid #ffb94d;
+  margin-top: 2.5rem;
+  background: #0c141f;
+}
+.agency-control {
+  display: grid;
+  gap: 1.4rem;
+  padding: 2rem;
+  border-left: 1px solid #29476a;
+  div {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    align-items: center;
-    gap: $space-10;
-
-    @media (max-width: $bp-lg) {
-      grid-template-columns: 1fr;
-      gap: $space-8;
-      padding: $space-8 $space-4 $space-12;
-    }
-
-    // Pantallas bajas (portátiles pequeños): compactar para mantener el no-scroll.
-    @media (min-width: $bp-lg) and (max-height: 840px) {
-      padding-top: $space-4;
-      padding-bottom: $space-4;
-    }
+    gap: 0.5rem;
   }
-
-  &__pitch {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $space-5;
-
-    @media (max-width: $bp-lg) {
-      align-items: center;
-      text-align: center;
-    }
-
-    @media (min-width: $bp-lg) and (max-height: 840px) {
-      gap: $space-4;
-    }
+  span {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: #60b0ff;
   }
-
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-1 $space-3;
-    border: 1px solid $border-hover;
-    border-radius: $radius-full;
-    background: $primary-subtle;
-    color: $primary-light;
-    font-size: $text-xs;
-    font-weight: $fw-semibold;
-    letter-spacing: 0.02em;
+  strong {
+    font-size: 1.2rem;
+    font-weight: 500;
   }
-
-  &__title {
-    font-family: $font-display;
-    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-    font-weight: $fw-bold;
-    color: $text;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
+  p {
+    font-size: 0.85rem;
   }
-
-  &__title-gradient {
-    background: linear-gradient(135deg, $primary-light 0%, $primary 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+}
+.agency-scales {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  .commercial-button {
+    margin-top: 1.8rem;
   }
-
-  &__subtitle {
-    color: $text-muted;
-    font-size: $text-lg;
-    line-height: 1.6;
-    max-width: 520px;
+}
+.agency-price {
+  display: block;
+  margin-top: 2rem;
+  color: #87bcf4;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.agency-example,
+.agency-clinic {
+  border-radius: 20px;
+  padding: 3rem;
+  background: #10223a;
+  strong {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 500;
   }
-
-  &__features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    padding: 0;
-    margin: 0;
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: $space-3;
-      color: $text;
-      font-size: $text-sm;
-
-      svg { color: $primary-light; flex-shrink: 0; }
-    }
-
-    @media (max-width: $bp-lg) {
-      align-items: flex-start;
-    }
+  p {
+    margin: 1.2rem 0;
   }
-
-  &__price {
-    display: flex;
-    align-items: baseline;
-    gap: $space-4;
-    flex-wrap: wrap;
-
-    @media (max-width: $bp-lg) {
-      justify-content: center;
-    }
+  > span:last-child {
+    font-size: 0.75rem;
+    color: #acbacb;
   }
-
-  &__price-amount {
-    font-family: $font-display;
-    font-size: $text-4xl;
-    font-weight: $fw-bold;
-    color: $text;
-
-    small {
-      font-size: $text-lg;
-      font-weight: $fw-medium;
-      color: $text-muted;
-    }
+}
+.agency-clinic {
+  background: #191c21;
+  border: 1px solid #4c3d2b;
+  > span {
+    display: block;
+    color: #ffb94d;
+    letter-spacing: 0.3em;
+    margin-bottom: 2rem;
   }
-
-  &__price-note {
-    font-size: $text-sm;
-    color: $text-muted;
+}
+@media (max-width: 950px) {
+  .agency-hero {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    min-height: auto;
   }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: $space-4;
-    flex-wrap: wrap;
-
-    @media (max-width: $bp-lg) {
-      justify-content: center;
-    }
+  .agency-board {
+    max-width: 600px;
+    transform: none;
   }
-
-  &__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    height: 52px;
-    padding: 0 $space-6;
-    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
-    color: $text-inverse;
-    font-family: inherit;
-    font-size: $text-base;
-    font-weight: $fw-semibold;
-    border: 0;
-    border-radius: $radius;
-    cursor: pointer;
-    transition: $transition;
-    box-shadow: 0 4px 20px rgba($primary, 0.3);
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba($primary, 0.4);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
+}
+@media (max-width: 650px) {
+  .agency-scales {
+    grid-template-columns: 1fr;
   }
-
-  &__cta-secondary {
-    display: inline-flex;
-    align-items: center;
-    height: 52px;
-    padding: 0 $space-5;
-    border: 1px solid $border;
-    border-radius: $radius;
-    color: $text-muted;
-    font-size: $text-base;
-    font-weight: $fw-medium;
-    text-decoration: none;
-    transition: $transition-fast;
-
-    &:hover {
-      border-color: $primary;
-      color: $primary-light;
-      background: $primary-subtle;
-    }
-  }
-
-  &__trust {
-    font-size: $text-xs;
-    color: $text-subtle;
-  }
-
-  &__demo {
-    display: flex;
-    justify-content: center;
+  .agency-hero {
+    padding-top: 48px !important;
   }
 }
 </style>

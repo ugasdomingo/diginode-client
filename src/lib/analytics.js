@@ -1,15 +1,4 @@
-// Analítica propia, anónima y sin cookies.
-//
-// Por qué esto NO necesita banner de consentimiento:
-//   - No escribe cookies, ni localStorage, ni sessionStorage. El identificador
-//     de pestaña vive en una variable de este módulo y muere al cerrarla.
-//   - No se envía nada que identifique a nadie: ni nombre, ni correo, ni la
-//     dirección completa de procedencia (solo el dominio, y el servidor lo
-//     reduce a un canal: instagram, google, directo…).
-//   - Los datos no salen de nuestro servidor ni se comparten con terceros: no
-//     hay seguimiento entre sitios, que es lo que exige pedir permiso.
-// Si algún día se activa el Pixel de Meta, ESO sí exige banner previo.
-
+// Own audience measurement. Activation requires reviewing the actual deployment and privacy notice.
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
 
 // Identificador de pestaña: aleatorio, en memoria y efímero. Solo sirve para
@@ -18,7 +7,7 @@ const sessionId = Math.random().toString(36).slice(2) + Date.now().toString(36)
 
 // Respetamos que alguien pida no ser medido, aunque la ley no nos obligue aquí.
 function optedOut() {
-  if (typeof navigator === 'undefined') return true
+  if (import.meta.env.VITE_ENABLE_ANALYTICS !== 'true' || typeof navigator === 'undefined') return true
   return navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true
 }
 
@@ -88,7 +77,7 @@ function externalReferrer() {
   } catch {
     return null
   }
-  return ref
+  try { return new URL(ref).origin } catch { return null }
 }
 
 // Solo se mide la web pública. El servidor descarta igualmente cualquier ruta
@@ -124,7 +113,9 @@ export function trackPageview(path, { referrer } = {}) {
 }
 
 /** Marca un hito de conversión sobre la visita en curso. */
+const EVENTS = ['checkout_click', 'purchase', 'lead_cta_click', 'lead_submit_success', 'demo_start', 'booking_click', 'web_project_click', 'digital_clinic_click']
 export function trackEvent(event) {
+  if (!EVENTS.includes(event)) return
   if (optedOut()) return
   send('event', { path: currentPath, event })
 }

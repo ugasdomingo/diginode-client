@@ -262,7 +262,7 @@
         </RouterLink>
         <a :href="calLink" target="_blank" rel="noopener noreferrer" class="quick-link">
           <CalendarClock :size="16" />
-          Agendar reunión
+          {{ calLink.startsWith('mailto:') ? 'Contactar con Diginode' : 'Agendar reunión' }}
         </a>
       </div>
 
@@ -284,6 +284,7 @@ import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import TrainingDetailsModal from '@/components/portal/TrainingDetailsModal.vue'
 import { useCheckout } from '@/composables/useCheckout'
+import { useServices } from '@/data/services'
 import { usePlans } from '@/data/plans'
 
 const clientStore = useClientStore()
@@ -317,12 +318,19 @@ const hasOffice = computed(
 )
 
 // Reunión directa con el propietario (misma agenda Cal que usa la web pública).
-const calLink = import.meta.env.VITE_CAL_BOOKING_LINK || '#'
+const { bookingUrl, load: loadServices } = useServices()
+let legacyBooking = null
+try {
+  const url = new URL(import.meta.env.VITE_CAL_BOOKING_LINK)
+  if (url.protocol === 'https:' && url.hostname === 'cal.com') legacyBooking = url.href
+} catch { /* no legacy calendar configured */ }
+const calLink = computed(() => bookingUrl.value || legacyBooking || 'mailto:info@midiginode.com')
 
 const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
 
 // Load lazily if user navigated directly (token in localStorage, no login flow)
 onMounted(async () => {
+  loadServices()
   loadPlans()
   if (!clientStore.loaded) {
     try {

@@ -143,3 +143,4 @@ vite.config.ts.timestamp-*
 # Laboratorio local y preparación de archivos entre repositorios
 dist-lab/
 .implementation/
+.prerender/

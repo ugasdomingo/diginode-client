@@ -19,6 +19,8 @@
         />
       </div>
 
+      <label>Servicio<select v-model="serviceFilter"><option value="">Todos</option><option value="brand_management">Gestión de marca</option><option value="web_project">Webs y aplicaciones</option><option value="digital_clinic">Clínica Digital</option><option value="undecided">Por orientar</option></select></label>
+      <label>Origen<select v-model="sourceFilter"><option value="">Todos</option><option value="web_form">Solicitud web</option><option value="demo_whatsapp">Demo</option><option value="organic">Orgánico</option><option value="ads">Publicidad</option><option value="other">Otro</option></select></label>
       <div class="filters__tabs">
         <button
           v-for="tab in statusTabs"
@@ -50,7 +52,7 @@
             <tr>
               <th>Contacto</th>
               <th>Plataforma</th>
-              <th>País</th>
+              <th>Necesidad y servicio</th>
               <th>Estado</th>
               <th>Fecha</th>
               <th>Acciones</th>
@@ -65,7 +67,7 @@
                   </div>
                   <div>
                     <p class="lead-name__primary">{{ lead.name || '—' }}</p>
-                    <p class="lead-name__secondary">{{ lead.contact_id }}</p>
+                    <p class="lead-name__secondary">{{ lead.email || lead.contact_id }}</p><p class="lead-name__secondary">{{ lead.company }}</p>
                   </div>
                 </div>
               </td>
@@ -75,7 +77,7 @@
                   {{ lead.platform }}
                 </AppBadge>
               </td>
-              <td class="cell-muted">{{ lead.country || '—' }}</td>
+              <td class="cell-muted lead-detail"><strong>{{ serviceLabel(lead.service_interest) }}</strong><p>{{ sourceLabel(lead.source) }}</p><p>{{ lead.goal || 'Sin objetivo registrado' }}</p><p>{{ scaleLabel(lead.requested_scale) }} · {{ budgetLabel(lead.budget_range) }}</p><a v-if="safeWebsite(lead.website)" :href="safeWebsite(lead.website)" target="_blank" rel="noopener noreferrer">Web del negocio ↗</a><p v-if="lead.booking_review_ids?.length">Reserva pendiente de asociación manual: {{ lead.booking_review_ids.join(', ') }}</p><p v-if="lead.notification_status === 'pending'">Aviso interno pendiente de reintento</p><details><summary>Seguimiento y notas internas</summary><label>Etapa<select :value="lead.funnel_stage" @change="updateStage(lead, $event.target.value)"><option v-for="stage in stages" :key="stage" :value="stage">{{ stageLabel(stage) }}</option></select></label><textarea v-model="lead.internal_notes" maxlength="4000" aria-label="Notas internas" /><button type="button" @click="saveNotes(lead)">Guardar notas</button></details></td>
               <td>
                 <AppBadge :variant="statusVariant(lead.status)">
                   {{ statusLabel(lead.status) }}
@@ -96,7 +98,7 @@
                   </select>
 
                   <AppButton
-                    v-if="lead.status === 'won'"
+                    v-if="lead.status === 'won' && (!lead.service_interest || lead.service_interest === 'digital_clinic')"
                     size="sm"
                     variant="primary"
                     :loading="convertingId === lead._id"
@@ -198,6 +200,16 @@ async function doDelete() {
     pendingDelete.value = null
   }
 }
+const serviceFilter = ref(''), sourceFilter = ref('')
+const stages = ['request_received', 'demo_started', 'identified', 'followup', 'qualified', 'meeting_booked', 'proposal', 'won', 'lost']
+const scaleLabel = id => ({ micro: 'Microempresa', sme: 'Pyme', pending: 'Escala por definir' }[id] || 'Sin escala')
+const budgetLabel = id => ({ pending: 'Presupuesto por definir', monthly_under_1500: 'Hasta 1.500 €/mes', monthly_1500_3000: '1.500–3.000 €/mes', monthly_over_3000: 'Más de 3.000 €/mes', project_under_5000: 'Hasta 5.000 € de proyecto', project_5000_10000: '5.000–10.000 € de proyecto', project_over_10000: 'Más de 10.000 € de proyecto' }[id] || 'Sin presupuesto')
+const sourceLabel = id => ({ web_form: 'Solicitud web', demo_whatsapp: 'Demo', organic: 'Orgánico', ads: 'Publicidad', other: 'Otro' }[id] || 'Sin clasificar')
+const stageLabel = id => ({ request_received: 'Solicitud recibida', demo_started: 'Demo iniciada', identified: 'Identificado', followup: 'Seguimiento', qualified: 'Cualificado', meeting_booked: 'Reunión', proposal: 'Propuesta', won: 'Ganado', lost: 'Perdido' }[id] || id)
+const serviceLabel = id => ({ brand_management: 'Gestión de marca', web_project: 'Webs y aplicaciones', digital_clinic: 'Clínica Digital', undecided: 'Por orientar' }[id] || 'Sin clasificar')
+function safeWebsite(value) { try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : null } catch { return null } }
+async function saveNotes(lead) { try { await api.patch('/admin/leads/' + lead._id, { internal_notes: lead.internal_notes || '' }); toast.success('Notas guardadas') } catch (err) { toast.error(err.message) } }
+async function updateStage(lead, stage) { try { const result = await api.patch('/admin/leads/' + lead._id, { funnel_stage: stage }); Object.assign(lead, result.data) } catch (err) { toast.error(err.message) } }
 const search       = ref('')
 const selectedStatus = ref('')
 const page         = ref(1)
@@ -253,6 +265,9 @@ async function fetchLeads() {
   try {
     const params = new URLSearchParams({ page: page.value, limit: 20 })
     if (selectedStatus.value) params.set('status', selectedStatus.value)
+    if (serviceFilter.value) params.set('service_interest', serviceFilter.value)
+    if (sourceFilter.value) params.set('source', sourceFilter.value)
+    if (search.value.trim()) params.set('search', search.value.trim())
 
     const res = await api.get(`/admin/leads?${params}`)
     leads.value      = res.data ?? []
@@ -267,8 +282,8 @@ async function fetchLeads() {
 async function updateStatus(lead, newStatus) {
   updatingId.value = lead._id
   try {
-    await api.patch(`/admin/leads/${lead._id}`, { status: newStatus })
-    lead.status = newStatus
+    const result = await api.patch(`/admin/leads/${lead._id}`, { status: newStatus })
+    Object.assign(lead, result.data)
     toast.success('Estado actualizado')
   } catch (err) {
     toast.error(err.message)
@@ -290,7 +305,10 @@ async function convertLead(lead) {
   }
 }
 
-watch([selectedStatus, page], fetchLeads)
+watch(page, fetchLeads)
+watch([selectedStatus, serviceFilter, sourceFilter], () => { if (page.value !== 1) page.value = 1; else fetchLeads() })
+let searchTimer
+watch(search, () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { if (page.value !== 1) page.value = 1; else fetchLeads() }, 300) })
 onMounted(fetchLeads)
 </script>
 
@@ -588,4 +606,7 @@ onMounted(fetchLeads)
 
   strong { color: $text; font-family: $font-mono; font-size: $text-xs; }
 }
+.lead-detail { min-width: 240px; max-width: 380px; white-space: normal; overflow-wrap: anywhere; p { margin: .5rem 0; } textarea { width: 100%; min-height: 80px; } }
+.filters label { color: #acbacb; display: grid; gap: .4rem; }
+.filters select, .lead-detail select, .lead-detail textarea { background: #0f1620; color: #f8fafc; padding: .6rem; border: 1px solid #29476a; border-radius: 6px; }
 </style>

@@ -3,8 +3,9 @@ import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 
 export default [
-  { ignores: ['node_modules/**', 'dist/**', 'dist-lab/**', '.implementation/**', '.claude/**'] },
+  { ignores: ['node_modules/**', 'dist/**', 'dist-lab/**', '.implementation/**', '.prerender/**', '.claude/**'] },
   js.configs.recommended,
+  { files: ['scripts/**/*.mjs'], languageOptions: { globals: globals.node } },
   // 'essential' = correctness rules only; formatting is Prettier's job.
   ...pluginVue.configs['flat/essential'],
   {

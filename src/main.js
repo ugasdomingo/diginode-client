@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import router from '@/router'
 import App from '@/App.vue'
 import '@/assets/styles/main.scss'
+import '@/assets/styles/commercial.scss'
 import { initPixel, track } from '@/lib/pixel'
 import { initAnalytics, trackPageview } from '@/lib/analytics'
 
@@ -13,8 +14,7 @@ app.use(router)
 initPixel()
 initAnalytics()
 
-// Cada navegación de la SPA cuenta como una vista. El pixel solo se dispara si
-// hay ID configurado; la analítica propia va siempre, porque es anónima.
+// Measurement is explicitly enabled by environment; advertising remains disabled.
 router.afterEach((to) => {
   track('PageView')
   trackPageview(to.path)

@@ -11,9 +11,9 @@ function parseJwt(token) {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const token             = ref(localStorage.getItem('dn_token') ?? null)
+  const token             = ref(typeof localStorage === 'undefined' ? null : localStorage.getItem('dn_token'))
   const user              = ref(token.value ? parseJwt(token.value) : null)
-  const mustChangePassword = ref(localStorage.getItem('dn_must_change_pwd') === 'true')
+  const mustChangePassword = ref(typeof localStorage !== 'undefined' && localStorage.getItem('dn_must_change_pwd') === 'true')
 
   const isAuthenticated = computed(() => !!token.value)
   const isAdmin  = computed(() => user.value?.role === 'admin')

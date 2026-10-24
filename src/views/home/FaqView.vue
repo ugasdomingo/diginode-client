@@ -1,7 +1,7 @@
 <template>
   <div class="faq">
     <div class="faq__header">
-      <h1 class="faq__title">Preguntas frecuentes</h1>
+      <h1 class="faq__title">Clínica Digital: preguntas frecuentes</h1>
       <p class="faq__subtitle">
         Todo lo que necesitas saber antes de poner en marcha tu Clínica Digital.
       </p>
@@ -24,7 +24,7 @@
         {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital — 150€/mes' }}
       </button>
       <p class="faq__cta-note">
-        ¿Prefieres probarla primero? <RouterLink to="/">Habla con Nora en la demo</RouterLink>.
+        ¿Prefieres probarla primero? <RouterLink to="/clinica-digital#demo-nora">Habla con Nora en la demo</RouterLink>.
       </p>
     </div>
   </div>

@@ -7,26 +7,26 @@
           Volver al inicio
         </RouterLink>
         <h1 class="legal-page__title">Aviso Legal</h1>
-        <p class="legal-page__updated">Última actualización: 8 de marzo de 2026</p>
+        <p class="legal-page__updated">Última actualización: 24 de octubre de 2026 · Versión de revisión</p>
       </div>
 
       <div class="legal-page__body">
 
         <section class="legal-section">
-          <h2>1. Datos identificativos del titular</h2>
+          <h2>1. Datos identificativos del titular</h2><p class="legal-note">Preparación local: los datos identificativos siguientes están pendientes de completar con información real del responsable antes de publicar.</p>
           <p>En cumplimiento de lo establecido en el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa al usuario de los siguientes datos identificativos del titular de este sitio web:</p>
           <div class="legal-databox">
             <p><strong>Denominación social:</strong> Diginode [completar con razón social completa]</p>
             <p><strong>NIF/CIF:</strong> [completar]</p>
             <p><strong>Domicilio social:</strong> [completar con dirección postal completa]</p>
-            <p><strong>Correo electrónico de contacto:</strong> [completar]</p>
+            <p><strong>Correo electrónico de contacto:</strong> info@midiginode.com</p>
             <p><strong>Datos de inscripción en el Registro Mercantil:</strong> [completar cuando proceda]</p>
           </div>
         </section>
 
         <section class="legal-section">
           <h2>2. Objeto del sitio web</h2>
-          <p>El presente sitio web tiene por objeto dar a conocer los servicios de automatización empresarial mediante agentes de inteligencia artificial ofrecidos por Diginode, así como facilitar el acceso al panel de control de los clientes contratantes.</p>
+          <p>El presente sitio web tiene por objeto dar a conocer los servicios de gestión de marca y marketing, webs y aplicaciones y Clínica Digital ofrecidos por Diginode, así como facilitar el acceso al panel de control de los clientes contratantes.</p>
         </section>
 
         <section class="legal-section">

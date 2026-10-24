@@ -1,203 +1,47 @@
 <template>
   <div class="nora-demo">
-    <!-- Phone mockup -->
+    <p class="nora-notice">Demo con IA. No introduzcas datos de pacientes ni información sensible. <RouterLink to="/legal/privacidad">Privacidad</RouterLink></p>
     <div class="phone">
       <div class="phone__notch" />
-
-      <!-- WhatsApp-style header -->
-      <header class="wa-header">
-        <div class="wa-header__avatar">N</div>
-        <div class="wa-header__meta">
-          <span class="wa-header__name">Nora · DigiNode</span>
-          <span class="wa-header__status">
-            {{ typing ? 'escribiendo…' : 'en línea' }}
-          </span>
-        </div>
-      </header>
-
-      <!-- Messages -->
-      <div ref="scrollEl" class="wa-body">
-        <p class="wa-day">DEMO</p>
-
-        <div
-          v-for="(m, i) in messages"
-          :key="i"
-          class="wa-row"
-          :class="m.from === 'me' ? 'wa-row--me' : 'wa-row--nora'"
-        >
-          <div class="wa-bubble" :class="m.from === 'me' ? 'wa-bubble--me' : 'wa-bubble--nora'">
-            <span class="wa-bubble__text">{{ m.text }}</span>
-            <a
-              v-if="m.bookingUrl"
-              class="wa-bubble__cta"
-              :href="m.bookingUrl"
-              target="_blank"
-              rel="noopener"
-            >
-              📅 Agendar mi reunión
-            </a>
-            <span class="wa-bubble__time">{{ m.time }}</span>
+      <header class="wa-header"><div class="wa-header__avatar">N</div><div class="wa-header__meta"><span class="wa-header__name">Nora · Diginode</span><span class="wa-header__status">{{ sending ? 'escribiendo…' : 'Asistente con IA · demo' }}</span></div></header>
+      <div ref="scrollEl" class="wa-body" role="log" aria-label="Conversación con Nora" aria-live="polite" :aria-busy="sending">
+        <p class="wa-day">AGENDA SIMULADA · CORREO CON CONFIRMACIÓN</p>
+        <div v-if="!messages.length" class="wa-row wa-row--nora"><div class="wa-bubble wa-bubble--nora"><span class="wa-bubble__text">{{ greeting }}</span></div></div>
+        <div v-for="(message, index) in messages" :key="index" class="wa-row" :class="message.from === 'me' ? 'wa-row--me' : 'wa-row--nora'">
+          <div class="wa-bubble" :class="message.from === 'me' ? 'wa-bubble--me' : 'wa-bubble--nora'"><span class="wa-bubble__text">{{ message.text }}</span>
+            <template v-for="action in message.actions" :key="action.href"><a v-if="action.type === 'booking'" class="wa-bubble__cta" :href="action.href" target="_blank" rel="noopener noreferrer" @click="trackEvent('booking_click')">{{ action.label }} ↗</a><RouterLink v-else class="wa-bubble__cta" :to="action.href">{{ action.label }}</RouterLink></template>
+            <span class="wa-bubble__time">{{ message.time }}</span>
           </div>
         </div>
-
-        <div v-if="typing" class="wa-row wa-row--nora">
-          <div class="wa-bubble wa-bubble--nora wa-bubble--typing">
-            <span class="dot" /><span class="dot" /><span class="dot" />
-          </div>
-        </div>
+        <div v-if="sending" class="wa-row wa-row--nora"><div class="wa-bubble wa-bubble--nora wa-bubble--typing"><span class="dot" /><span class="dot" /><span class="dot" /></div></div>
       </div>
-
-      <!-- Composer -->
-      <form class="wa-composer" @submit.prevent="send">
-        <input
-          v-model="draft"
-          class="wa-composer__input"
-          type="text"
-          placeholder="Escribe un mensaje…"
-          :disabled="capped"
-          maxlength="2000"
-        />
-        <button class="wa-composer__send" type="submit" :disabled="!draft.trim() || sending || capped">
-          ➤
-        </button>
-      </form>
+      <form class="wa-composer" @submit.prevent="submit"><input v-model="draft" class="wa-composer__input" type="text" aria-label="Mensaje para Nora" placeholder="Cuéntame tu caso…" :disabled="capped || sending" maxlength="2000" /><button class="wa-composer__send" type="submit" aria-label="Enviar mensaje a Nora" :disabled="!draft.trim() || sending || capped">➤</button></form>
     </div>
-
-    <!-- Suggestion cards -->
-    <div class="nora-demo__cards">
-      <button
-        v-for="s in suggestions"
-        :key="s.label"
-        class="demo-card"
-        :disabled="sending || capped"
-        @click="sendSuggestion(s.text)"
-      >
-        <span class="demo-card__icon">{{ s.icon }}</span>
-        <span class="demo-card__label">{{ s.label }}</span>
-      </button>
-    </div>
-
-    <p v-if="capped" class="nora-demo__capped">
-      Has alcanzado el límite de esta demo. ¿List@ para tenerla en tu clínica?
-      <button type="button" class="nora-demo__capped-link" :disabled="buying" @click="buyClinica">
-        Comprar Clínica Digital →
-      </button>
-    </p>
-    <p v-if="error" class="nora-demo__error">{{ error }}</p>
+    <div v-if="pending" class="nora-pending" role="region" aria-label="Revisar correo antes de enviar"><strong>Correo preparado. Aún no se ha enviado.</strong><p>Para: {{ pending.recipient }}</p><p>{{ pending.summary }}</p><p>La confirmación caduca a los 10 minutos. Máximo dos correos por contacto y destinatario al día.</p><button type="button" class="commercial-button" :disabled="confirming" @click="confirmEmail">{{ confirming ? 'Confirmando…' : 'Confirmar envío de correo' }}</button><button type="button" class="nora-text-button" :disabled="confirming" @click="pending = null">Cancelar</button></div>
+    <div class="nora-demo__cards"><button v-for="suggestion in suggestions" :key="suggestion.label" class="demo-card" :disabled="sending || capped" @click="send(suggestion.text, context)"><span class="demo-card__label">{{ suggestion.label }}</span></button></div>
+    <p v-if="capped" class="nora-demo__capped">Has alcanzado el límite de esta demo.</p>
+    <p v-if="error" role="alert" class="nora-demo__error">{{ error }}</p>
+    <RouterLink :to="contactPath" class="nora-human">{{ context === 'web' ? 'Hablar con una persona sobre mi proyecto' : 'Solicitar una revisión con una persona' }} ↗</RouterLink>
   </div>
 </template>
-
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
-import { useApi } from '@/composables/useApi'
-import { useCheckout } from '@/composables/useCheckout'
-import { track } from '@/lib/pixel'
-
-const api = useApi()
-const { buying, buyClinica } = useCheckout()
-
-const messages = ref([])
-const draft    = ref('')
-const sending  = ref(false)
-const typing   = ref(false)
-const capped   = ref(false)
-const error    = ref('')
-const scrollEl = ref(null)
-
-// Stable per-browser contact id so the backend keeps one demo lead per visitor.
-function contactId() {
-  let id = localStorage.getItem('dn_demo_contact')
-  if (!id) {
-    id = 'demo-' + (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2))
-    localStorage.setItem('dn_demo_contact', id)
-  }
-  return id
-}
-
-function now() {
-  return new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-}
-
-// Strips markdown the model sometimes emits (**bold**, *italic*, `code`, # headings)
-// so the WhatsApp bubble shows clean plain text.
-function stripMarkdown(text) {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '$1')
-    .replace(/\*(.*?)\*/g, '$1')
-    .replace(/`(.*?)`/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-}
-
-// Pulls the first http(s) URL out of a reply so we can render it as a CTA button.
-// Trims trailing markdown/punctuation the model may glue to the link (e.g. "url**").
-function extractUrl(text) {
-  const match = text.match(/https?:\/\/[^\s]+/)
-  if (!match) return null
-  return match[0].replace(/[*_`)\].,;:!?]+$/, '')
-}
-
-async function scrollToBottom() {
-  await nextTick()
-  if (scrollEl.value) scrollEl.value.scrollTop = scrollEl.value.scrollHeight
-}
-
-function pushNora(text) {
-  messages.value.push({ from: 'nora', text: stripMarkdown(text), time: now(), bookingUrl: extractUrl(text) })
-  scrollToBottom()
-}
-
-const suggestions = [
-  { icon: '✉️', label: 'Pídele que te mande un correo', text: 'Nora, ¿me puedes enviar un correo con un resumen de lo que hace DigiNode?' },
-  { icon: '📅', label: 'Pídele su agenda de la semana', text: 'Nora, enséñame tu agenda de citas de esta semana.' },
-  { icon: '💡', label: '¿Qué es DigiNode?', text: '¿Qué es DigiNode y qué harías tú por mi negocio?' },
-]
-
-function sendSuggestion(text) {
-  if (sending.value || capped.value) return
-  draft.value = text
-  send()
-}
-
-async function send() {
-  const text = draft.value.trim()
-  if (!text || sending.value || capped.value) return
-
-  // First message from the visitor = a started conversation (Meta "Contact").
-  if (!messages.value.some(m => m.from === 'me')) track('Contact')
-
-  messages.value.push({ from: 'me', text, time: now() })
-  draft.value = ''
-  scrollToBottom()
-
-  sending.value = true
-  typing.value = true
-  try {
-    const res = await api.post('/demo/message', { contact_id: contactId(), platform: 'website', message: text })
-    typing.value = false
-    pushNora(res.reply)
-    if (res.capped) capped.value = true
-  } catch (e) {
-    typing.value = false
-    error.value = e.message ?? 'No se pudo enviar el mensaje. Inténtalo de nuevo.'
-  } finally {
-    sending.value = false
-  }
-}
-
-onMounted(() => {
-  // Nora opens the conversation.
-  setTimeout(() => {
-    typing.value = true
-    setTimeout(() => {
-      typing.value = false
-      pushNora('¡Hola! 👋 Soy Nora, la recepcionista con IA de DigiNode. Cuéntame, ¿en qué tipo de consulta trabajas y qué tarea te quita más tiempo?')
-    }, 900)
-  }, 400)
-})
+import { computed, nextTick, ref, watch } from 'vue'
+import { useNoraDemo } from '@/composables/useNoraDemo'
+import { trackEvent } from '@/lib/analytics'
+const props = defineProps({ context: { type: String, default: 'clinic', validator: value => ['agency', 'clinic', 'web'].includes(value) } })
+const { messages, sending, capped, error, pending, confirming, send, confirmEmail } = useNoraDemo()
+const draft = ref(''), scrollEl = ref(null)
+const contactPath = computed(() => props.context === 'web' ? '/webs-y-aplicaciones#contacto' : props.context === 'clinic' ? '/clinica-digital#contacto' : '/#contacto')
+const greeting = computed(() => props.context === 'agency' ? 'Soy Nora, la asistente de Diginode. ¿A qué se dedica tu empresa y qué te gustaría mejorar?' : props.context === 'web' ? 'Soy Nora, la asistente de Diginode. ¿Qué proceso de tu negocio te gustaría resolver con una web o aplicación?' : 'Soy Nora, la asistente de Diginode. ¿Qué tipo de consulta tienes y qué tarea administrativa te gustaría mejorar?')
+const suggestions = [{ label: 'Cómo ayudarías a mi negocio', text: '¿Cómo podrías ayudar a mi negocio?' }, { label: 'Ver una agenda de ejemplo', text: 'Enséñame una agenda ficticia de ejemplo, sin reservar ninguna cita.' }, { label: 'Preparar un resumen por correo', text: 'Quiero preparar un resumen de Diginode por correo para revisarlo y confirmar el envío.' }]
+async function submit() { const text = draft.value.trim(); if (!text || sending.value || capped.value) return; draft.value = ''; await send(text, props.context) }
+watch(() => [messages.value.length, sending.value], async () => { await nextTick(); if (scrollEl.value) scrollEl.value.scrollTop = scrollEl.value.scrollHeight })
 </script>
 
 <style lang="scss" scoped>
 .nora-demo {
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -420,4 +264,10 @@ onMounted(() => {
     &:disabled { opacity: 0.4; cursor: not-allowed; }
   }
 }
+.nora-notice, .nora-human { font-size: .78rem; line-height: 1.6; color: #bccbdc; }
+.nora-notice a, .nora-human { color: #87bcf4; text-decoration: underline; }
+.nora-pending { display: grid; gap: .8rem; border: 1px solid #ffb94d; border-radius: 10px; padding: 1rem; font-size: .85rem; line-height: 1.6; overflow-wrap: anywhere; }
+.nora-text-button { border: 0; background: transparent; color: #bccbdc; text-decoration: underline; cursor: pointer; }
+.wa-composer__input { min-width: 0; }
+.wa-bubble__text { overflow-wrap: anywhere; }
 </style>

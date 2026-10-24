@@ -3,7 +3,7 @@
     <!-- Hero -->
     <section class="epm__hero">
       <h1 class="epm__title">
-        Este servicio es para ti<br />
+        Clínica Digital es para ti<br />
         <span class="epm__title-gradient">si te reconoces aquí</span>
       </h1>
       <p class="epm__subtitle">
@@ -91,7 +91,7 @@
         {{ buying ? 'Abriendo pago…' : 'Comprar Clínica Digital' }}
       </button>
       <p class="epm__cta-note">
-        ¿Aún con dudas? <RouterLink to="/">Prueba la demo de Nora</RouterLink> o
+        ¿Aún con dudas? <RouterLink to="/clinica-digital#demo-nora">Prueba la demo de Nora</RouterLink> o
         <RouterLink to="/faq">revisa las preguntas frecuentes</RouterLink>.
       </p>
     </section>

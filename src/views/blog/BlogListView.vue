@@ -3,7 +3,7 @@
     <div class="blog-list__hero">
       <div class="container">
         <h1 class="blog-list__heading">Blog</h1>
-        <p class="blog-list__sub">Para solopreneurs y autónomos que quieren dejar de hacerlo todo solos — sin contratar personal</p>
+        <p class="blog-list__sub">Marca, marketing y herramientas para tu negocio. También encontrarás nuestras guías para consultas.</p>
       </div>
     </div>
 

@@ -4,7 +4,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Visitas</h1>
-        <p class="page-subtitle">Tráfico de la web pública · datos anónimos, sin cookies</p>
+        <p class="page-subtitle">Tráfico de la web pública · medición propia separada del CRM</p>
       </div>
       <div class="range-picker">
         <button
@@ -61,6 +61,14 @@
         </div>
       </div>
 
+      <section class="panel">
+        <h3 class="panel-title">Ofertas y solicitudes</h3>
+        <p>Las solicitudes, reservas verificadas y contratos proceden del CRM. Los clics y las demos son señales de navegación, no ventas.</p>
+        <div class="offer-tables">
+          <table class="table"><thead><tr><th>Oferta</th><th>Solicitudes</th><th>Cualificadas</th><th>Reservas verificadas</th><th>Ganados</th></tr></thead><tbody><tr v-for="offer in data.business_funnel" :key="offer._id"><td>{{ serviceLabel(offer._id) }}</td><td>{{ offer.requests }}</td><td>{{ offer.qualified }}</td><td>{{ offer.confirmed_meetings }}</td><td>{{ offer.won }}</td></tr></tbody></table>
+          <table class="table"><thead><tr><th>Landing</th><th>Visitas</th><th>Clics de contacto</th><th>Demos</th><th>Clics de agenda</th></tr></thead><tbody><tr v-for="offer in data.by_offer" :key="offer._id"><td>{{ offer._id }}</td><td>{{ offer.views }}</td><td>{{ offer.cta_clicks }}</td><td>{{ offer.demos }}</td><td>{{ offer.booking_clicks }}</td></tr></tbody></table>
+        </div>
+      </section>
       <!-- Evolución diaria -->
       <section class="panel">
         <h3 class="panel-title">
@@ -179,8 +187,8 @@
 
       <p class="privacy-note">
         <ShieldCheck :size="14" />
-        Medición propia y anónima: no se usan cookies, no se guarda ninguna dirección IP
-        y los datos se borran solos a los 90 días. Por eso la web no necesita banner de cookies.
+        Medición propia: rutas sin parámetros, identificadores diarios seudónimos y borrado a los 90 días.
+        Su activación requiere revisar la configuración y la información de privacidad del entorno.
       </p>
     </template>
   </div>
@@ -202,6 +210,7 @@ const RANGES = [
 ]
 
 const api   = useApi()
+const serviceLabel = id => ({ brand_management: 'Gestión de marca', web_project: 'Webs y aplicaciones', digital_clinic: 'Clínica Digital', undecided: 'Por orientar' }[id] || 'Sin clasificar')
 const toast = useToastStore()
 
 const data    = ref(null)
@@ -637,4 +646,5 @@ function deviceLabel(d) {
 
   svg { flex-shrink: 0; margin-top: 2px; color: $success; }
 }
+.offer-tables { overflow-x: auto; table { min-width: 600px; margin-top: 1.5rem; } }
 </style>

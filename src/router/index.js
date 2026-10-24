@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createMemoryHistory } from 'vue-router'
+import { PAGE_SEO } from '@/data/pageSeo'
+import { applySeo } from '@/composables/useSeo'
 import { useAuthStore } from '@/stores/auth'
 
 const routes = [
@@ -13,9 +15,14 @@ const routes = [
         name: 'home',
         component: () => import('@/views/home/HomeView.vue'),
         meta: {
-          title: 'DigiNode — Clínica Digital llave en mano para psicólogos, coaches y terapeutas',
-          description: 'Página web profesional + 3 empleados IA que atienden a tus pacientes, gestionan tu agenda y crean tu contenido. 150€/mes, sin permanencia, tuya al completar 12 cuotas.',
+          ...PAGE_SEO['/'],
         },
+      },
+      {
+        path: 'clinica-digital', name: 'clinica', component: () => import('@/views/clinica/ClinicaDigitalView.vue'), meta: PAGE_SEO['/clinica-digital'],
+      },
+      {
+        path: 'webs-y-aplicaciones', name: 'web-apps', component: () => import('@/views/services/WebAppsView.vue'), meta: PAGE_SEO['/webs-y-aplicaciones'],
       },
       {
         path: 'es-para-mi',
@@ -45,7 +52,7 @@ const routes = [
         component: () => import('@/views/legal/CookiesView.vue'),
         meta: {
           title: 'Política de cookies | DigiNode',
-          description: 'Esta web no utiliza cookies. La medición de visitas es propia, agregada y anónima, y no permite identificar a ninguna persona.',
+          description: 'Información sobre almacenamiento funcional, medición propia y publicidad desactivada.',
         },
       },
       {
@@ -59,8 +66,8 @@ const routes = [
         name: 'blog.list',
         component: () => import('@/views/blog/BlogListView.vue'),
         meta: {
-          title: 'Blog — Clínica digital para psicólogos, coaches y terapeutas | DigiNode',
-          description: 'Guías y recursos para digitalizar tu consulta: captación de pacientes, gestión de agenda y marketing ético para profesionales de la salud mental.',
+          title: 'Blog de marca, marketing y negocio digital | Diginode',
+          description: 'Recursos sobre marca, marketing, webs y atención comercial. Conservamos nuestras guías específicas para consultas.',
         },
       },
       {
@@ -69,8 +76,8 @@ const routes = [
         component: () => import('@/views/blog/BlogPostView.vue'),
       },
       // Rutas antiguas → home (mantienen vivos los enlaces indexados/compartidos)
-      { path: 'demo', redirect: '/' },
-      { path: 'plan', redirect: '/' },
+      { path: 'demo', redirect: '/clinica-digital#demo-nora' },
+      { path: 'plan', redirect: '/clinica-digital' },
       { path: 'operacion-solo', redirect: '/' },
       { path: 'despacho-digital', redirect: '/' },
       { path: 'bolsa-de-empleo', redirect: '/' },
@@ -219,8 +226,9 @@ const routes = [
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
+export function createDiginodeRouter(memory = false) {
 const router = createRouter({
-  history: createWebHistory(),
+  history: memory ? createMemoryHistory() : createWebHistory(),
   routes,
   scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition
@@ -230,6 +238,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
+  if (to.path === '/' && to.query.compra) return { path: '/clinica-digital', query: to.query, replace: true }
   const auth = useAuthStore()
 
   if (to.meta.public) return true
@@ -252,22 +261,11 @@ router.beforeEach((to) => {
   return true
 })
 
-// SEO por ruta (SPA sin SSR): título y meta description desde route.meta.
-// Las vistas con necesidades más ricas (JSON-LD) lo refinan con useSeo(),
-// que corre después (onMounted) y por tanto gana.
-const DEFAULT_TITLE = 'DigiNode — Clínica Digital llave en mano para psicólogos, coaches y terapeutas'
-const DEFAULT_DESCRIPTION = 'Página web profesional + 3 empleados IA por 150€/mes. Sin permanencia y tuya al completar 12 cuotas.'
-
-router.afterEach((to) => {
-  document.title = to.meta.title ?? DEFAULT_TITLE
-
-  let tag = document.querySelector('meta[name="description"]')
-  if (!tag) {
-    tag = document.createElement('meta')
-    tag.setAttribute('name', 'description')
-    document.head.appendChild(tag)
-  }
-  tag.setAttribute('content', to.meta.description ?? DEFAULT_DESCRIPTION)
+router.afterEach(to => {
+  if (typeof document === 'undefined') return
+  const path = to.path.replace(/\/+$/, '') || '/'
+  applySeo({ ...PAGE_SEO['/'], ...to.meta, path, jsonLd: PAGE_SEO[path]?.jsonLd ?? null, noindex: !to.meta.public })
 })
-
-export default router
+return router
+}
+export default createDiginodeRouter(typeof window === 'undefined')

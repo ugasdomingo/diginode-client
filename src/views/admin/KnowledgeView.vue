@@ -3,7 +3,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Conocimiento</h1>
-        <p class="page-subtitle">Bases de conocimiento que usan tus empleados IA para responder</p>
+        <p class="page-subtitle">Nora conoce gestión de marca, webs/aplicaciones y Clínica Digital. El catálogo prevalece en precios y condiciones.</p>
       </div>
       <AppButton :loading="saving" @click="save">
         <Save :size="16" />
@@ -33,7 +33,7 @@
       <textarea
         v-model="content"
         class="editor-card__textarea"
-        placeholder="Escribe aquí la información que La Recepcionista debe conocer: precios, servicios, preguntas frecuentes, tono, cómo presentarse, cuándo derivar al CEO, etc."
+        placeholder="Explicaciones, preguntas frecuentes, tono y cuándo derivar a una persona. Los precios y ofertas se autorizan en el catálogo, no en esta base."
         spellcheck="true"
       />
       <div class="editor-card__footer">

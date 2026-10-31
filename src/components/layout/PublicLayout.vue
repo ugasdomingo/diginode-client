@@ -17,9 +17,9 @@
           {{ mobileOpen ? 'Cerrar ✕' : 'Menú ☰' }}
         </button>
         <nav id="public-menu" :class="{ open: mobileOpen }" aria-label="Navegación principal">
-          <RouterLink to="/" @click="mobileOpen = false">Gestión de marca</RouterLink
+          <RouterLink to="/" @click="mobileOpen = false">Departamento de marketing</RouterLink
           ><RouterLink to="/webs-y-aplicaciones" @click="mobileOpen = false"
-            >Webs y aplicaciones</RouterLink
+            >Páginas web</RouterLink
           ><RouterLink to="/clinica-digital" @click="mobileOpen = false">Clínica Digital</RouterLink
           ><RouterLink :to="clientLink" @click="mobileOpen = false">Soy cliente</RouterLink>
           <button
@@ -36,7 +36,7 @@
             to="/#contacto"
             class="commercial-button"
             @click="requestReview"
-            >Revisar mi negocio ↗</RouterLink
+            >Quiero mi plan ↗</RouterLink
           >
         </nav>
       </div>
@@ -49,12 +49,12 @@
             ><img src="/logo.png" alt="" /><span>DigiNode</span></RouterLink
           >
           <p>Descansa, nosotros nos encargamos de todo.</p>
-          <p>Marca, marketing y herramientas para tu negocio.</p>
+          <p>Tu departamento de marketing, a medida de tu negocio.</p>
         </div>
         <nav aria-label="Servicios">
           <strong>Tu siguiente paso</strong
-          ><RouterLink to="/#contacto">Revisar mi negocio</RouterLink
-          ><RouterLink to="/webs-y-aplicaciones">Webs y aplicaciones</RouterLink
+          ><RouterLink to="/#contacto">Pedir mi plan a medida</RouterLink
+          ><RouterLink to="/webs-y-aplicaciones">Páginas web</RouterLink
           ><RouterLink to="/clinica-digital">Clínica Digital</RouterLink
           ><RouterLink to="/clinica-digital#demo-nora">Demo para tu consulta</RouterLink
           ><RouterLink to="/es-para-mi">Clínica: ¿es para mí?</RouterLink

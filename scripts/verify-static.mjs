@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 const SITE = 'https://midiginode.com'
 const headings = {
-  '/': 'Tu empresa necesita marketing.',
+  '/': 'Descansa.',
   '/clinica-digital': 'Tu clínica digital',
   '/webs-y-aplicaciones': 'Una web que ayuda a vender.',
 }

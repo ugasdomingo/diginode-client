@@ -3,22 +3,23 @@ const clinic = snapshot.services.find((service) => service.id === 'digital_clini
 export const SITE = 'https://midiginode.com'
 export const PAGE_SEO = {
   '/': {
-    title: 'Diginode — Gestión de marca y marketing para microempresas y pymes',
+    title: 'Diginode — Tu departamento de marketing para microempresas y pymes',
     description:
-      'Dirigimos y ejecutamos tu comunicación, web y campañas. Tú decides el rumbo y el presupuesto. Revisamos tu negocio para acordar una propuesta.',
+      'Descansa, nosotros nos encargamos de todo: marca, web, publicidad, redes y mensajes, con un plan a medida. Hasta un 78 % menos que contratar a un responsable.',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'Diginode',
       url: SITE,
       logo: `${SITE}/logo.png`,
-      description: 'Gestión de marca y marketing, webs y aplicaciones y Clínica Digital.',
+      slogan: 'Descansa, nosotros nos encargamos de todo.',
+      description: 'Departamento de marketing externo para microempresas y pymes, creación de webs y Clínica Digital.',
     },
   },
   '/webs-y-aplicaciones': {
-    title: 'Webs y aplicaciones para tu negocio | Diginode',
+    title: 'Creación de páginas web para vender desde 1.900 € | Diginode',
     description:
-      'Web comercial, catálogo con presupuestos y herramientas internas. Proyectos independientes con alcance, validación, propiedad y mantenimiento acordados.',
+      'Webs comerciales, catálogos y aplicaciones a medida, sin obligación de contratar marketing. Alcance, validación, propiedad y mantenimiento por escrito.',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Service',

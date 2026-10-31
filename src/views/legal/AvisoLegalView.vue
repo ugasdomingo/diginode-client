@@ -26,7 +26,7 @@
 
         <section class="legal-section">
           <h2>2. Objeto del sitio web</h2>
-          <p>El presente sitio web tiene por objeto dar a conocer los servicios de gestión de marca y marketing, webs y aplicaciones y Clínica Digital ofrecidos por Diginode, así como facilitar el acceso al panel de control de los clientes contratantes.</p>
+          <p>El presente sitio web tiene por objeto dar a conocer los servicios de departamento de marketing externo, creación de páginas web y aplicaciones, y Clínica Digital ofrecidos por Diginode, así como facilitar el acceso al panel de control de los clientes contratantes.</p>
         </section>
 
         <section class="legal-section">

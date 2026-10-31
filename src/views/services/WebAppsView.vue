@@ -2,7 +2,7 @@
   <div class="commercial-page">
     <section class="section split">
       <div>
-        <span class="eyebrow">Webs y aplicaciones · Proyectos independientes</span>
+        <span class="eyebrow">Solo página web · Sin contratar marketing · Desde 1.900 € + IVA</span>
         <h1>Una web que ayuda a vender.<br />Una aplicación que facilita trabajar.</h1>
         <p class="intro">
           Del primer contacto al presupuesto. Del trabajo repetido a un proceso claro. Diseñamos y
@@ -125,12 +125,13 @@
         </p>
         <p>
           Infraestructura, dominio, correo, IA y otras integraciones se detallan aparte cuando
-          proceda. Las nuevas funciones llevan presupuesto. Si la gestión de marca ya incluye tareas
-          de mantenimiento, evitamos cobrarlas dos veces.
+          proceda. Las nuevas funciones llevan presupuesto. Si el departamento de marketing ya incluye
+          tareas de mantenimiento, no las cobramos dos veces.
         </p>
         <p>
-          <strong>Presupuesto según alcance.</strong> Puedes contratar el proyecto sin contratar
-          marketing.
+          <strong>Web profesional desde 1.900 € + IVA</strong> (Latinoamérica: desde 990 USD). Las
+          aplicaciones a medida tienen presupuesto propio. Puedes contratar el proyecto sin
+          contratar marketing.
         </p>
       </div>
     </section>

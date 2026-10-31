@@ -52,8 +52,8 @@
         /></label>
         <label
           >¿Qué necesitas?<select v-model="form.service_interest" name="service">
-            <option value="brand_management">Gestión de marca y marketing</option>
-            <option value="web_project">Web o aplicación</option>
+            <option value="brand_management">Departamento de marketing completo</option>
+            <option value="web_project">Solo página web o aplicación</option>
             <option value="digital_clinic">Clínica Digital</option>
             <option value="undecided">Necesito orientación</option>
           </select></label
@@ -97,7 +97,7 @@
           minlength="10"
           maxlength="2000"
           required
-          placeholder="Cuéntanos cómo trabajáis y qué está costando más de la cuenta."
+          placeholder="Qué vendes, a quién y qué te quita más tiempo o clientes hoy."
         />
       </label>
       <label class="lead-form__trap" aria-hidden="true"
@@ -116,7 +116,7 @@
         {{ sending ? 'Enviando solicitud…' : 'Enviar solicitud' }} <span aria-hidden="true">↗</span>
       </button>
       <p class="lead-form__note">
-        Revisamos tu caso y acordamos una conversación. Sin crear una cuenta ni iniciar un cobro.
+        Leemos tu caso, miramos tu negocio y te proponemos una conversación. Sin cuenta ni cobro.
       </p>
     </form>
   </div>
@@ -171,7 +171,7 @@ const budgets = computed(() =>
         { value: 'project_over_10000', label: 'Más de 10.000 €' },
       ]
     : [
-        { value: 'monthly_under_1500', label: 'Hasta 1.500 €/mes' },
+        { value: 'monthly_under_1500', label: 'Hasta 1.500 €/mes (sin publicidad)' },
         { value: 'monthly_1500_3000', label: '1.500–3.000 €/mes' },
         { value: 'monthly_over_3000', label: 'Más de 3.000 €/mes' },
       ]

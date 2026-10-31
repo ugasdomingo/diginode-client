@@ -19,7 +19,7 @@
         />
       </div>
 
-      <label>Servicio<select v-model="serviceFilter"><option value="">Todos</option><option value="brand_management">Gestión de marca</option><option value="web_project">Webs y aplicaciones</option><option value="digital_clinic">Clínica Digital</option><option value="undecided">Por orientar</option></select></label>
+      <label>Servicio<select v-model="serviceFilter"><option value="">Todos</option><option value="brand_management">Departamento de marketing</option><option value="web_project">Páginas web</option><option value="digital_clinic">Clínica Digital</option><option value="undecided">Por orientar</option></select></label>
       <label>Origen<select v-model="sourceFilter"><option value="">Todos</option><option value="web_form">Solicitud web</option><option value="demo_whatsapp">Demo</option><option value="organic">Orgánico</option><option value="ads">Publicidad</option><option value="other">Otro</option></select></label>
       <div class="filters__tabs">
         <button
@@ -206,7 +206,7 @@ const scaleLabel = id => ({ micro: 'Microempresa', sme: 'Pyme', pending: 'Escala
 const budgetLabel = id => ({ pending: 'Presupuesto por definir', monthly_under_1500: 'Hasta 1.500 €/mes', monthly_1500_3000: '1.500–3.000 €/mes', monthly_over_3000: 'Más de 3.000 €/mes', project_under_5000: 'Hasta 5.000 € de proyecto', project_5000_10000: '5.000–10.000 € de proyecto', project_over_10000: 'Más de 10.000 € de proyecto' }[id] || 'Sin presupuesto')
 const sourceLabel = id => ({ web_form: 'Solicitud web', demo_whatsapp: 'Demo', organic: 'Orgánico', ads: 'Publicidad', other: 'Otro' }[id] || 'Sin clasificar')
 const stageLabel = id => ({ request_received: 'Solicitud recibida', demo_started: 'Demo iniciada', identified: 'Identificado', followup: 'Seguimiento', qualified: 'Cualificado', meeting_booked: 'Reunión', proposal: 'Propuesta', won: 'Ganado', lost: 'Perdido' }[id] || id)
-const serviceLabel = id => ({ brand_management: 'Gestión de marca', web_project: 'Webs y aplicaciones', digital_clinic: 'Clínica Digital', undecided: 'Por orientar' }[id] || 'Sin clasificar')
+const serviceLabel = id => ({ brand_management: 'Departamento de marketing', web_project: 'Páginas web', digital_clinic: 'Clínica Digital', undecided: 'Por orientar' }[id] || 'Sin clasificar')
 function safeWebsite(value) { try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : null } catch { return null } }
 async function saveNotes(lead) { try { await api.patch('/admin/leads/' + lead._id, { internal_notes: lead.internal_notes || '' }); toast.success('Notas guardadas') } catch (err) { toast.error(err.message) } }
 async function updateStage(lead, stage) { try { const result = await api.patch('/admin/leads/' + lead._id, { funnel_stage: stage }); Object.assign(lead, result.data) } catch (err) { toast.error(err.message) } }

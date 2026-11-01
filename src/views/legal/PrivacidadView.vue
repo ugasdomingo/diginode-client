@@ -18,7 +18,7 @@
           <div class="legal-databox">
             <p><strong>Responsable:</strong> Domingo Ugas (nombre comercial: Diginode)</p>
             <p><strong>NIE:</strong> Z0646506G</p>
-            <p><strong>Domicilio:</strong> [completar con dirección postal]</p>
+            <p><strong>Domicilio:</strong> Calle de Siena 9, 28027 Madrid</p>
             <p><strong>Correo electrónico:</strong> ugasdomingo@gmail.com</p>
             <p><strong>Teléfono:</strong> +34 604 822 385</p>
           </div>

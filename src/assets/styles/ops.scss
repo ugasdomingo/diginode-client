@@ -1,0 +1,350 @@
+@use "@/assets/styles/variables" as *;
+
+// Pantallas de operación y portal. Encajan en la paleta ya usada en el sitio.
+
+.ops-page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.ops-head {
+  display: flex;
+  justify-content: space-between;
+  gap: $space-4;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.ops-title {
+  font-family: $font-display;
+  font-size: clamp(1.7rem, 2vw, 2.1rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.ops-kicker {
+  color: $accent-light;
+  font-size: $text-xs;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: $space-2;
+}
+
+.ops-lead {
+  color: $text-muted;
+  max-width: 42rem;
+  margin-top: $space-2;
+}
+
+.ops-notice {
+  display: flex;
+  gap: $space-3;
+  align-items: flex-start;
+  padding: $space-3 $space-4;
+  border: 1px solid rgba(245, 166, 35, 0.35);
+  background: $accent-subtle;
+  border-radius: $radius;
+  color: $text;
+  font-size: $text-sm;
+
+  strong { color: $accent-light; }
+}
+
+.ops-state {
+  padding: $space-10 $space-4;
+  text-align: center;
+  color: $text-muted;
+  border: 1px dashed $border;
+  border-radius: $radius-lg;
+
+  &--error {
+    border-style: solid;
+    border-color: rgba(255, 107, 107, 0.35);
+    color: $text;
+  }
+
+  button {
+    margin-top: $space-4;
+    background: transparent;
+    color: $primary-light;
+    border: 1px solid $border-hover;
+    border-radius: $radius;
+    padding: $space-2 $space-4;
+    cursor: pointer;
+  }
+}
+
+.ops-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: $space-3;
+  align-items: start;
+}
+
+.ops-col {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  min-height: 120px;
+}
+
+.ops-col__head {
+  display: flex;
+  justify-content: space-between;
+  gap: $space-2;
+  align-items: baseline;
+  padding: 0 $space-1;
+
+  strong {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+  }
+
+  span {
+    color: $text-subtle;
+    font-family: $font-mono;
+    font-size: $text-xs;
+  }
+
+  p {
+    grid-column: 1 / -1;
+    color: $text-subtle;
+    font-size: $text-xs;
+  }
+}
+
+.ops-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-4;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  color: inherit;
+  text-decoration: none;
+  text-align: left;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: $border-hover;
+    transform: translateY(-2px);
+  }
+
+  h3, strong.ops-card__title {
+    color: $text;
+    font-size: $text-base;
+    font-family: $font-display;
+    letter-spacing: -0.02em;
+  }
+}
+
+.ops-card__meta {
+  color: $text-subtle;
+  font-size: $text-xs;
+}
+
+.ops-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  width: fit-content;
+  max-width: 100%;
+  white-space: normal;
+  padding: 2px $space-2;
+  border-radius: $radius-full;
+  background: $primary-subtle;
+  color: $primary-light;
+  font-size: $text-xs;
+
+  &--visit {
+    background: $accent-subtle;
+    color: $accent-light;
+  }
+
+  &--warn {
+    background: $warning-bg;
+    color: $accent-light;
+  }
+}
+
+.ops-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: $space-4;
+
+  @media (max-width: $bp-lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ops-panel {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: $space-5;
+}
+
+.ops-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 $space-4;
+  border-left: 2px solid rgba(30, 144, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.ops-timeline li {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * $space-4 - 5px);
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $primary;
+    box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.15);
+  }
+}
+
+.ops-timeline time {
+  display: block;
+  color: $text-subtle;
+  font-family: $font-mono;
+  font-size: $text-xs;
+  margin-bottom: $space-1;
+}
+
+.ops-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $text-sm;
+
+  th {
+    text-align: left;
+    color: $text-subtle;
+    font-weight: $fw-medium;
+    font-size: $text-xs;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: $space-2 $space-3;
+    border-bottom: 1px solid $border;
+  }
+
+  td {
+    padding: $space-3;
+    border-bottom: 1px solid $border;
+    vertical-align: top;
+    color: $text;
+  }
+
+  tr {
+    cursor: pointer;
+  }
+
+  tr[aria-selected='true'] {
+    background: $primary-subtle;
+  }
+
+  @media (max-width: $bp-md) {
+    display: block;
+    thead { display: none; }
+    tr, td { display: block; }
+    td { border: 0; padding: $space-1 $space-3; }
+    tr {
+      padding: $space-3 0;
+      border-bottom: 1px solid $border;
+    }
+  }
+}
+
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: $space-3;
+}
+
+.ops-stat {
+  padding: $space-4;
+  background: $bg-surface;
+  border-radius: $radius;
+  border: 1px solid $border;
+
+  span {
+    display: block;
+    color: $text-subtle;
+    font-size: $text-xs;
+    margin-bottom: $space-1;
+  }
+
+  strong {
+    font-family: $font-display;
+    font-size: $text-xl;
+    color: $text;
+  }
+}
+
+.ops-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.ops-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  span, label {
+    color: $text-muted;
+    font-size: $text-sm;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: $bg-input;
+    color: $text;
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: $space-3;
+    outline: none;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px $primary-glow;
+    }
+  }
+
+  textarea { min-height: 88px; resize: vertical; }
+}
+
+.ops-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.ops-link {
+  color: $primary-light;
+  font-size: $text-sm;
+}
+
+.ops-rise {
+  animation: ops-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ops-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ops-rise { animation: none; }
+  .ops-card:hover { transform: none; }
+}

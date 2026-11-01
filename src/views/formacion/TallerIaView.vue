@@ -169,6 +169,7 @@
           <RouterLink to="/legal/terminos">Términos</RouterLink>
           <RouterLink to="/legal/privacidad">Privacidad</RouterLink>
           <RouterLink to="/legal/cookies">Cookies</RouterLink>
+          <button type="button" @click="openCookies">Configurar cookies</button>
           <RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink>
         </nav>
       </footer>
@@ -187,11 +188,16 @@ import InscripcionForm from '@/views/formacion/InscripcionForm.vue'
 import { useTraining } from '@/data/trainings'
 import { useCheckout } from '@/composables/useCheckout'
 import { useSeo } from '@/composables/useSeo'
+import { useConsentStore } from '@/stores/consent'
 
 const SLUG = 'ia-para-terapeutas'
 
 const { training: t, loading, load } = useTraining(SLUG)
 const { buying, buyTraining } = useCheckout()
+const consent = useConsentStore()
+function openCookies() {
+  consent.openPanel()
+}
 
 useSeo({
   jsonLd: {
@@ -381,10 +387,15 @@ function reservar() {
     display: flex;
     gap: $space-4;
 
-    a {
+    a, button {
       color: $text-subtle;
       text-decoration: none;
       transition: $transition-fast;
+      background: none;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
 
       &:hover { color: $primary-light; }
     }

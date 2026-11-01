@@ -106,7 +106,7 @@
     <section class="section split agency-clinic">
       <div>
         <span class="eyebrow">Clínica Digital · Para quien trabaja por su cuenta</span>
-        <h2>¿Tienes una consulta?<br />También tenemos algo para ti.</h2>
+        <h2>¿Eres profesional independiente?<br />También tenemos algo para ti.</h2>
         <p class="intro">
           Para psicólogos, coaches y terapeutas: tu web profesional y tres asistentes con IA por
           {{ clinic.monthly }} €/mes, sin permanencia. El criterio clínico sigue en tus manos.

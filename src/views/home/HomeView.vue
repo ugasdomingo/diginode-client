@@ -101,15 +101,28 @@
           >
         </article>
       </div>
-      <p class="agency-clinic">
-        ¿Eres psicólogo, coach o terapeuta y trabajas por tu cuenta?
+    </section>
+
+    <section class="section split agency-clinic">
+      <div>
+        <span class="eyebrow">Clínica Digital · Para quien trabaja por su cuenta</span>
+        <h2>¿Tienes una consulta?<br />También tenemos algo para ti.</h2>
+        <p class="intro">
+          Para psicólogos, coaches y terapeutas: tu web profesional y tres asistentes con IA por
+          {{ clinic.monthly }} €/mes, sin permanencia. El criterio clínico sigue en tus manos.
+        </p>
         <RouterLink
           to="/clinica-digital"
           class="commercial-link"
           @click="trackEvent('digital_clinic_click')"
-          >Clínica Digital: web y asistentes con IA por {{ clinic.monthly }} €/mes ↗</RouterLink
+          >Ver Clínica Digital ↗</RouterLink
         >
-      </p>
+      </div>
+      <ul class="agency-clinic__team">
+        <li><strong>Nora</strong> Atiende las consultas administrativas.</li>
+        <li><strong>Alex</strong> Mantiene todo funcionando.</li>
+        <li><strong>Valeria</strong> Prepara tu contenido.</li>
+      </ul>
     </section>
 
     <section id="equipo" class="section">
@@ -117,8 +130,8 @@
         <span class="eyebrow">Qué incluye tu departamento</span>
         <h2>Todos los roles.<br />Una sola persona a la que llamar.</h2>
         <p class="intro">
-          Un experto en marketing y programador dirige tu cuenta. Agentes de IA trabajan a todas
-          horas siguiendo los lineamientos de tu marca. Cada criterio importante lo revisa una
+          Un responsable con más de 12 años en marketing dirige tu cuenta. Agentes de IA trabajan a
+          todas horas siguiendo los lineamientos de tu marca. Cada criterio importante lo revisa una
           persona.
         </p>
       </div>
@@ -223,10 +236,20 @@
       </div>
       <div>
         <p class="intro">
-          Aún no tenemos clientes que mostrarte. Las cifras de esta página son de fuentes públicas,
-          no resultados nuestros. Lo que sí tienes: atención directa de quien dirige Diginode, pocas
-          empresas a la vez y objetivos medibles acordados contigo antes de empezar.
+          Aún no tenemos clientes que mostrarte, y no te vamos a engañar con clientes que no
+          tenemos. Lo que sí tenemos es oficio: sabemos lo que hacemos.
         </p>
+        <dl class="agency-experience">
+          <div>
+            <dt>+12 años</dt>
+            <dd>trabajando en marketing: fundadores y responsables de Diginode.</dd>
+          </div>
+          <div>
+            <dt>+6 años</dt>
+            <dd>de experiencia de nuestro programador.</dd>
+          </div>
+        </dl>
+        <p>Las cifras de esta página son de fuentes públicas, no resultados nuestros.</p>
       </div>
     </section>
 
@@ -527,8 +550,38 @@ onMounted(load)
   font-size: 1.45rem;
   font-weight: 600;
 }
-.agency-clinic {
-  margin-top: 1.8rem;
+.agency-clinic__team {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    color: #acbacb;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(96, 176, 255, 0.2);
+  }
+  strong {
+    display: block;
+    color: #ffb94d;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+.agency-experience {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.8rem 0;
+  dt {
+    color: #ffb94d;
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+  }
+  dd {
+    margin: 0.3rem 0 0;
+    color: #acbacb;
+    line-height: 1.5;
+  }
 }
 .agency-roles {
   display: grid;

@@ -145,6 +145,31 @@ const routes = [
         component: () => import('@/views/admin/TrainingsView.vue'),
       },
       {
+        path: 'pipeline',
+        name: 'admin.pipeline',
+        component: () => import('@/views/admin/ops/PipelineView.vue'),
+      },
+      {
+        path: 'pipeline/:id',
+        name: 'admin.pipeline.lead',
+        component: () => import('@/views/admin/ops/LeadTimelineView.vue'),
+      },
+      {
+        path: 'aprobaciones',
+        name: 'admin.approvals',
+        component: () => import('@/views/admin/ops/ApprovalsView.vue'),
+      },
+      {
+        path: 'cartera',
+        name: 'admin.cartera',
+        component: () => import('@/views/admin/ops/CarteraView.vue'),
+      },
+      {
+        path: 'boveda',
+        name: 'admin.vault',
+        component: () => import('@/views/admin/ops/VaultView.vue'),
+      },
+      {
         path: 'leads',
         name: 'admin.leads',
         component: () => import('@/views/admin/LeadsView.vue'),
@@ -203,6 +228,26 @@ const routes = [
         path: 'dashboard',
         name: 'portal.dashboard',
         component: () => import('@/views/portal/PortalDashboardView.vue'),
+      },
+      {
+        path: 'piezas',
+        name: 'portal.pieces',
+        component: () => import('@/views/portal/PiezasView.vue'),
+      },
+      {
+        path: 'informes',
+        name: 'portal.reports',
+        component: () => import('@/views/portal/InformesView.vue'),
+      },
+      {
+        path: 'reuniones',
+        name: 'portal.meetings',
+        component: () => import('@/views/portal/ReunionesView.vue'),
+      },
+      {
+        path: 'facturas',
+        name: 'portal.facturas',
+        component: () => import('@/views/portal/FacturasView.vue'),
       },
       {
         path: 'invoices',

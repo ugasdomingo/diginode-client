@@ -9,6 +9,14 @@ export default [
   // 'essential' = correctness rules only; formatting is Prettier's job.
   ...pluginVue.configs['flat/essential'],
   {
+    files: ['tests/**/*.js', 'vitest.config.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.browser, ...globals.node },
+    },
+  },
+  {
     files: ['src/**/*.{js,vue}'],
     languageOptions: {
       ecmaVersion: 2022,

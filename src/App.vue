@@ -1,11 +1,13 @@
 <template>
   <RouterView />
   <AppToast />
+  <CookieConsent />
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 import AppToast from '@/components/ui/AppToast.vue'
+import CookieConsent from '@/components/consent/CookieConsent.vue'
 import { useToastStore } from '@/stores/toast'
 
 const toast = useToastStore()

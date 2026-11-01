@@ -1,5 +1,20 @@
-// Own audience measurement. Activation requires reviewing the actual deployment and privacy notice.
+import { hasConsent } from '@/lib/consent'
+
+// Own audience measurement. It stays off unless the environment flag is on
+// AND the visitor accepted the analytics category. No beacon leaves before that.
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
+
+export function analyticsAllowed({
+  envFlag = import.meta.env.VITE_ENABLE_ANALYTICS,
+  consent = hasConsent('analytics'),
+  doNotTrack = typeof navigator !== 'undefined' && (navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true),
+} = {}) {
+  if (envFlag !== 'true') return false
+  if (!consent) return false
+  if (doNotTrack) return false
+  return true
+}
 
 // Identificador de pestaña: aleatorio, en memoria y efímero. Solo sirve para
 // casar la entrada a una página con el tiempo que se estuvo en ella.
@@ -7,8 +22,8 @@ const sessionId = Math.random().toString(36).slice(2) + Date.now().toString(36)
 
 // Respetamos que alguien pida no ser medido, aunque la ley no nos obligue aquí.
 function optedOut() {
-  if (import.meta.env.VITE_ENABLE_ANALYTICS !== 'true' || typeof navigator === 'undefined') return true
-  return navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true
+  if (typeof navigator === 'undefined') return true
+  return !analyticsAllowed()
 }
 
 // Envío en segundo plano. keepalive permite que salga aunque la pestaña se esté
@@ -122,7 +137,8 @@ export function trackEvent(event) {
 
 /** Arranca los enganches del navegador. Se llama una vez, al iniciar la app. */
 export function initAnalytics() {
-  if (typeof document === 'undefined' || optedOut()) return
+  if (typeof document === 'undefined' || window.__dnAnalyticsInit) return
+  window.__dnAnalyticsInit = true
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
@@ -137,4 +153,7 @@ export function initAnalytics() {
   })
 
   window.addEventListener('pagehide', flush)
+  window.addEventListener('dn-consent-changed', () => {
+    if (!optedOut() && !currentPath) trackPageview(window.location.pathname)
+  })
 }

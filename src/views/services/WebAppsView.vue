@@ -155,7 +155,12 @@
           Cuéntanos el proceso y quién lo utiliza. Revisaremos tu caso para acordar una conversación
           y definir el alcance.
         </p>
-        <p>También en <a href="mailto:info@midiginode.com">info@midiginode.com</a>.</p>
+        <p>
+          También por
+          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>,
+          <a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram</a> o
+          <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
+        </p>
       </div>
       <LeadForm service="web_project" />
     </section>
@@ -165,6 +170,7 @@
 import { computed, ref } from 'vue'
 import LeadForm from '@/components/public/LeadForm.vue'
 import LazyNora from '@/components/public/LazyNora.vue'
+import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
 const quantity = ref(12),
   customization = ref('Sin personalización'),

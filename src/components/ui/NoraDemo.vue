@@ -9,7 +9,7 @@
         <div v-if="!messages.length" class="wa-row wa-row--nora"><div class="wa-bubble wa-bubble--nora"><span class="wa-bubble__text">{{ greeting }}</span></div></div>
         <div v-for="(message, index) in messages" :key="index" class="wa-row" :class="message.from === 'me' ? 'wa-row--me' : 'wa-row--nora'">
           <div class="wa-bubble" :class="message.from === 'me' ? 'wa-bubble--me' : 'wa-bubble--nora'"><span class="wa-bubble__text">{{ message.text }}</span>
-            <template v-for="action in message.actions" :key="action.href"><a v-if="action.type === 'booking'" class="wa-bubble__cta" :href="action.href" target="_blank" rel="noopener noreferrer" @click="trackEvent('booking_click')">{{ action.label }} ↗</a><RouterLink v-else class="wa-bubble__cta" :to="action.href">{{ action.label }}</RouterLink></template>
+            <template v-for="action in message.actions" :key="action.href"><a v-if="action.type === 'booking'" class="wa-bubble__cta" :href="action.href" target="_blank" rel="noopener noreferrer" @click="trackEvent('booking_click')">{{ action.label }} ↗</a><a v-else-if="action.type === 'direct'" class="wa-bubble__cta" :href="action.href" target="_blank" rel="noopener noreferrer">{{ action.label }} ↗</a><RouterLink v-else class="wa-bubble__cta" :to="action.href">{{ action.label }}</RouterLink></template>
             <span class="wa-bubble__time">{{ message.time }}</span>
           </div>
         </div>

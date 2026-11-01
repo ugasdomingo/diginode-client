@@ -16,10 +16,11 @@
           <h2>1. Responsable del tratamiento</h2>
           <p>El responsable del tratamiento de los datos personales recogidos a través de este sitio web y de los servicios de Diginode es:</p>
           <div class="legal-databox">
-            <p><strong>Denominación:</strong> Diginode [completar con razón social completa]</p>
-            <p><strong>NIF/CIF:</strong> [completar]</p>
+            <p><strong>Responsable:</strong> Domingo Ugas (nombre comercial: Diginode)</p>
+            <p><strong>NIE:</strong> Z0646506G</p>
             <p><strong>Domicilio:</strong> [completar con dirección postal]</p>
-            <p><strong>Correo electrónico:</strong> info@midiginode.com</p>
+            <p><strong>Correo electrónico:</strong> ugasdomingo@gmail.com</p>
+            <p><strong>Teléfono:</strong> +34 604 822 385</p>
           </div>
         </section>
 

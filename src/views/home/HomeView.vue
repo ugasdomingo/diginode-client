@@ -250,7 +250,10 @@
           plan con prioridades y precio cerrado.
         </p>
         <p>
-          También puedes escribir a <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
+          Si prefieres hablar ya:
+          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>,
+          <a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram</a> o
+          <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
         </p>
       </div>
       <LeadForm :scale="selectedScale" />
@@ -262,6 +265,7 @@ import { computed, onMounted, ref } from 'vue'
 import LeadForm from '@/components/public/LeadForm.vue'
 import LazyNora from '@/components/public/LazyNora.vue'
 import { useServices } from '@/data/services'
+import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
 const { services, load } = useServices()
 const byId = (id) => services.value.find((service) => service.id === id)

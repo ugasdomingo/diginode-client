@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useApi } from '@/composables/useApi'
 import { trackEvent } from '@/lib/analytics'
+import { CONTACT } from '@/data/contact'
 
 // Shared for the SPA session. Conversation text is never persisted in the browser.
 const messages = ref([]),
@@ -30,6 +31,7 @@ const time = () => new Date().toLocaleTimeString('es-ES', { hour: '2-digit', min
 export function allowedAction(action) {
   const paths = ['/#contacto', '/clinica-digital#contacto', '/webs-y-aplicaciones#contacto']
   if (action?.type === 'contact' && paths.includes(action.href)) return true
+  if (action?.type === 'direct') return action.href === CONTACT.whatsapp
   try {
     const url = new URL(action?.href)
     return action?.type === 'booking' && url.protocol === 'https:' && url.hostname === 'cal.com'

@@ -67,6 +67,8 @@
           ><RouterLink to="/legal/cookies">Cookies y medición</RouterLink
           ><RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink
           ><a href="mailto:info@midiginode.com">info@midiginode.com</a
+          ><a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a
+          ><a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram ↗</a
           ><a
             v-if="bookingUrl"
             :href="bookingUrl"
@@ -87,6 +89,7 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCheckout } from '@/composables/useCheckout'
 import { useServices } from '@/data/services'
+import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
 const mobileOpen = ref(false),
   route = useRoute(),

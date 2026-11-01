@@ -13,14 +13,15 @@
       <div class="legal-page__body">
 
         <section class="legal-section">
-          <h2>1. Datos identificativos del titular</h2><p class="legal-note">Preparación local: los datos identificativos siguientes están pendientes de completar con información real del responsable antes de publicar.</p>
+          <h2>1. Datos identificativos del titular</h2>
           <p>En cumplimiento de lo establecido en el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa al usuario de los siguientes datos identificativos del titular de este sitio web:</p>
           <div class="legal-databox">
-            <p><strong>Denominación social:</strong> Diginode [completar con razón social completa]</p>
-            <p><strong>NIF/CIF:</strong> [completar]</p>
+            <p><strong>Titular:</strong> Domingo Ugas (nombre comercial: Diginode)</p>
+            <p><strong>NIE:</strong> Z0646506G</p>
             <p><strong>Domicilio social:</strong> [completar con dirección postal completa]</p>
-            <p><strong>Correo electrónico de contacto:</strong> info@midiginode.com</p>
-            <p><strong>Datos de inscripción en el Registro Mercantil:</strong> [completar cuando proceda]</p>
+            <p><strong>Correo electrónico de contacto:</strong> ugasdomingo@gmail.com</p>
+            <p><strong>Teléfono, WhatsApp y Telegram:</strong> +34 604 822 385</p>
+            <p><strong>Registro Mercantil:</strong> no aplica (persona física)</p>
           </div>
         </section>
 

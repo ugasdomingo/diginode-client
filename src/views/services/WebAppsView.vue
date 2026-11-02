@@ -149,15 +149,14 @@
     </section>
     <section id="contacto" class="section split contact-section">
       <div class="contact-copy">
-        <span class="eyebrow">Hablemos del proyecto</span>
-        <h2>¿Qué debería ser más fácil en tu negocio?</h2>
+        <span class="eyebrow">Si la web no te está ayudando</span>
+        <h2>¿Qué se te está haciendo cuesta arriba?</h2>
         <p class="intro">
-          Cuéntanos el proceso y quién lo utiliza. Revisaremos tu caso para acordar una conversación
-          y definir el alcance.
+          Cuéntanos qué te frena en la web o en el día a día, y te decimos cómo lo resolveríamos.
         </p>
         <p>
           También por
-          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>,
+          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer" @click="trackContact('whatsapp', 'contact_section')">WhatsApp</a>,
           <a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram</a> o
           <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
         </p>
@@ -172,6 +171,7 @@ import LeadForm from '@/components/public/LeadForm.vue'
 import LazyNora from '@/components/public/LazyNora.vue'
 import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
+import { trackContact } from '@/lib/contactTracking'
 const quantity = ref(12),
   customization = ref('Sin personalización'),
   showExample = ref(false)

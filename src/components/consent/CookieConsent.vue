@@ -18,7 +18,8 @@
         <h2 id="consent-title">{{ consent.managing && consent.record ? 'Tus cookies' : 'Antes de seguir' }}</h2>
         <p class="consent__text">
           Este sitio es de Domingo Ugas. Lo necesario para entrar y recordar esta elección se guarda siempre.
-          La medición, la publicidad y los calendarios incrustados no se cargan hasta que lo dices.
+          Hay una medición anónima, sin cookies ni identificadores, que no depende de esta elección.
+          La cookie de visitas, la publicidad y los calendarios incrustados no se cargan hasta que lo dices.
         </p>
 
         <div v-if="showDetails" class="consent__options">
@@ -32,7 +33,7 @@
           <label class="consent__row">
             <span>
               <strong>Medición</strong>
-              <small>Páginas públicas visitadas, sin correos ni mensajes. El panel no se mide.</small>
+              <small>Cookie dn_vid para enlazar visitas de distintos días. Sin correos ni mensajes. El panel no se mide.</small>
             </span>
             <input v-model="draft.analytics" type="checkbox" />
           </label>

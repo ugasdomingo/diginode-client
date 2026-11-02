@@ -26,6 +26,12 @@
 
         <section class="legal-section">
           <h2>2. Datos personales que recogemos</h2><p>El formulario de revisión recoge nombre, empresa, email, necesidad y, opcionalmente, web, escala y presupuesto orientativo. Se utiliza para responder a la solicitud y preparar una conversación, sin crear una cuenta ni iniciar un cobro. No implica suscripción publicitaria.</p><p>La demo pública de Nora utiliza IA y conserva la conversación en el CRM. No introduzcas datos de pacientes ni información sensible. El navegador mantiene los mensajes solo en memoria durante la navegación; puede guardar un identificador aleatorio para aplicar los límites de la demo. Un correo de resumen se envía solo tras revisar y confirmar el destinatario y el contenido.</p>
+          <p>La medición de la web pública tiene tres niveles, descritos en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>:</p>
+          <ul>
+            <li><strong>Estadística agregada, sin consentimiento:</strong> ruta, dominio de procedencia, parámetros de campaña, tipo de dispositivo, idioma principal y clics de contacto (tipo y lugar). Sin nombre, correo, teléfono ni identificador. La dirección IP no se envía en el mensaje ni se guarda; el servidor solo deduce un país o una ciudad aproximados.</li>
+            <li><strong>Recorrido de la visita, si se marca la casilla del formulario:</strong> páginas de esa pestaña, clics de contacto y origen de la entrada, asociados a la solicitud. No es una cookie y se pierde al cerrar o recargar si no se envía.</li>
+            <li><strong>Cookie dn_vid, si se acepta la medición:</strong> un identificador aleatorio, durante 13 meses como máximo, para enlazar visitas de otros días. No se crea antes de aceptar y se borra al retirar el permiso.</li>
+          </ul>
           <p>En función de la interacción del usuario con nuestros servicios, podemos tratar las siguientes categorías de datos:</p>
           <ul>
             <li><strong>Datos de identificación:</strong> nombre, apellidos, correo electrónico, número de teléfono.</li>
@@ -64,6 +70,18 @@
                   <td>Consentimiento (art. 6.1.a RGPD)</td>
                 </tr>
                 <tr>
+                  <td>Estadística agregada de páginas y clics de contacto, sin cookies ni identificadores</td>
+                  <td>Interés legítimo (art. 6.1.f RGPD). No usa almacenamiento en el terminal</td>
+                </tr>
+                <tr>
+                  <td>Asociar el recorrido de la visita a una solicitud, si se marca la casilla</td>
+                  <td>Consentimiento (art. 6.1.a RGPD)</td>
+                </tr>
+                <tr>
+                  <td>Cookie dn_vid para enlazar visitas de distintos días</td>
+                  <td>Consentimiento (art. 6.1.a RGPD), el de la categoría de medición</td>
+                </tr>
+                <tr>
                   <td>Atender solicitudes comerciales y enviar el resumen expresamente confirmado</td>
                   <td>Gestión de la solicitud del interesado. La base aplicable y los plazos deben validarse antes de publicar.</td>
                 </tr>
@@ -90,7 +108,7 @@
           <p>Los datos se conservarán mientras dure la relación contractual y, una vez extinguida, durante los plazos establecidos por la legislación aplicable:</p>
           <ul>
             <li>Datos de facturación: durante los plazos legales aplicables que debe validar el responsable.</li>
-            <li>Solicitudes, conversaciones y soporte: mientras se gestiona la relación y durante el plazo que el responsable debe fijar antes de publicar. No hay un borrado automático general de conversaciones configurado en esta entrega.</li><li>Acciones pendientes de correo: caducan a los 10 minutos; las confirmaciones enviadas se conservan un día para evitar duplicados. Registros de medición, cuando se active: borrado automático a los 90 días.</li>
+            <li>Solicitudes, conversaciones y soporte: mientras se gestiona la relación y durante el plazo que el responsable debe fijar antes de publicar. No hay un borrado automático general de conversaciones configurado en esta entrega.</li><li>Acciones pendientes de correo: caducan a los 10 minutos; las confirmaciones enviadas se conservan un día para evitar duplicados. Registros de medición, cuando se activen, incluida la que usa la cookie dn_vid: borrado automático a los 90 días. La cookie en el navegador dura como máximo 13 meses y se borra antes si se retira el permiso. La estadística agregada no conserva la dirección IP. El recorrido asociado a una solicitud, si se aceptó la casilla, se conserva con esa solicitud, durante el plazo que el responsable debe fijar antes de publicar.</li>
             <li>Datos de marketing (con consentimiento): hasta la retirada del consentimiento.</li>
           </ul>
         </section>
@@ -106,7 +124,8 @@
             <li><strong>Portabilidad:</strong> recibir los datos en formato estructurado y de uso común.</li>
             <li><strong>Oposición:</strong> oponerse al tratamiento basado en interés legítimo o para fines de marketing.</li>
           </ul>
-          <p>Para ejercer cualquiera de estos derechos, el usuario puede dirigirse por correo electrónico a la dirección indicada en el apartado 1, aportando únicamente la información necesaria para verificar su identidad.</p>
+          <p>Para ejercer cualquiera de estos derechos, el usuario puede dirigirse por correo electrónico a la dirección indicada en el apartado 1, aportando únicamente la información necesaria para verificar su identidad. Eso incluye el acceso a la medición o al recorrido asociado a una solicitud, la exportación de una copia y la supresión.</p>
+          <p>La cookie dn_vid se borra del navegador al retirar la medición en «Configurar cookies» o en «Cambiar mi elección», en la página de cookies. El recorrido de la visita no llega a guardarse si el formulario se envía sin la casilla. No hay en esta web un botón automático de descarga: la copia se pide por el mismo correo.</p>
           <p>Sin perjuicio de lo anterior, el usuario tiene derecho a presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong> en <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>.</p>
         </section>
 
@@ -118,7 +137,7 @@
 
         <section class="legal-section">
           <h2>8. Cookies y medición de visitas</h2>
-          <p>La publicidad está desactivada. La medición y los contenidos incrustados no se cargan hasta que la persona lo acepta. Rechazarlos no impide usar la web. La elección se puede cambiar desde el pie de página. El detalle está en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>.</p>
+          <p>La publicidad está desactivada. La medición anónima del nivel A no usa cookies y no depende de la elección. El recorrido del nivel B solo se envía si se marca la casilla del formulario. La cookie dn_vid y los contenidos incrustados no se cargan hasta que la persona lo acepta. Rechazarlos no impide usar la web. La elección se puede cambiar desde el pie de página. El detalle está en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>.</p>
           <p class="legal-note">⚠️ Nota: Este documento es un borrador informativo generado para tu revisión. Se recomienda su validación por un profesional del derecho (Delegado de Protección de Datos o abogado especialista en privacidad) antes de su publicación.</p>
         </section>
 

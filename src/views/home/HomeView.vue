@@ -266,15 +266,14 @@
 
     <section id="contacto" class="section split contact-section">
       <div class="contact-copy">
-        <span class="eyebrow">El siguiente paso</span>
-        <h2>Cuéntanos qué vendes.<br />Nosotros pensamos el resto.</h2>
+        <span class="eyebrow">Cuando el marketing se atasca</span>
+        <h2>¿Qué te está quitando tiempo?</h2>
         <p class="intro">
-          Leemos tu caso, miramos tu negocio y te proponemos una conversación. Después recibes un
-          plan con prioridades y precio cerrado.
+          Cuéntanos qué te preocupa de tu marketing y te decimos cómo lo resolveríamos.
         </p>
         <p>
-          Si prefieres hablar ya:
-          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>,
+          Si prefieres hablarlo de otra forma:
+          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer" @click="trackContact('whatsapp', 'contact_section')">WhatsApp</a>,
           <a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram</a> o
           <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
         </p>
@@ -290,6 +289,7 @@ import LazyNora from '@/components/public/LazyNora.vue'
 import { useServices } from '@/data/services'
 import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
+import { trackContact } from '@/lib/contactTracking'
 const { services, load } = useServices()
 const byId = (id) => services.value.find((service) => service.id === id)
 const management = computed(() => byId('brand_management'))

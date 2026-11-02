@@ -9,6 +9,20 @@ export default [
   // 'essential' = correctness rules only; formatting is Prettier's job.
   ...pluginVue.configs['flat/essential'],
   {
+    files: ['api/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        fetch: 'readonly',
+        Headers: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+      },
+    },
+  },
+  {
     files: ['tests/**/*.js', 'vitest.config.js'],
     languageOptions: {
       ecmaVersion: 2022,

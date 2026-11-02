@@ -52,7 +52,7 @@ const routes = [
         component: () => import('@/views/legal/CookiesView.vue'),
         meta: {
           title: 'Política de cookies | DigiNode',
-          description: 'Información sobre almacenamiento funcional, medición propia y publicidad desactivada.',
+          description: 'Medición anónima sin cookies, recorrido asociado a una solicitud y cookie de visitas dn_vid. La publicidad está desactivada.',
         },
       },
       {

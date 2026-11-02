@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { hasConsent, readConsent, writeConsent } from '@/lib/consent'
+import { hasConsent, readConsent, syncVisitorCookie, writeConsent } from '@/lib/consent'
 
 export const useConsentStore = defineStore('consent', () => {
   const record = ref(null)
@@ -15,6 +15,7 @@ export const useConsentStore = defineStore('consent', () => {
     if (hydrated.value) return
     record.value = readConsent()
     hydrated.value = true
+    syncVisitorCookie()
     if (!record.value) {
       panelOpen.value = true
       managing.value = false

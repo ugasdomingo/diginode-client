@@ -16,6 +16,9 @@ import '@/assets/styles/main.scss'
 import '@/assets/styles/commercial.scss'
 import { initPixel, track } from '@/lib/pixel'
 import { initAnalytics, trackPageview } from '@/lib/analytics'
+import { trackAnonPageview } from '@/lib/anonAnalytics'
+import { syncVisitorCookie } from '@/lib/consent'
+import { rememberPageview } from '@/lib/journey'
 
 // After a deploy, an open tab asks for chunks that no longer exist. Reload once to get the new build.
 window.addEventListener('vite:preloadError', (event) => {
@@ -36,12 +39,15 @@ app.use(createPinia())
 app.use(router)
 
 initPixel()
+syncVisitorCookie()
 initAnalytics()
 
 // Measurement is explicitly enabled by environment; advertising remains disabled.
 router.afterEach((to) => {
   track('PageView')
   trackPageview(to.path)
+  trackAnonPageview(to.path, { query: to.query })
+  rememberPageview(to.path, { query: to.query })
 })
 
 app.mount('#app')

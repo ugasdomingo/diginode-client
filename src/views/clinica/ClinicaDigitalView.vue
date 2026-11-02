@@ -59,7 +59,7 @@
     </div>
   </div>
   <section class="section"><span class="eyebrow">Clínica Digital</span><h2>Tu consulta, con apoyo administrativo.</h2><p class="intro">Nora atiende consultas administrativas, Alex apoya el mantenimiento y Valeria prepara contenido. El criterio clínico permanece en manos del profesional. Esta demo no utiliza datos reales de pacientes.</p><div class="commercial-actions"><RouterLink to="/es-para-mi" class="commercial-link">¿Es para mi consulta?</RouterLink><RouterLink to="/faq" class="commercial-link">Ver condiciones y preguntas frecuentes</RouterLink><RouterLink to="/login" class="commercial-link">Ya soy cliente</RouterLink></div></section>
-  <section id="contacto" class="section split contact-section"><div><span class="eyebrow">Resuelve tus dudas</span><h2>Hablemos de tu consulta.</h2><p class="intro">Puedes contratar con el botón de Clínica Digital o consultarnos antes. Este formulario no inicia ningún cobro.</p></div><LeadForm service="digital_clinic" /></section>
+  <section id="contacto" class="section split contact-section"><div><span class="eyebrow">Si la consulta te desborda</span><h2>¿Qué parte administrativa te está quitando tiempo?</h2><p class="intro">Cuéntanos qué te preocupa. Este formulario no cobra nada ni te apunta a una lista.</p></div><LeadForm service="digital_clinic" /></section>
   </div>
 </template>
 

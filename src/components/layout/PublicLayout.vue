@@ -22,6 +22,7 @@
             >Páginas web</RouterLink
           ><RouterLink to="/clinica-digital" @click="mobileOpen = false">Clínica Digital</RouterLink
           ><RouterLink :to="clientLink" @click="mobileOpen = false">Soy cliente</RouterLink>
+          <ContactDock mode="header" />
           <button
             v-if="isClinic"
             type="button"
@@ -67,8 +68,13 @@
           ><RouterLink to="/legal/cookies">Cookies y medición</RouterLink
           ><button type="button" class="footer-consent" @click="openConsent">Configurar cookies</button
           ><RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink
-          ><a href="mailto:info@midiginode.com">info@midiginode.com</a
-          ><a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a
+          ><a :href="`mailto:${CONTACT.publicEmail}`">{{ CONTACT.publicEmail }}</a
+          ><a
+            :href="CONTACT.whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="trackContact('whatsapp', 'footer')"
+            >WhatsApp ↗</a
           ><a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram ↗</a
           ><a
             v-if="bookingUrl"
@@ -82,6 +88,7 @@
       </div>
       <p class="public-footer__bottom">© {{ year }} Diginode</p>
     </footer>
+    <ContactDock mode="fab" :menu-open="mobileOpen" />
   </div>
 </template>
 <script setup>
@@ -92,7 +99,9 @@ import { useCheckout } from '@/composables/useCheckout'
 import { useServices } from '@/data/services'
 import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
+import { trackContact } from '@/lib/contactTracking'
 import { useConsentStore } from '@/stores/consent'
+import ContactDock from '@/components/public/ContactDock.vue'
 const mobileOpen = ref(false),
   route = useRoute(),
   auth = useAuthStore(),
@@ -158,7 +167,7 @@ onMounted(load)
   nav {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   nav a:not(.commercial-button) {
     color: #b5c3d4;

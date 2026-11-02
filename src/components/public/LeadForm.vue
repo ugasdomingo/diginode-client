@@ -1,11 +1,11 @@
 <template>
   <div class="lead-form">
     <div v-if="receipt" ref="receiptEl" class="lead-form__receipt" role="status" tabindex="-1">
-      <span class="eyebrow">Solicitud recibida</span>
-      <h3>Ya tenemos el punto de partida.</h3>
+      <span class="eyebrow">Lo hemos leído</span>
+      <h3>Gracias por contárnoslo.</h3>
       <p>{{ receipt.message }}</p>
       <p>
-        No te has suscrito a publicidad. Si necesitas añadir algo, escribe a
+        No te has suscrito a publicidad. Si quieres añadir algo, escribe a
         <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
       </p>
       <a
@@ -15,10 +15,14 @@
         rel="noopener noreferrer"
         class="commercial-button"
         @click="trackEvent('booking_click')"
-        >Concertar una reunión real ↗</a
+        >Si te encaja, lo hablamos en una llamada ↗</a
       >
     </div>
     <form v-else @submit.prevent="submit">
+      <div class="lead-form__intro">
+        <h3>Cuéntanos qué te preocupa</h3>
+        <p>De lo que te frena ahora. Con eso te decimos cómo lo resolveríamos.</p>
+      </div>
       <div class="lead-form__grid">
         <label
           >Tu nombre
@@ -51,15 +55,15 @@
             maxlength="254"
         /></label>
         <label
-          >¿Qué necesitas?<select v-model="form.service_interest" name="service">
-            <option value="brand_management">Departamento de marketing completo</option>
-            <option value="web_project">Solo página web o aplicación</option>
-            <option value="digital_clinic">Clínica Digital</option>
-            <option value="undecided">Necesito orientación</option>
+          >¿Por dónde te ayudamos?<select v-model="form.service_interest" name="service">
+            <option value="brand_management">El marketing, en general</option>
+            <option value="web_project">La web o una herramienta</option>
+            <option value="digital_clinic">La parte administrativa de la consulta</option>
+            <option value="undecided">Aún no lo tengo claro</option>
           </select></label
         >
         <label v-if="form.service_interest === 'brand_management'"
-          >Tu operación<select v-model="form.requested_scale" name="scale">
+          >Cómo es tu día a día<select v-model="form.requested_scale" name="scale">
             <option value="pending">Lo vemos juntos</option>
             <option value="micro">Microempresa</option>
             <option value="sme">Pyme</option>
@@ -75,12 +79,8 @@
             maxlength="500"
         /></label>
         <label v-if="['brand_management', 'web_project'].includes(form.service_interest)"
-          >{{
-            form.service_interest === 'web_project'
-              ? 'Inversión de proyecto'
-              : 'Presupuesto mensual'
-          }}
-          <span>(orientativo, opcional)</span
+          >Si ya barajas una cifra
+          <span>(opcional, no hace falta)</span>
           ><select v-model="form.budget_range" name="budget">
             <option value="pending">Pendiente de definir</option>
             <option v-for="budget in budgets" :key="budget.value" :value="budget.value">
@@ -90,33 +90,41 @@
         >
       </div>
       <label
-        >¿Qué te gustaría resolver?<textarea
+        >¿Qué te está costando?<textarea
           v-model="form.goal"
           name="goal"
           rows="4"
           minlength="10"
           maxlength="2000"
           required
-          placeholder="Qué vendes, a quién y qué te quita más tiempo o clientes hoy."
+          placeholder="Qué te quita tiempo, qué te preocupa del marketing y qué te gustaría que fuera más fácil."
         />
       </label>
       <label class="lead-form__trap" aria-hidden="true"
         >Deja este campo vacío<input v-model="honeypot" tabindex="-1" autocomplete="off" name="fax"
       /></label>
       <label class="lead-form__privacy"
-        ><input v-model="acknowledged" type="checkbox" required />
+        ><input v-model="acknowledged" type="checkbox" name="privacy" required />
         <span
           >He leído la <RouterLink to="/legal/privacidad">información de privacidad</RouterLink>.
           Usaremos estos datos para responder a mi solicitud; no para suscribirme a
           publicidad.</span
         ></label
       >
+      <label class="lead-form__privacy lead-form__journey">
+        <input v-model="journeyConsent" type="checkbox" name="journey_consent" />
+        <span
+          >Acepto que Diginode asocie mi visita a mi solicitud (<RouterLink to="/legal/privacidad"
+            >política de privacidad</RouterLink
+          >).</span
+        >
+      </label>
       <p v-if="error" role="alert" class="lead-form__error">{{ error }} Tus datos siguen aquí.</p>
       <button type="submit" class="commercial-button" :disabled="sending">
-        {{ sending ? 'Enviando solicitud…' : 'Enviar solicitud' }} <span aria-hidden="true">↗</span>
+        {{ sending ? 'Enviando…' : 'Cuéntanoslo' }} <span aria-hidden="true">↗</span>
       </button>
       <p class="lead-form__note">
-        Leemos tu caso, miramos tu negocio y te proponemos una conversación. Sin cuenta ni cobro.
+        Lo leemos nosotros y te decimos cómo lo resolveríamos. Sin cuenta ni cobro.
       </p>
     </form>
   </div>
@@ -127,6 +135,10 @@ import { useRoute } from 'vue-router'
 import { useApi } from '@/composables/useApi'
 import { useServices } from '@/data/services'
 import { trackEvent } from '@/lib/analytics'
+import { trackContact } from '@/lib/contactTracking'
+import { JOURNEY_CONSENT_VERSION, readVisitorId } from '@/lib/consent'
+import { currentJourney } from '@/lib/journey'
+import { publicPath, roundedIso } from '@/lib/measureContext'
 const props = defineProps({
   service: { type: String, default: 'brand_management' },
   scale: { type: String, default: 'pending' },
@@ -145,6 +157,7 @@ const form = reactive({
 })
 const honeypot = ref(''),
   acknowledged = ref(false),
+  journeyConsent = ref(false),
   sending = ref(false),
   error = ref(''),
   receipt = ref(null),
@@ -195,6 +208,22 @@ async function submit() {
     privacy_acknowledged: true,
     honeypot: honeypot.value,
   }
+  if (journeyConsent.value) {
+    const journey = currentJourney()
+    const formAt = roundedIso()
+    journey.events.push({
+      type: 'contact_click',
+      path: content.landing_path,
+      at: formAt,
+      contact_type: 'form',
+      location: 'contact_section',
+    })
+    journey.consent = { version: JOURNEY_CONSENT_VERSION, at: formAt }
+    content.journey = journey
+    content.journey_consent = true
+    const visitorId = readVisitorId()
+    if (visitorId) content.visitor_id = visitorId
+  }
   const fingerprint = JSON.stringify(content)
   if (!submission || submission.fingerprint !== fingerprint)
     submission = { fingerprint, id: crypto.randomUUID() }
@@ -202,6 +231,7 @@ async function submit() {
   try {
     receipt.value = await useApi().post('/leads', { request_id: submission.id, ...content })
     trackEvent('lead_submit_success')
+    trackContact('form', 'contact_section', publicPath(content.landing_path) || content.landing_path)
     await nextTick()
     receiptEl.value?.focus()
   } catch (err) {
@@ -262,6 +292,19 @@ onMounted(load)
   }
   textarea {
     resize: vertical;
+  }
+  &__intro {
+    display: grid;
+    gap: 0.35rem;
+    h3 {
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+    p {
+      margin: 0;
+      color: $text-muted;
+      line-height: 1.6;
+    }
   }
   &__grid {
     display: grid;

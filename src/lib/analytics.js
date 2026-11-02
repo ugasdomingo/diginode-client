@@ -1,4 +1,4 @@
-import { hasConsent } from '@/lib/consent'
+import { hasConsent, readVisitorId } from '@/lib/consent'
 
 // Own audience measurement. It stays off unless the environment flag is on
 // AND the visitor accepted the analytics category. No beacon leaves before that.
@@ -38,7 +38,12 @@ function optedOut() {
 function send(endpoint, payload) {
   if (optedOut()) return
   const url = `${BASE_URL}/analytics/${endpoint}`
-  const body = JSON.stringify({ ...payload, session_id: sessionId })
+  const visitor_id = readVisitorId()
+  const body = JSON.stringify({
+    ...payload,
+    session_id: sessionId,
+    ...(visitor_id ? { visitor_id } : {}),
+  })
 
   try {
     if (navigator.sendBeacon) {
@@ -128,11 +133,14 @@ export function trackPageview(path, { referrer } = {}) {
 }
 
 /** Marca un hito de conversión sobre la visita en curso. */
-const EVENTS = ['checkout_click', 'purchase', 'lead_cta_click', 'lead_submit_success', 'demo_start', 'booking_click', 'web_project_click', 'digital_clinic_click']
-export function trackEvent(event) {
+const EVENTS = ['checkout_click', 'purchase', 'lead_cta_click', 'lead_submit_success', 'demo_start', 'booking_click', 'web_project_click', 'digital_clinic_click', 'contact_call_click', 'contact_whatsapp_click', 'contact_form_submit']
+const CONTACT_LOCATIONS = ['header', 'fab', 'contact_section', 'footer', 'nora']
+export function trackEvent(event, details = {}) {
   if (!EVENTS.includes(event)) return
   if (optedOut()) return
-  send('event', { path: currentPath, event })
+  const payload = { path: currentPath, event }
+  if (CONTACT_LOCATIONS.includes(details.location)) payload.location = details.location
+  send('event', payload)
 }
 
 /** Arranca los enganches del navegador. Se llama una vez, al iniciar la app. */

@@ -3,8 +3,8 @@ import fs from 'node:fs/promises'
 const SITE = 'https://midiginode.com'
 const headings = {
   '/': 'Descansa.',
-  '/clinica-digital': 'Tu clínica digital',
-  '/webs-y-aplicaciones': 'Una web que ayuda a vender.',
+  '/clinica-digital': '¿Pasas más tiempo contestando',
+  '/webs-y-aplicaciones': '¿Tu web no te trae',
 }
 const titles = []
 for (const [route, heading] of Object.entries(headings)) {
@@ -22,8 +22,15 @@ for (const [route, heading] of Object.entries(headings)) {
     html.includes(`<meta property="og:url" content="${SITE}${route}"`),
     `Wrong Open Graph URL: ${route}`
   )
-  assert(html.includes('id="contacto"'), `No initial contact section: ${route}`)
-  assert(html.includes('name="company"'), `No initial form: ${route}`)
+  const clinic = route === '/clinica-digital'
+  assert(
+    html.includes(clinic ? 'id="demo-nora"' : 'id="contacto"'),
+    `No initial contact section: ${route}`
+  )
+  assert(
+    html.includes(clinic ? 'Contratar Clínica Digital' : 'Solicitar mi propuesta'),
+    `No initial call to action: ${route}`
+  )
   assert(!html.includes('[CAL_BOOKING_LINK]'), `Placeholder link: ${route}`)
   assert(html.includes('id="route-jsonld"'), `Missing structured data: ${route}`)
   const css = [...html.matchAll(/rel="stylesheet"[^>]*href="([^"]+)"/g)]

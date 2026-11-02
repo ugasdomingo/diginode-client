@@ -35,7 +35,7 @@
           <h2>3. Proceso de contratación</h2>
           <p>La contratación se formaliza mediante los siguientes pasos:</p>
           <ol>
-            <li>El Cliente contrata directamente desde el sitio web a través de la plataforma de pago Stripe, abonando la primera cuota mensual.</li>
+            <li>El Cliente contrata directamente desde el sitio web a través de la plataforma de pago Stripe, abonando la cuota de instalación y la primera cuota mensual.</li>
             <li>Tras el pago, el Cliente recibe acceso a su panel y completa un formulario de bienvenida con la información de su consulta.</li>
             <li>Diginode configura y entrega la web y los empleados IA en un plazo estimado de siete (7) días desde la recepción del formulario.</li>
           </ol>
@@ -43,7 +43,7 @@
 
         <section class="legal-section">
           <h2>4. Precios y facturación</h2>
-          <p>El precio del servicio Clínica Digital es una cuota única de <strong>150 € al mes</strong>, sin coste de configuración inicial ni permanencia mínima. El registro del dominio corre a cargo del Cliente por ser de su propiedad.</p>
+          <p>El precio del servicio Clínica Digital consiste en una cuota de instalación de <strong>450 €</strong>, que se abona una sola vez con el primer pago, y una cuota de <strong>150 € al mes</strong>, sin permanencia mínima. El registro del dominio corre a cargo del Cliente por ser de su propiedad.</p>
           <p>Todos los precios están expresados en euros e incluyen el IVA aplicable según la legislación española vigente. Diginode se reserva el derecho de modificar sus tarifas con un preaviso de 30 días naturales al Cliente; dicha modificación no afectará a las cuotas ya abonadas ni al cómputo de las doce (12) cuotas de la opción a compra ya iniciada.</p>
           <p>Las cuotas mensuales se cobran de forma automática a través de Stripe.</p>
         </section>

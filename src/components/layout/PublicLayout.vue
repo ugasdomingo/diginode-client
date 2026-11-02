@@ -20,7 +20,6 @@
           <RouterLink to="/" @click="mobileOpen = false">Departamento de marketing</RouterLink
           ><RouterLink to="/webs-y-aplicaciones" @click="mobileOpen = false"
             >Páginas web</RouterLink
-          ><RouterLink to="/clinica-digital" @click="mobileOpen = false">Clínica Digital</RouterLink
           ><RouterLink :to="clientLink" @click="mobileOpen = false">Soy cliente</RouterLink>
           <button
             v-if="isClinic"

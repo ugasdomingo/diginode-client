@@ -29,7 +29,7 @@ function contactId() {
 }
 const time = () => new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
 export function allowedAction(action) {
-  const paths = ['/#contacto', '/clinica-digital#contacto', '/webs-y-aplicaciones#contacto']
+  const paths = ['/#contacto', '/clinica-digital#contacto', '/clinica-digital#demo-nora', '/webs-y-aplicaciones#contacto']
   if (action?.type === 'contact' && paths.includes(action.href)) return true
   if (action?.type === 'direct') return action.href === CONTACT.whatsapp
   try {

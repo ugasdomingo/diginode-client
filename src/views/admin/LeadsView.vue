@@ -77,7 +77,7 @@
                   {{ lead.platform }}
                 </AppBadge>
               </td>
-              <td class="cell-muted lead-detail"><strong>{{ serviceLabel(lead.service_interest) }}</strong><p>{{ sourceLabel(lead.source) }}</p><p>{{ lead.goal || 'Sin objetivo registrado' }}</p><p>{{ scaleLabel(lead.requested_scale) }} · {{ budgetLabel(lead.budget_range) }}</p><a v-if="safeWebsite(lead.website)" :href="safeWebsite(lead.website)" target="_blank" rel="noopener noreferrer">Web del negocio ↗</a><p v-if="lead.booking_review_ids?.length">Reserva pendiente de asociación manual: {{ lead.booking_review_ids.join(', ') }}</p><p v-if="lead.notification_status === 'pending'">Aviso interno pendiente de reintento</p><details><summary>Seguimiento y notas internas</summary><label>Etapa<select :value="lead.funnel_stage" @change="updateStage(lead, $event.target.value)"><option v-for="stage in stages" :key="stage" :value="stage">{{ stageLabel(stage) }}</option></select></label><textarea v-model="lead.internal_notes" maxlength="4000" aria-label="Notas internas" /><button type="button" @click="saveNotes(lead)">Guardar notas</button></details></td>
+              <td class="cell-muted lead-detail"><strong>{{ serviceLabel(lead.service_interest) }}</strong><p>{{ sourceLabel(lead.source) }}</p><p>{{ lead.goal || 'Sin objetivo registrado' }}</p><p>{{ scaleLabel(lead.requested_scale) }} · {{ budgetLabel(lead.budget_range) }}</p><a v-if="safeWebsite(lead.website)" :href="safeWebsite(lead.website)" target="_blank" rel="noopener noreferrer">Web del negocio ↗</a><p v-if="lead.booking_review_ids?.length">Reserva pendiente de asociación manual: {{ lead.booking_review_ids.join(', ') }}</p><p v-if="lead.notification_status === 'pending'">Aviso interno pendiente de reintento</p><LeadProposals v-if="lead.source === 'web_form'" :lead="lead" /><details><summary>Seguimiento y notas internas</summary><label>Etapa<select :value="lead.funnel_stage" @change="updateStage(lead, $event.target.value)"><option v-for="stage in stages" :key="stage" :value="stage">{{ stageLabel(stage) }}</option></select></label><textarea v-model="lead.internal_notes" maxlength="4000" aria-label="Notas internas" /><button type="button" @click="saveNotes(lead)">Guardar notas</button></details></td>
               <td>
                 <AppBadge :variant="statusVariant(lead.status)">
                   {{ statusLabel(lead.status) }}
@@ -156,6 +156,7 @@ import {
   Monitor, UserCheck, ChevronLeft, ChevronRight, Trash2,
 } from 'lucide-vue-next'
 import { useApi } from '@/composables/useApi'
+import LeadProposals from '@/components/admin/LeadProposals.vue'
 import { useToastStore } from '@/stores/toast'
 import AppCard    from '@/components/ui/AppCard.vue'
 import AppBadge   from '@/components/ui/AppBadge.vue'

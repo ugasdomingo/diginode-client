@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     q: '¿Cuánto cuesta? ¿Hay costes ocultos?',
-    a: 'Una única cuota de 150€ al mes. Sin coste de instalación, sin permanencia y sin sorpresas: el precio que ves es el precio que pagas. Lo único que va aparte es tu dominio (unos 10-15€ al año), porque es tuyo y va a tu nombre.',
+    a: '450€ de instalación una sola vez y después 150€ al mes, sin permanencia y sin sorpresas: el precio que ves es el precio que pagas. Lo único que va aparte es tu dominio (unos 10-15€ al año), porque es tuyo y va a tu nombre.',
   },
   {
     q: '¿Quiénes son los 3 empleados IA y qué hacen por mí?',
@@ -94,7 +94,7 @@ const faqs = [
 
 useSeo({
   title: 'Preguntas frecuentes — Clínica Digital para psicólogos, coaches y terapeutas | DigiNode',
-  description: 'Resuelve tus dudas sobre la Clínica Digital: precio de 150€/mes, cancelación sin permanencia, alquiler con opción a compra a 12 meses y propiedad de tu dominio y datos.',
+  description: 'Resuelve tus dudas sobre la Clínica Digital: 450€ de instalación y 150€/mes, cancelación sin permanencia, alquiler con opción a compra a 12 meses y propiedad de tu dominio y datos.',
   jsonLd: {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

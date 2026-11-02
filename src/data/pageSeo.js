@@ -5,7 +5,7 @@ export const PAGE_SEO = {
   '/': {
     title: 'Diginode — Tu departamento de marketing para microempresas y pymes',
     description:
-      'Descansa, nosotros nos encargamos de todo: marca, web, publicidad, redes y mensajes, con un plan a medida. Hasta un 78 % menos que contratar a un responsable.',
+      '¿Tu marketing no se nota en tus ingresos? Unimos redes, anuncios, web, tu local y el boca a boca en un solo plan para traerte clientes. Descansa, nosotros nos encargamos de todo.',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
@@ -19,7 +19,7 @@ export const PAGE_SEO = {
   '/webs-y-aplicaciones': {
     title: 'Creación de páginas web para vender desde 1.900 € | Diginode',
     description:
-      'Webs comerciales, catálogos y aplicaciones a medida, sin obligación de contratar marketing. Alcance, validación, propiedad y mantenimiento por escrito.',
+      'Diseñamos y construimos a medida la web que tu negocio necesita para vender. Sin plantillas y tuya desde el primer día. Desde 1.900 € + IVA.',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Service',
@@ -31,7 +31,7 @@ export const PAGE_SEO = {
   },
   '/clinica-digital': {
     title: 'Clínica Digital para psicólogos, coaches y terapeutas | Diginode',
-    description: `Web profesional y tres empleados IA para tu consulta. ${clinic.monthly} €/mes, sin permanencia. Prueba a Nora y consulta las condiciones de Clínica Digital.`,
+    description: `Tu web profesional y tres asistentes con IA que atienden, agendan y publican por ti. ${clinic.setup} € de instalación y ${clinic.monthly} €/mes, sin permanencia. Prueba a Nora.`,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Product',

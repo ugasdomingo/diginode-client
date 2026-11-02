@@ -75,6 +75,12 @@ const routes = [
         name: 'blog.post',
         component: () => import('@/views/blog/BlogPostView.vue'),
       },
+      {
+        path: 'propuesta/:token',
+        name: 'proposal',
+        component: () => import('@/views/proposal/ProposalView.vue'),
+        meta: { title: 'Tu propuesta | Diginode', noindex: true },
+      },
       // Rutas antiguas → home (mantienen vivos los enlaces indexados/compartidos)
       { path: 'demo', redirect: '/clinica-digital#demo-nora' },
       { path: 'plan', redirect: '/clinica-digital' },
@@ -264,7 +270,7 @@ router.beforeEach((to) => {
 router.afterEach(to => {
   if (typeof document === 'undefined') return
   const path = to.path.replace(/\/+$/, '') || '/'
-  applySeo({ ...PAGE_SEO['/'], ...to.meta, path, jsonLd: PAGE_SEO[path]?.jsonLd ?? null, noindex: !to.meta.public })
+  applySeo({ ...PAGE_SEO['/'], ...to.meta, path, jsonLd: PAGE_SEO[path]?.jsonLd ?? null, noindex: !to.meta.public || !!to.meta.noindex })
 })
 return router
 }

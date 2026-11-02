@@ -5,7 +5,7 @@ import { useApi } from '@/composables/useApi'
 // Solo se usa si GET /api/plans falla (red caída / API abajo) para que la web
 // nunca muestre precios vacíos. La fuente de verdad es la API.
 const FALLBACK_PLANS = [
-  { slug: 'clinica', name: 'Clínica Digital', monthly: 150, monthly_promo: null, promo_months: 0, setup: 0, employees_included: 3, role: 'flagship' },
+  { slug: 'clinica', name: 'Clínica Digital', monthly: 150, monthly_promo: null, promo_months: 0, setup: 450, employees_included: 3, role: 'flagship' },
 ]
 
 // Module-level singleton so the list is fetched once and shared across views.

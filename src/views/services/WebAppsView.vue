@@ -1,221 +1,85 @@
 <template>
-  <div class="commercial-page">
-    <section class="section split">
-      <div>
-        <span class="eyebrow">Solo página web · Sin contratar marketing · Desde 1.900 € + IVA</span>
-        <h1>Una web que ayuda a vender.<br />Una aplicación que facilita trabajar.</h1>
-        <p class="intro">
-          Del primer contacto al presupuesto. Del trabajo repetido a un proceso claro. Diseñamos y
-          construimos la herramienta que necesita tu operación, con alcance, fases y entrega
-          acordados.
-        </p>
-        <div class="commercial-actions">
-          <a href="#contacto" class="commercial-button" @click="trackEvent('lead_cta_click')"
-            >Hablar de mi proyecto ↗</a
-          ><a href="#ejemplo" class="commercial-link">Ver un ejemplo ↓</a>
+  <div class="commercial-page landing">
+    <LandingBackground />
+
+    <!-- 1 · El dolor y la promesa -->
+    <section class="landing__hero">
+      <h1 class="rise">¿Tu web no te trae<br />clientes?</h1>
+      <p class="landing__slogan rise rise--2">
+        Descansa. <span>Nosotros nos encargamos de todo.</span>
+      </p>
+      <p class="landing__line rise rise--3">
+        Diseñamos y construimos a medida la web que tu negocio necesita para vender. Sin plantillas.
+      </p>
+      <HomeActions class="rise rise--4" :question="question" />
+      <p class="landing__pill rise rise--5">
+        <strong>Desde {{ euro(web.from_price) }} €</strong> · Tuya desde el primer día
+      </p>
+      <a href="#web" class="landing__scroll" aria-label="Ver más"><span /></a>
+    </section>
+
+    <!-- 2 · Qué cambia y cuánto cuesta -->
+    <section id="web" class="landing__section">
+      <h2 v-reveal>Una web hecha para vender.<br /><span>No para adornar.</span></h2>
+      <ul class="landing__shift">
+        <li v-for="(row, i) in shift" :key="row[0]" v-reveal :style="{ '--delay': `${i * 120}ms` }">
+          <s>{{ row[0] }}</s><span class="landing__arrow" aria-hidden="true">→</span
+          ><strong>{{ row[1] }}</strong>
+        </li>
+      </ul>
+      <p v-reveal class="landing__values">Primero entendemos cómo vendes. Después diseñamos.</p>
+      <div v-reveal class="landing__prices">
+        <div v-for="price in prices" :key="price[0]">
+          <span>{{ price[0] }}</span>
+          <strong>{{ price[1] }}</strong>
         </div>
       </div>
-      <div class="web-blueprint">
-        <span>01 / PRESENTAR</span><strong>Tu oferta, clara.</strong><span>02 / CONECTAR</span
-        ><strong>De la consulta al equipo.</strong><span>03 / TRABAJAR</span
-        ><strong>Menos tareas repetidas.</strong>
-      </div>
+      <p v-reveal class="landing__fine">
+        Precios desde, + IVA · Sin obligación de contratar marketing · Latinoamérica desde
+        {{ euro(web.latam_from_usd) }} USD
+      </p>
+      <p v-reveal class="landing__trust">
+        <b>+6 años</b> desarrollando <i aria-hidden="true">·</i> <b>+12</b> en marketing
+        <i aria-hidden="true">·</i> Código, datos y accesos a tu nombre
+      </p>
     </section>
-    <section class="section">
-      <div class="section-head">
-        <span class="eyebrow">Tres puntos de partida</span>
-        <h2>El problema decide la solución.</h2>
-      </div>
-      <div class="commercial-grid">
-        <article class="commercial-card">
-          <h3>Web comercial</h3>
-          <p>
-            Tu oferta, tu marca y un recorrido de contacto que recoge lo necesario para responder.
-            Contenido y estructura pensados para tus clientes.
-          </p>
-        </article>
-        <article class="commercial-card">
-          <h3>Catálogo y presupuestos</h3>
-          <p>
-            Productos, variantes y solicitudes ordenadas. Tu equipo recibe el detalle y prepara el
-            presupuesto sin reconstruir cada conversación.
-          </p>
-        </article>
-        <article class="commercial-card">
-          <h3>Herramientas internas</h3>
-          <p>
-            Solicitudes, tareas o información conectadas en un lugar. Validamos el proceso con
-            quienes lo van a usar antes de ampliar.
-          </p>
-        </article>
-      </div>
-    </section>
-    <section id="ejemplo" class="section split">
-      <div>
-        <span class="eyebrow">Demostración anónima · Datos de ejemplo</span>
-        <h2>De elegir un producto<br />a preparar un presupuesto.</h2>
-        <p class="intro">
-          Prueba este pequeño recorrido de catálogo. No envía solicitudes, no guarda datos ni
-          realiza compras. Es una muestra de interacción, no un caso de éxito ni una integración con
-          existencias reales.
+
+    <!-- 3 · Una sola decisión -->
+    <section id="contacto" class="landing__section landing__close">
+      <div v-reveal class="landing__card">
+        <h2>Aclara tus dudas<br /><span>o recibe una propuesta.</span></h2>
+        <HomeActions quiet :question="question" />
+        <div class="landing__or"><span>o</span></div>
+        <p class="landing__ask">
+          <strong>¿Tienes 3 minutos?</strong> Cuéntanos qué necesitas y te enviamos una propuesta
+          con precio.
         </p>
+        <ProposalForm service="web_project" landing="/webs-y-aplicaciones" />
       </div>
-      <div class="commercial-card web-example">
-        <span class="eyebrow">Catálogo de ejemplo</span>
-        <h3>Prenda profesional</h3>
-        <label>Unidades <input v-model.number="quantity" type="number" min="1" max="500" /></label
-        ><label
-          >Personalización
-          <select v-model="customization">
-            <option>Sin personalización</option>
-            <option>Logo del equipo</option>
-          </select></label
-        ><button type="button" class="commercial-button" @click="showExample = true">
-          Preparar solicitud de ejemplo
-        </button>
-        <p v-if="showExample" role="status">
-          <strong>Simulación preparada:</strong> {{ validQuantity }} unidades · {{ customization }}.
-          El equipo revisaría disponibilidad, plazo y precio antes de presupuestar. No se ha enviado
-          nada.
-        </p>
-      </div>
-    </section>
-    <section class="section">
-      <div class="section-head">
-        <span class="eyebrow">De la necesidad a la entrega</span>
-        <h2>Construir con un acuerdo claro.</h2>
-      </div>
-      <div class="commercial-grid">
-        <article>
-          <span class="commercial-number">01 / DEFINIR</span>
-          <h3>Alcance y fases.</h3>
-          <p>
-            Revisamos el proceso, priorizamos lo necesario y cerramos entregables, hitos, inversión
-            y responsabilidades.
-          </p>
-        </article>
-        <article>
-          <span class="commercial-number">02 / VALIDAR</span>
-          <h3>Probar antes de entregar.</h3>
-          <p>
-            Revisas el diseño y el funcionamiento en un entorno de pruebas. Los criterios de
-            aceptación y las revisiones se acuerdan al inicio.
-          </p>
-        </article>
-        <article>
-          <span class="commercial-number">03 / ENTREGAR</span>
-          <h3>Usar y mantener.</h3>
-          <p>
-            Documentación, accesos y formación de uso. Concretamos el mantenimiento y cómo se
-            solicitan ampliaciones.
-          </p>
-        </article>
-      </div>
-    </section>
-    <section class="section split">
-      <div>
-        <span class="eyebrow">Propiedad y continuidad</span>
-        <h2>Una herramienta para tu empresa.<br />Con las condiciones a la vista.</h2>
-      </div>
-      <div>
-        <p>
-          El acuerdo identifica código específico, datos y accesos del cliente, componentes
-          reutilizados y licencias de terceros. Documentamos la entrega y la posibilidad de cambiar
-          de proveedor.
-        </p>
-        <p>
-          Infraestructura, dominio, correo, IA y otras integraciones se detallan aparte cuando
-          proceda. Las nuevas funciones llevan presupuesto. Si el departamento de marketing ya incluye
-          tareas de mantenimiento, no las cobramos dos veces.
-        </p>
-        <p>
-          <strong>Web profesional desde 1.900 € + IVA</strong> (Latinoamérica: desde 990 USD). Las
-          aplicaciones a medida tienen presupuesto propio. Puedes contratar el proyecto sin
-          contratar marketing.
-        </p>
-      </div>
-    </section>
-    <section id="demo-nora" class="section split">
-      <div>
-        <span class="eyebrow">Explora tu necesidad</span>
-        <h2>Cuéntale a Nora qué proceso quieres resolver.</h2>
-        <p class="intro">
-          Esta demo con IA ayuda a empezar una consulta. La agenda es ficticia; el correo requiere
-          confirmación; el presupuesto y los compromisos los acuerdas con una persona.
-        </p>
-        <a href="#contacto" class="commercial-link">Prefiero hablar del proyecto ↗</a>
-      </div>
-      <LazyNora context="web" />
-    </section>
-    <section id="contacto" class="section split contact-section">
-      <div class="contact-copy">
-        <span class="eyebrow">Hablemos del proyecto</span>
-        <h2>¿Qué debería ser más fácil en tu negocio?</h2>
-        <p class="intro">
-          Cuéntanos el proceso y quién lo utiliza. Revisaremos tu caso para acordar una conversación
-          y definir el alcance.
-        </p>
-        <p>
-          También por
-          <a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>,
-          <a :href="CONTACT.telegram" target="_blank" rel="noopener noreferrer">Telegram</a> o
-          <a href="mailto:info@midiginode.com">info@midiginode.com</a>.
-        </p>
-      </div>
-      <LeadForm service="web_project" />
     </section>
   </div>
 </template>
 <script setup>
-import { computed, ref } from 'vue'
-import LeadForm from '@/components/public/LeadForm.vue'
-import LazyNora from '@/components/public/LazyNora.vue'
-import { CONTACT } from '@/data/contact'
-import { trackEvent } from '@/lib/analytics'
-const quantity = ref(12),
-  customization = ref('Sin personalización'),
-  showExample = ref(false)
-const validQuantity = computed(() =>
-  Math.max(1, Math.min(500, Math.floor(Number(quantity.value) || 1)))
-)
+import { computed, onMounted } from 'vue'
+import HomeActions from '@/components/public/HomeActions.vue'
+import ProposalForm from '@/components/public/ProposalForm.vue'
+import LandingBackground from '@/components/public/LandingBackground.vue'
+import { useServices } from '@/data/services'
+import { vReveal } from '@/composables/useReveal'
+const { services, load } = useServices()
+const euro = (value) => new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(value)
+const web = computed(() => services.value.find((service) => service.id === 'web_project'))
+const question = 'Hola, vengo de vuestra web y tengo una duda sobre una página web para mi negocio.'
+// Matches the internal pricing starting points (pricing_service.js in the API).
+const prices = computed(() => [
+  ['Web profesional', `${euro(web.value.from_price)} €`],
+  ['Tienda online', `${euro(web.value.from_price + 1500)} €`],
+  ['Aplicación a medida', `${euro(web.value.from_price + 2000)} €`],
+])
+const shift = [
+  ['Plantilla genérica', 'Diseño a medida de tu negocio'],
+  ['Una web que nadie visita', 'Pensada para que te encuentren y te escriban'],
+  ['Depender de alguien para cada cambio', 'Tuya, con código, datos y accesos a tu nombre'],
+]
+onMounted(load)
 </script>
-<style scoped lang="scss">
-.web-blueprint {
-  display: grid;
-  gap: 1rem;
-  padding: 3rem;
-  border: 1px solid #29476a;
-  border-radius: 20px;
-  background: #10223a;
-  span {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: #60b0ff;
-    margin-top: 1rem;
-  }
-  strong {
-    font-weight: 500;
-    font-size: 1.6rem;
-  }
-}
-.web-example {
-  display: grid;
-  gap: 1.4rem;
-  label {
-    display: grid;
-    gap: 0.6rem;
-    font-size: 0.9rem;
-  }
-  input,
-  select {
-    min-width: 0;
-    width: 100%;
-    border: 1px solid #29476a;
-    background: #050a0f;
-    color: #f8fafc;
-    padding: 0.8rem;
-    border-radius: 8px;
-    font: inherit;
-  }
-}
-</style>

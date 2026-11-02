@@ -4,6 +4,7 @@ import router from '@/router'
 import App from '@/App.vue'
 import '@/assets/styles/main.scss'
 import '@/assets/styles/commercial.scss'
+import '@/assets/styles/landing.scss'
 import { initPixel, track } from '@/lib/pixel'
 import { initAnalytics, trackPageview } from '@/lib/analytics'
 

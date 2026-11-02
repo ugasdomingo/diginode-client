@@ -4,4 +4,5 @@ Disallow: /admin
 Disallow: /portal
 Disallow: /login
 Disallow: /cambiar-contrasena
+Disallow: /propuesta
 Sitemap: https://midiginode.com/sitemap.xml

@@ -22,13 +22,9 @@
             class="ops-card ops-rise"
             :to="`/admin/pipeline/${lead.id}`"
           >
-            <strong class="ops-card__title">{{ lead.company }}</strong>
-            <span class="ops-card__meta">{{ lead.name }} · {{ lead.neighborhood }}</span>
-            <span
-              v-if="lead.next_action"
-              class="ops-chip"
-              :class="{ 'ops-chip--visit': lead.next_action.type === 'visit' }"
-            >{{ lead.next_action.type === 'visit' ? 'Visita' : 'Llamada' }} · {{ lead.next_action.label }}</span>
+            <strong class="ops-card__title">{{ lead.company || lead.business }}</strong>
+            <span class="ops-card__meta">{{ lead.name || 'Sin nombre' }} · {{ lead.origin_detail || lead.country || 'Sin zona' }}</span>
+            <span v-if="lead.next_action" class="ops-chip">{{ lead.next_action }}</span>
           </RouterLink>
         </section>
       </div>
@@ -48,7 +44,7 @@ const { data, error, loading, reload } = useAsyncData(listLeads)
 const columns = computed(() =>
   LEAD_PIPELINE.map((column) => ({
     ...column,
-    items: (data.value || []).filter((lead) => lead.status === column.id),
+    items: (data.value || []).filter((lead) => lead.pipeline_status === column.id),
   }))
 )
 </script>

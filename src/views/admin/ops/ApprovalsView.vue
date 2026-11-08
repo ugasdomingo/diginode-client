@@ -29,7 +29,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { approveAsDomingo, listApprovals, rejectAsDomingo } from '@/api/ops/client'
+import { decideAsDomingo, listDomingoQueue } from '@/api/ops/client'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useToastStore } from '@/stores/toast'
 import ApprovalCard from '@/components/ops/ApprovalCard.vue'
@@ -37,15 +37,20 @@ import MockNotice from '@/components/ops/MockNotice.vue'
 import OpsState from '@/components/ops/OpsState.vue'
 
 const toast = useToastStore()
-const { data, error, loading, reload } = useAsyncData(() => listApprovals())
+const { data, error, loading, reload } = useAsyncData(() => listDomingoQueue())
 const busyId = ref('')
 
 async function decide(item, action, comment = '') {
   busyId.value = item.id
   try {
-    if (action === 'approve') await approveAsDomingo(item.id)
-    else await rejectAsDomingo(item.id, comment)
-    toast.success(action === 'approve' ? 'Pasa al cliente.' : 'La pieza no llega al cliente.')
+    if (action === 'approve') await decideAsDomingo(item.id, 'aprobar')
+    else await decideAsDomingo(item.id, 'rechazar', comment)
+    const passedToClient = action === 'approve' && item.mode !== 'solo_domingo'
+    toast.success(
+      action === 'approve'
+        ? (passedToClient ? 'Pasa al cliente.' : 'Queda aprobada.')
+        : 'Vuelve a borrador. Hay que corregirla antes de seguir.'
+    )
     await reload()
   } catch (err) {
     toast.error(err.message)

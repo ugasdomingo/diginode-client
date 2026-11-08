@@ -2,7 +2,7 @@
   <p v-if="mock" class="ops-notice" role="status">
     <span>
       <strong>Datos de demostración.</strong>
-      La API de operación todavía no está en main. Nada de lo que ves aquí es un cliente real.
+      Este entorno los pide de forma explícita. Nada de lo que ves aquí es un cliente real.
     </span>
   </p>
 </template>

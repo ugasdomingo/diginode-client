@@ -1,7 +1,20 @@
-export function formatEur(cents) {
-  const value = Number(cents)
+/** Importes de la API de agencia, en euros (amount_eur), no en céntimos. */
+export function formatEur(amount) {
+  const value = Number(amount)
   if (!Number.isFinite(value)) return '—'
-  return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value / 100)
+  return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value)
+}
+
+export function periodLabel(period) {
+  const match = /^(\d{4})-(\d{2})$/.exec(String(period || ''))
+  if (!match) return period || '—'
+  const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1))
+  const label = new Intl.DateTimeFormat('es-ES', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+  return label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 export function formatDate(iso) {

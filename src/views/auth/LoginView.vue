@@ -18,7 +18,7 @@
           <p class="login__subtitle">Accede a tu panel de control</p>
         </div>
 
-        <form class="login__form" @submit.prevent="handleLogin" novalidate>
+        <form v-if="step === 'password'" class="login__form" @submit.prevent="handleLogin" novalidate>
           <div class="field">
             <label class="field__label" for="email">Correo electrónico</label>
             <div class="field__wrapper">
@@ -68,6 +68,44 @@
             Iniciar sesión
           </AppButton>
         </form>
+
+        <form v-else class="login__form" @submit.prevent="handleMfa" novalidate>
+          <p class="login__hint">
+            Te enviamos un código de 6 dígitos a {{ mfaHint }}. Caduca en unos minutos.
+          </p>
+          <div class="field">
+            <label class="field__label" for="code">Código del correo</label>
+            <div class="field__wrapper">
+              <input
+                id="code"
+                v-model="code"
+                class="field__input field__input--code"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                placeholder="000000"
+                required
+              />
+            </div>
+          </div>
+          <p v-if="error" class="login__error" role="alert">
+            <AlertCircle :size="14" />
+            {{ error }}
+          </p>
+          <p v-else-if="notice" class="login__hint">{{ notice }}</p>
+          <AppButton type="submit" size="lg" :loading="loading" class="login__submit">
+            Confirmar código
+          </AppButton>
+          <button type="button" class="login__textbtn" @click="resend">Enviar otro código</button>
+          <button type="button" class="login__textbtn" @click="backToPassword">Volver</button>
+        </form>
+
+        <details v-if="mockMode" class="login__demo">
+          <summary>Acceso de demostración</summary>
+          <p>Domingo: domingo@midiginode.com · Madrid-2026</p>
+          <p>Cliente: lucia@aireyoga.test · Aire-2026 · código 482913</p>
+        </details>
       </div>
 
       <p class="login__footer">
@@ -83,45 +121,111 @@ import { useRouter } from 'vue-router'
 import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useClientStore } from '@/stores/client'
-import { useApi } from '@/composables/useApi'
+import { login, opsUsesMock, resendMfa, verifyMfa } from '@/api/ops/client'
+import { interpretLogin, interpretMfa, normalizeCode } from '@/lib/authFlow'
 import AppButton from '@/components/ui/AppButton.vue'
 
 const auth         = useAuthStore()
 const clientStore  = useClientStore()
 const router       = useRouter()
-const api          = useApi()
 
 const form = ref({ email: '', password: '' })
 const loading     = ref(false)
 const error       = ref('')
 const showPassword = ref(false)
+const step = ref('password')
+const challengeId = ref('')
+const mfaHint = ref('')
+const code = ref('')
+const notice = ref('')
+const mockMode = opsUsesMock()
+
+function enterSession(token, passwordChangeRequired) {
+  auth.setToken(token, passwordChangeRequired)
+  form.value.password = ''
+  code.value = ''
+  if (auth.mustChangePassword) {
+    router.push('/cambiar-contrasena')
+  } else if (auth.isAdmin) {
+    router.push('/admin/dashboard')
+  } else if (mockMode) {
+    router.push('/portal/dashboard')
+  } else {
+    clientStore.load().catch(() => {}).finally(() => router.push('/portal/dashboard'))
+  }
+}
 
 async function handleLogin() {
   error.value   = ''
   loading.value = true
+  const password = form.value.password
 
   try {
-    const data = await api.post('/auth/login', {
+    const data = await login({
       email:    form.value.email.trim().toLowerCase(),
-      password: form.value.password,
+      password,
     })
-
-    auth.setToken(data.token, data.user?.password_change_required ?? false)
-
-    if (auth.mustChangePassword) {
-      router.push('/cambiar-contrasena')
-    } else if (auth.isAdmin) {
-      router.push('/admin/dashboard')
-    } else {
-      // Pre-load all portal data before entering the portal (single request)
-      await clientStore.load()
-      router.push('/portal/dashboard')
+    const next = interpretLogin(data)
+    if (!next.ok) {
+      error.value = next.message
+      return
     }
+    if (next.step === 'mfa') {
+      step.value = 'mfa'
+      challengeId.value = next.challengeId
+      mfaHint.value = next.hint
+      return
+    }
+    enterSession(next.token, next.passwordChangeRequired)
   } catch (err) {
-    error.value = err.message ?? 'Credenciales incorrectas'
+    error.value = err.message ?? 'Correo o contraseña incorrectos'
   } finally {
+    form.value.password = ''
     loading.value = false
   }
+}
+
+async function handleMfa() {
+  error.value = ''
+  const normalized = normalizeCode(code.value)
+  code.value = normalized
+  if (normalized.length !== 6) {
+    error.value = 'El código tiene 6 dígitos.'
+    return
+  }
+  loading.value = true
+  try {
+    const data = await verifyMfa({ challenge_id: challengeId.value, code: normalized })
+    const next = interpretMfa(data)
+    if (!next.ok) {
+      error.value = next.message
+      return
+    }
+    enterSession(next.token, next.passwordChangeRequired)
+  } catch (err) {
+    error.value = err.message ?? 'El código no es válido'
+  } finally {
+    code.value = ''
+    loading.value = false
+  }
+}
+
+async function resend() {
+  error.value = ''
+  notice.value = ''
+  try {
+    await resendMfa({ challenge_id: challengeId.value })
+    notice.value = 'Te enviamos otro código.'
+  } catch (err) {
+    error.value = err.message
+  }
+}
+
+function backToPassword() {
+  step.value = 'password'
+  challengeId.value = ''
+  code.value = ''
+  error.value = ''
 }
 </script>
 
@@ -240,6 +344,29 @@ async function handleLogin() {
     font-size: $text-xs;
     color: $text-subtle;
   }
+
+  &__hint {
+    color: $text-muted;
+    font-size: $text-sm;
+  }
+
+  &__textbtn {
+    background: none;
+    border: 0;
+    color: $text-muted;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+  }
+
+  &__demo {
+    width: 100%;
+    color: $text-subtle;
+    font-size: $text-xs;
+
+    summary { cursor: pointer; }
+    p { margin-top: $space-2; }
+  }
 }
 
 // Form fields
@@ -291,6 +418,13 @@ async function handleLogin() {
     &:focus {
       border-color: $primary;
       box-shadow: 0 0 0 3px $primary-glow;
+    }
+
+    &--code {
+      padding-left: $space-4;
+      letter-spacing: 0.4em;
+      font-family: $font-mono;
+      font-size: $text-lg;
     }
   }
 

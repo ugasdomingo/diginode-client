@@ -64,6 +64,7 @@
           <strong>Información</strong><RouterLink to="/legal/terminos">Términos</RouterLink
           ><RouterLink to="/legal/privacidad">Privacidad</RouterLink
           ><RouterLink to="/legal/cookies">Cookies y medición</RouterLink
+          ><button type="button" class="footer-consent" @click="openConsent">Configurar cookies</button
           ><RouterLink to="/legal/aviso-legal">Aviso legal</RouterLink
           ><a href="mailto:info@midiginode.com">info@midiginode.com</a
           ><a :href="CONTACT.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a
@@ -90,9 +91,15 @@ import { useCheckout } from '@/composables/useCheckout'
 import { useServices } from '@/data/services'
 import { CONTACT } from '@/data/contact'
 import { trackEvent } from '@/lib/analytics'
+import { useConsentStore } from '@/stores/consent'
 const mobileOpen = ref(false),
   route = useRoute(),
-  auth = useAuthStore()
+  auth = useAuthStore(),
+  consent = useConsentStore()
+function openConsent() {
+  mobileOpen.value = false
+  consent.openPanel()
+}
 const { buying, buyClinica } = useCheckout()
 const { bookingUrl, load } = useServices()
 function requestReview() {
@@ -213,6 +220,17 @@ onMounted(load)
       margin-bottom: 0.5rem;
       font-size: 0.85rem;
     }
+  }
+  .footer-consent {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: #a9b9cc;
+    font: inherit;
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    &:hover { color: #fff; }
   }
   &__bottom {
     max-width: 1160px;

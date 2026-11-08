@@ -7,15 +7,33 @@
           Volver al inicio
         </RouterLink>
         <h1 class="legal-page__title">Política de Cookies</h1>
-        <p class="legal-page__updated">Última actualización: 24 de octubre de 2026 · Versión de revisión</p>
+        <p class="legal-page__updated">Última actualización: 1 de noviembre de 2026 · Borrador para revisión</p>
+        <button type="button" class="legal-choice" @click="openConsent">Cambiar mi elección</button>
       </div>
 
       <div class="legal-page__body">
 
-        <section class="legal-section"><h2>1. Publicidad desactivada</h2><p>Esta entrega no carga el Pixel de Meta, aunque exista un identificador antiguo configurado. Cualquier activación publicitaria futura requiere información y consentimiento previo, informado y revocable.</p></section>
-        <section class="legal-section"><h2>2. Almacenamiento funcional</h2><p>Al escribir a Nora se puede guardar un identificador aleatorio en localStorage (dn_demo_contact) para mantener la identidad de demo y sus límites. Los mensajes visibles se mantienen en memoria, sin persistirlos en el navegador. El servidor conserva la conversación en el CRM.</p><p>El acceso al panel utiliza almacenamiento funcional para la sesión autenticada. Borrar los datos del sitio elimina esos elementos del navegador.</p></section>
-        <section class="legal-section"><h2>3. Medición propia</h2><p>La medición está desactivada por defecto. Antes de activarla debe revisarse la configuración del entorno y si cumple las condiciones aplicables para la medición de audiencia. La ausencia de cookies no elimina automáticamente las obligaciones de privacidad.</p><p>Cuando está habilitada, registra la ruta sin parámetros, duración visible, canal y dispositivo categorizados y eventos de navegación. No incluye emails, mensajes ni identificadores del CRM. La IP y el navegador intervienen en un hash diario; la IP no se almacena en el registro de medición. Los registros se borran a los 90 días. El hash es un seudónimo diario, no anonimato absoluto.</p><p>Se respetan las señales Do Not Track y Global Privacy Control. La navegación del panel no se registra en este sistema.</p><p>Consulta las <a href="https://www.aepd.es/guias/guia-cookies-analiticas-externas.pdf" target="_blank" rel="noopener noreferrer">condiciones de medición de audiencia de la AEPD</a>.</p></section>
-        <section class="legal-section"><h2>4. Responsable y contacto</h2><p>Responsable: Domingo Ugas, NIE Z0646506G. Puedes escribir a ugasdomingo@gmail.com. Más detalles en la <RouterLink to="/legal/privacidad">información de privacidad</RouterLink>.</p></section>
+        <section class="legal-section">
+          <h2>1. Qué ocurre antes de elegir</h2>
+          <p>Hasta que aceptas, rechazas o configuras, no se carga medición, publicidad ni contenido incrustado de terceros. Rechazar está al mismo nivel que aceptar. Si rechazas, la web, el formulario y el panel siguen funcionando.</p>
+          <p>Las fuentes se sirven desde este mismo sitio. No hay una petición a Google Fonts antes de tu elección.</p>
+        </section>
+        <section class="legal-section">
+          <h2>2. Almacenamiento necesario</h2>
+          <p>La elección se guarda en el almacenamiento local del navegador (dn_consent). Sirve solo para no volver a preguntar y puedes cambiarla desde «Configurar cookies» en el pie de página.</p>
+          <p>Al escribir a Nora se puede guardar un identificador aleatorio (dn_demo_contact) para la demo. Los mensajes visibles no se guardan en el navegador. El acceso al panel guarda la sesión (dn_token). Son datos funcionales de la función que estás usando.</p>
+        </section>
+        <section class="legal-section">
+          <h2>3. Medición, publicidad e incrustados</h2>
+          <p>La medición propia solo se envía si la activas y, además, el entorno tiene la medición habilitada. No incluye correos, mensajes ni el panel. Se respetan Do Not Track y Global Privacy Control. El detalle de plazos y del hash diario debe revisarse antes de darla por definitiva.</p>
+          <p>La publicidad (píxel de Meta) está apagada en el código de esta versión, aunque exista un identificador antiguo. Si se reactivara, exigiría el permiso de publicidad.</p>
+          <p>Un calendario u otro contenido incrustado pide permiso solo para ese servicio, en la pantalla donde aparece. Si dices que no, la alternativa (formulario o enlace) sigue disponible.</p>
+        </section>
+        <section class="legal-section">
+          <h2>4. Responsable</h2>
+          <p>Domingo Ugas (Diginode), NIE Z0646506G, Calle de Siena 9, 28027 Madrid. Correo: ugasdomingo@gmail.com. Teléfono: +34 604 822 385. Más detalles en la <RouterLink to="/legal/privacidad">información de privacidad</RouterLink> y en el <RouterLink to="/legal/aviso-legal">aviso legal</RouterLink>.</p>
+          <p class="legal-note">Este texto es un borrador para revisión. Conviene que lo valide un profesional del derecho antes de tratarlo como política definitiva.</p>
+        </section>
 
       </div>
     </div>
@@ -24,6 +42,12 @@
 
 <script setup>
 import { ArrowLeft } from 'lucide-vue-next'
+import { useConsentStore } from '@/stores/consent'
+
+const consent = useConsentStore()
+function openConsent() {
+  consent.openPanel()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -65,6 +89,16 @@ import { ArrowLeft } from 'lucide-vue-next'
     font-size: $text-sm;
     color: $text-subtle;
     font-family: $font-mono;
+  }
+
+  .legal-choice {
+    width: fit-content;
+    background: transparent;
+    color: $text;
+    border: 1px solid $border-hover;
+    border-radius: $radius;
+    padding: $space-2 $space-4;
+    cursor: pointer;
   }
 
   &__body {

@@ -14,6 +14,8 @@
       </AppBadge>
     </div>
 
+    <PortalOpsHome />
+
     <!-- Skeleton -->
     <template v-if="isLoading">
       <div class="stats-row">
@@ -280,6 +282,8 @@ import {
   Sparkles, ChevronRight, Info, Check,
 } from 'lucide-vue-next'
 import { useClientStore } from '@/stores/client'
+import { opsUsesMock } from '@/api/ops/client'
+import PortalOpsHome from '@/components/portal/PortalOpsHome.vue'
 import { useToastStore } from '@/stores/toast'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import TrainingDetailsModal from '@/components/portal/TrainingDetailsModal.vue'
@@ -326,7 +330,7 @@ try {
 } catch { /* no legacy calendar configured */ }
 const calLink = computed(() => bookingUrl.value || legacyBooking || 'mailto:info@midiginode.com')
 
-const isLoading = computed(() => clientStore.loading || !clientStore.loaded)
+const isLoading = computed(() => clientStore.loading || (!clientStore.loaded && !clientStore.error))
 
 // Load lazily if user navigated directly (token in localStorage, no login flow)
 onMounted(async () => {
@@ -336,7 +340,7 @@ onMounted(async () => {
     try {
       await clientStore.load()
     } catch {
-      toast.error('No se pudo cargar la información del portal')
+      if (!opsUsesMock()) toast.error('No se pudo cargar la información del portal')
     }
   }
 })

@@ -7,7 +7,7 @@
           Volver al inicio
         </RouterLink>
         <h1 class="legal-page__title">Aviso Legal</h1>
-        <p class="legal-page__updated">Última actualización: 24 de octubre de 2026 · Versión de revisión</p>
+        <p class="legal-page__updated">Última actualización: 1 de noviembre de 2026 · Borrador para revisión</p>
       </div>
 
       <div class="legal-page__body">

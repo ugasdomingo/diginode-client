@@ -7,7 +7,7 @@
           Volver al inicio
         </RouterLink>
         <h1 class="legal-page__title">Política de Privacidad</h1>
-        <p class="legal-page__updated">Última actualización: 24 de octubre de 2026 · Versión de revisión 2026-10</p>
+        <p class="legal-page__updated">Última actualización: 1 de noviembre de 2026 · Borrador para revisión</p>
       </div>
 
       <div class="legal-page__body">
@@ -111,14 +111,14 @@
         </section>
 
         <section class="legal-section">
-          <h2>7. Seguridad</h2>
+          <h2>7. Seguridad, acceso y claves</h2>
           <p>Diginode aplica medidas técnicas y organizativas apropiadas para garantizar un nivel de seguridad adecuado al riesgo, incluyendo el cifrado en tránsito (TLS/HTTPS), el control de acceso por roles y la autenticación mediante JWT.</p>
+          <p>El acceso de un cliente puede pedir, además de la contraseña, un código de un solo uso enviado por correo. Las claves de redes, dominios o bots se escriben en un formulario que las envía al servidor para guardarlas cifradas. Este sitio no las escribe en cookies ni en el almacenamiento local: el campo se vacía al enviarlas.</p>
         </section>
 
         <section class="legal-section">
           <h2>8. Cookies y medición de visitas</h2>
-          <p>La publicidad está desactivada. Se usa almacenamiento funcional para el acceso al panel y para el identificador de la demo, cuando se utilizan esas funciones.</p>
-          <p>Para conocer cuántas personas visitan la web y qué contenidos resultan de interés, Diginode dispone de un sistema de medición propio, desactivado por defecto en esta entrega hasta validar su configuración y condiciones de uso. Sus identificadores diarios son seudónimos, no una garantía de anonimato absoluto. Puedes consultar el detalle en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>.</p>
+          <p>La publicidad está desactivada. La medición y los contenidos incrustados no se cargan hasta que la persona lo acepta. Rechazarlos no impide usar la web. La elección se puede cambiar desde el pie de página. El detalle está en la <RouterLink to="/legal/cookies">política de cookies</RouterLink>.</p>
           <p class="legal-note">⚠️ Nota: Este documento es un borrador informativo generado para tu revisión. Se recomienda su validación por un profesional del derecho (Delegado de Protección de Datos o abogado especialista en privacidad) antes de su publicación.</p>
         </section>
 

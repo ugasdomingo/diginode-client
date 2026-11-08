@@ -8,21 +8,24 @@
 
     <!-- Nav -->
     <nav class="sidebar__nav" aria-label="Navegación principal">
-      <RouterLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        class="sidebar__link"
-        :class="{ 'sidebar__link--active': isActive(item.to) }"
-        @click="$emit('close')"
-      >
-        <component :is="item.icon" :size="18" class="sidebar__link-icon" />
-        <span>{{ item.label }}</span>
-      </RouterLink>
+      <template v-for="item in navItems" :key="item.to || item.heading">
+        <p v-if="item.heading" class="sidebar__heading">{{ item.heading }}</p>
+        <RouterLink
+          v-else
+          :to="item.to"
+          class="sidebar__link"
+          :class="{ 'sidebar__link--active': isActive(item.to) }"
+          @click="$emit('close')"
+        >
+          <component :is="item.icon" :size="18" class="sidebar__link-icon" />
+          <span>{{ item.label }}</span>
+        </RouterLink>
+      </template>
     </nav>
 
     <!-- User info + logout -->
     <div class="sidebar__footer">
+      <button type="button" class="sidebar__cookies" @click="openConsent">Cookies</button>
       <div class="sidebar__user">
         <div class="sidebar__user-avatar">
           {{ avatarChar }}
@@ -58,9 +61,16 @@ import {
   Brain,
   CreditCard,
   MessageCircle,
+  Kanban,
+  BadgeCheck,
+  KeyRound,
+  FileBarChart,
+  CalendarDays,
+  Receipt,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useClientStore } from '@/stores/client'
+import { useConsentStore } from '@/stores/consent'
 
 defineProps({
   open: { type: Boolean, default: false },
@@ -72,8 +82,16 @@ const clientStore = useClientStore()
 const route       = useRoute()
 const router      = useRouter()
 
+const consent = useConsentStore()
+
 const adminNav = [
   { to: '/admin/dashboard', label: 'Dashboard',  icon: LayoutDashboard },
+  { heading: 'Operación' },
+  { to: '/admin/pipeline', label: 'Pipeline', icon: Kanban },
+  { to: '/admin/aprobaciones', label: 'Aprobaciones', icon: BadgeCheck },
+  { to: '/admin/cartera', label: 'Cartera', icon: Users },
+  { to: '/admin/boveda', label: 'Bóveda', icon: KeyRound },
+  { heading: 'Estudio' },
   { to: '/admin/analytics', label: 'Visitas',     icon: Eye },
   { to: '/admin/leads',     label: 'Leads',       icon: Users },
   { to: '/admin/funnel',    label: 'Funnel',      icon: Filter },
@@ -88,7 +106,12 @@ const adminNav = [
 ]
 
 const clientNav = [
-  { to: '/portal/dashboard', label: 'Inicio',   icon: LayoutDashboard },
+  { to: '/portal/dashboard', label: 'Inicio', icon: LayoutDashboard },
+  { to: '/portal/piezas', label: 'Piezas', icon: BadgeCheck },
+  { to: '/portal/informes', label: 'Informes', icon: FileBarChart },
+  { to: '/portal/reuniones', label: 'Reuniones', icon: CalendarDays },
+  { to: '/portal/facturas', label: 'Facturas', icon: Receipt },
+  { heading: 'Cuenta' },
   { to: '/portal/invoices',  label: 'Compras',  icon: FileText },
   { to: '/portal/support',   label: 'Soporte',  icon: LifeBuoy },
 ]
@@ -101,7 +124,12 @@ const avatarChar = computed(() => {
 })
 
 function isActive(path) {
-  return route.path.startsWith(path)
+  if (path === '/admin/pipeline') return route.path === path || route.path.startsWith('/admin/pipeline/')
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
+
+function openConsent() {
+  consent.openPanel()
 }
 
 function handleLogout() {
@@ -203,10 +231,33 @@ function handleLogout() {
     }
   }
 
+  &__heading {
+    margin: $space-4 $space-3 $space-1;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $text-subtle;
+  }
+
+  &__cookies {
+    flex-basis: 100%;
+    background: none;
+    border: 0;
+    color: $text-subtle;
+    font: inherit;
+    font-size: $text-xs;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+
+    &:hover { color: $primary-light; }
+  }
+
   &__footer {
     padding: $space-4;
     border-top: 1px solid $border;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: $space-3;
   }

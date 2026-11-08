@@ -16,16 +16,25 @@
           :item="item"
           mode="client"
           :busy="busyId === item.id"
-          @approve="decide(item, 'approve')"
-          @reject="decide(item, 'reject', $event)"
+          @approve="decide(item, 'aprobar')"
+          @reject="decide(item, 'rechazar', $event)"
         />
       </div>
+      <section v-if="waiting.length">
+        <h2>Todavía con Domingo</h2>
+        <ul class="done">
+          <li v-for="item in waiting" :key="item.id">
+            <strong>{{ item.title }}</strong>
+            <span>Aún no está en tu bandeja.</span>
+          </li>
+        </ul>
+      </section>
       <section v-if="done.length">
         <h2>Ya revisadas</h2>
         <ul class="done">
           <li v-for="item in done" :key="item.id">
             <strong>{{ item.title }}</strong>
-            <span>{{ item.status === 'approved' ? 'Aprobada' : 'Devuelta' }}</span>
+            <span>{{ item.status === 'aprobado' ? 'Aprobada' : 'Devuelta' }}</span>
           </li>
         </ul>
       </section>
@@ -35,32 +44,30 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { approveDeliverable, listDeliverables, rejectDeliverable } from '@/api/ops/client'
+import { decideAsClient, listPortalApprovals } from '@/api/ops/client'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useToastStore } from '@/stores/toast'
 import ApprovalCard from '@/components/ops/ApprovalCard.vue'
 import OpsState from '@/components/ops/OpsState.vue'
 
 const toast = useToastStore()
-const { data, error, loading, reload } = useAsyncData(listDeliverables)
+const { data, error, loading, reload } = useAsyncData(listPortalApprovals)
 const busyId = ref('')
-const pending = computed(() =>
-  (data.value || []).filter((item) => item.stage === 'client' && item.status === 'pending')
-)
+const pending = computed(() => (data.value || []).filter((item) => item.status === 'pendiente_cliente'))
+const waiting = computed(() => (data.value || []).filter((item) => item.status === 'pendiente_domingo'))
 const done = computed(() =>
-  (data.value || []).filter((item) => !(item.stage === 'client' && item.status === 'pending'))
+  (data.value || []).filter((item) => item.status === 'aprobado' || item.status === 'devuelto')
 )
 
-async function decide(item, action, comment = '') {
+async function decide(item, decision, comment = '') {
   busyId.value = item.id
   try {
-    if (action === 'approve') {
-      await approveDeliverable(item.id)
-      toast.success('Aprobada. Gracias.')
-    } else {
-      await rejectDeliverable(item.id, comment)
-      toast.success('Devuelta. Domingo la verá antes de publicarla.')
-    }
+    await decideAsClient(item.id, decision, comment)
+    toast.success(
+      decision === 'aprobar'
+        ? 'Aprobada. Gracias.'
+        : 'Devuelta. Hay que corregirla y Domingo la verá otra vez antes de publicarla.'
+    )
     await reload()
   } catch (err) {
     toast.error(err.message)

@@ -1,20 +1,21 @@
 /**
  * Interpreta el login sin guardar la contraseña ni el código.
- * El paso `mfa` solo aparece cuando la API lo pide (clientes).
+ * El paso OTP solo aparece cuando la API responde requires_otp (clientes).
+ * Domingo recibe el token en el mismo paso.
  *
- * @param {import('@/api/ops/contracts').LoginResult|null|undefined} result
+ * @param {{ success?: boolean, requires_otp?: boolean, challenge_id?: string, token?: string, user?: { password_change_required?: boolean } }|null|undefined} result
+ * @param {string} [email] Correo que acaba de escribir la persona. La API no manda una pista.
  */
-export function interpretLogin(result) {
-  if (result?.mfa_required) {
+export function interpretLogin(result, email) {
+  if (result?.requires_otp) {
     if (!result.challenge_id) {
       return { ok: false, message: 'No se pudo iniciar la verificación. Inténtalo de nuevo.' }
     }
     return {
       ok: true,
-      step: 'mfa',
+      step: 'otp',
       challengeId: result.challenge_id,
-      hint: result.destination_hint || 'tu correo',
-      expiresAt: result.expires_at || null,
+      hint: email || 'tu correo',
     }
   }
   if (result?.token) {
@@ -37,6 +38,17 @@ export function interpretMfa(result) {
     }
   }
   return { ok: false, message: 'El código no es válido.' }
+}
+
+/**
+ * El reenvío anula el código anterior y entrega otro challenge_id.
+ * Hay que guardar el nuevo: el anterior ya no verifica.
+ */
+export function interpretOtpResend(result) {
+  if (result?.success && result.challenge_id) {
+    return { ok: true, challengeId: result.challenge_id }
+  }
+  return { ok: false, message: 'No se pudo enviar otro código.' }
 }
 
 export function normalizeCode(value) {

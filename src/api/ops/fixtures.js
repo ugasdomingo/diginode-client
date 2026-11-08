@@ -1,376 +1,389 @@
-/** Datos de demostración. No hay secretos reales: la bóveda solo guarda metadatos. */
+/** Datos de demostración. No hay secretos reales: la bóveda los guarda aparte. */
 
-function lead(partial) {
-  return {
-    email: '',
-    phone: '',
-    neighborhood: 'Madrid',
-    need: '',
-    next_action: null,
-    timeline: [],
-    updated_at: '2026-10-30T09:00:00.000Z',
-    ...partial,
-  }
-}
-
-export function createFixtures() {
-  const leads = [
-    lead({
-      id: 'lead_nuria',
-      name: 'Nuria Gil',
-      company: 'Peluquería Nuria',
-      email: 'nuria@peluquerianuria.test',
-      phone: '+34 611 203 441',
-      neighborhood: 'Carabanchel',
-      status: 'nuevo',
-      need: 'Quiere que las clientas reserven por Instagram sin contestar ella a cada mensaje.',
-      next_action: { type: 'call', label: 'Llamar el lunes 2 de noviembre, 10:30', at: '2026-11-02T09:30:00.000Z' },
-      updated_at: '2026-10-31T16:10:00.000Z',
-      timeline: [
-        { id: 't1', type: 'next_action', action: 'call', at: '2026-10-31T16:10:00.000Z', title: 'Siguiente paso: llamada', detail: 'Dejó el teléfono en el formulario de la web. Todavía no la hemos llamado.' },
-      ],
-    }),
-    lead({
-      id: 'lead_hector',
-      name: 'Héctor Lama',
-      company: 'Reformas Lama',
-      email: 'hector@reformaslama.test',
-      phone: '+34 622 118 903',
-      neighborhood: 'Vallecas',
-      status: 'mensaje_enviado',
-      need: 'Pedir obras con fotos de antes y después, sin publicidad complicada.',
-      next_action: { type: 'call', label: 'Si no contesta, llamar el miércoles 4', at: '2026-11-04T10:00:00.000Z' },
-      updated_at: '2026-10-29T11:20:00.000Z',
-      timeline: [
-        { id: 't2', type: 'message_sent', at: '2026-10-29T11:20:00.000Z', title: 'WhatsApp enviado', detail: 'Domingo le escribió con dos ejemplos de reformas en Madrid y le pidió fotos de la última obra.' },
-        { id: 't3', type: 'next_action', action: 'call', at: '2026-10-29T11:21:00.000Z', title: 'Siguiente paso: llamada', detail: 'Si el miércoles no hay respuesta, llamar al móvil.' },
-      ],
-    }),
-    lead({
-      id: 'lead_sol',
-      name: 'Javier Soto',
-      company: 'Taller Sol',
-      email: 'javier@tallersol.test',
-      phone: '+34 610 552 778',
-      neighborhood: 'Usera',
-      status: 'con_respuesta',
-      need: 'Recordatorios de ITV y revisiones. Ahora se le olvidan en una libreta.',
-      next_action: { type: 'visit', label: 'Pasarse el viernes 6, a las 9:00, antes de abrir el taller', at: '2026-11-06T08:00:00.000Z' },
-      updated_at: '2026-10-30T18:40:00.000Z',
-      timeline: [
-        { id: 't4', type: 'message_sent', at: '2026-10-28T09:05:00.000Z', title: 'Mensaje enviado', detail: 'Propuesta corta: recordatorios por WhatsApp y una página con el teléfono grande.' },
-        { id: 't5', type: 'reply', at: '2026-10-30T18:40:00.000Z', title: 'Contestó', detail: '«Me encaja, pero quiero verlo en el taller. El viernes a primera hora estoy.»' },
-        { id: 't6', type: 'next_action', action: 'visit', at: '2026-10-30T18:45:00.000Z', title: 'Siguiente paso: visita', detail: 'Viernes 6 de noviembre, 9:00. Calle del Pico de Extremadura, 14.' },
-      ],
-    }),
-    lead({
-      id: 'lead_belen',
-      name: 'Belén García',
-      company: 'Floristería Belén',
-      email: 'belen@floristeriabelen.test',
-      phone: '+34 655 441 220',
-      neighborhood: 'Lavapiés',
-      status: 'llamada_visita',
-      need: 'Encargos de ramo para el mismo día y un Instagram que no parezca de banco de fotos.',
-      next_action: { type: 'visit', label: 'Visita el jueves 5 de noviembre, 17:00', at: '2026-11-05T16:00:00.000Z' },
-      updated_at: '2026-10-31T12:00:00.000Z',
-      timeline: [
-        { id: 't7', type: 'message_sent', at: '2026-10-27T10:00:00.000Z', title: 'Mensaje enviado', detail: 'Nota de voz resumida por escrito: tres piezas al mes con las flores de esa semana.' },
-        { id: 't8', type: 'reply', at: '2026-10-27T19:12:00.000Z', title: 'Contestó', detail: '«El jueves estoy en la tienda después de las cinco. Trae algo que pueda enseñar a mi madre, que también decide.»' },
-        { id: 't9', type: 'piece_sent', at: '2026-10-30T08:30:00.000Z', title: 'Pieza enviada', detail: 'Boceto de historia: ramo de temporada y el precio escrito a mano, no en un cartel genérico.' },
-        { id: 't10', type: 'next_action', action: 'visit', at: '2026-10-31T12:00:00.000Z', title: 'Siguiente paso: visita', detail: 'Jueves 5, 17:00. Calle del Ave María, 22.' },
-      ],
-    }),
-    lead({
-      id: 'lead_espiga',
-      name: 'Carmen Ruiz',
-      company: 'Panadería La Espiga',
-      email: 'carmen@laespiga.test',
-      phone: '+34 600 218 334',
-      neighborhood: 'Usera',
-      status: 'pieza_enviada',
-      need: 'Avisar cuándo sale la hogaza del sábado y dejar de depender del grupo de WhatsApp del barrio.',
-      next_action: { type: 'call', label: 'Llamar el martes 3 para revisar el carrusel', at: '2026-11-03T10:00:00.000Z' },
-      updated_at: '2026-10-31T09:40:00.000Z',
-      timeline: [
-        { id: 't11', type: 'message_sent', at: '2026-10-22T08:10:00.000Z', title: 'Mensaje enviado', detail: 'Domingo se presentó después de comprar el pan. Pidió permiso para usar la foto del mostrador.' },
-        { id: 't12', type: 'reply', at: '2026-10-22T13:02:00.000Z', title: 'Contestó', detail: '«La foto sí, el precio del pan no lo pongas si cambia cada semana.»' },
-        { id: 't13', type: 'piece_sent', at: '2026-10-31T09:40:00.000Z', title: 'Pieza enviada', detail: 'Carrusel de cuatro fotos: masa, horno, hogaza y el sábado. Esperando la aprobación de Domingo antes de enseñárselo a Carmen.' },
-        { id: 't14', type: 'next_action', action: 'call', at: '2026-10-31T09:41:00.000Z', title: 'Siguiente paso: llamada', detail: 'Martes 3 de noviembre, 11:00, cuando cierra el turno de mañana.' },
-      ],
-    }),
-    lead({
-      id: 'lead_aire',
-      name: 'Lucía Romero',
-      company: 'Estudio Aire',
-      email: 'lucia@aireyoga.test',
-      phone: '+34 644 778 120',
-      neighborhood: 'Chamberí',
-      status: 'cliente',
-      need: 'Clases de yoga y una web que explique el horario sin que tenga que repetirlo por mensaje.',
-      next_action: { type: 'visit', label: 'Revisión en el estudio el 3 de noviembre, 11:00', at: '2026-11-03T10:00:00.000Z' },
-      updated_at: '2026-10-28T17:00:00.000Z',
-      timeline: [
-        { id: 't15', type: 'message_sent', at: '2026-09-02T09:00:00.000Z', title: 'Mensaje enviado', detail: 'Primera nota después de una clase de prueba.' },
-        { id: 't16', type: 'reply', at: '2026-09-02T21:10:00.000Z', title: 'Contestó', detail: 'Pidió empezar por la web y cuatro piezas al mes.' },
-        { id: 't17', type: 'piece_sent', at: '2026-10-28T17:00:00.000Z', title: 'Pieza enviada', detail: 'Reel de la clase del jueves, pendiente de que Lucía lo apruebe en el portal.' },
-      ],
-    }),
-    lead({
-      id: 'lead_rivas',
-      name: 'Andrés Rivas',
-      company: 'Asesoría Rivas',
-      email: 'andres@asesoriarivas.test',
-      phone: '+34 619 300 214',
-      neighborhood: 'Retiro',
-      status: 'perdido',
-      need: 'Quería captar autónomos, pero este trimestre no tiene presupuesto.',
-      next_action: null,
-      updated_at: '2026-10-18T11:00:00.000Z',
-      timeline: [
-        { id: 't18', type: 'message_sent', at: '2026-10-10T09:30:00.000Z', title: 'Mensaje enviado', detail: 'Resumen de una página de servicios y una ficha de Google.' },
-        { id: 't19', type: 'reply', at: '2026-10-18T11:00:00.000Z', title: 'Contestó', detail: '«Lo dejamos para después de la renta. Escríbeme en mayo.»' },
-      ],
-    }),
-  ]
-
-  const clients = [
-    {
-      id: 'cli_aire',
-      name: 'Lucía Romero',
-      company: 'Estudio Aire',
-      email: 'lucia@aireyoga.test',
-      neighborhood: 'Chamberí',
-      plan_label: 'Marketing mensual',
-      since: '2026-09-08',
-      kpis: {
-        pieces_this_month: 4,
-        approved: 2,
-        pending: 2,
-        avg_approval_days: 1.4,
-        open_invoices_cents: 14900,
-        next_meeting_at: '2026-11-03T10:00:00.000Z',
-        messages_sent: 18,
-        replies: 11,
-      },
-    },
-    {
-      id: 'cli_espiga',
-      name: 'Carmen Ruiz',
-      company: 'Panadería La Espiga',
-      email: 'carmen@laespiga.test',
-      neighborhood: 'Usera',
-      plan_label: 'Puesta en marcha',
-      since: '2026-10-22',
-      kpis: {
-        pieces_this_month: 1,
-        approved: 0,
-        pending: 1,
-        avg_approval_days: 0,
-        open_invoices_cents: 0,
-        next_meeting_at: '2026-11-03T10:00:00.000Z',
-        messages_sent: 6,
-        replies: 3,
-      },
-    },
-    {
-      id: 'cli_norte',
-      name: 'Marcos Peña',
-      company: 'Clínica Dental Norte',
-      email: 'marcos@dentalnorte.test',
-      neighborhood: 'Retiro',
-      plan_label: 'Marketing mensual',
-      since: '2026-08-12',
-      kpis: {
-        pieces_this_month: 5,
-        approved: 3,
-        pending: 1,
-        avg_approval_days: 2.1,
-        open_invoices_cents: 24900,
-        next_meeting_at: '2026-11-12T16:30:00.000Z',
-        messages_sent: 22,
-        replies: 14,
-      },
-    },
-  ]
-
-  const approvals = [
-    {
-      id: 'ap_espiga_carrusel',
-      client_id: 'cli_espiga',
-      client_name: 'Carmen Ruiz',
-      company: 'Panadería La Espiga',
-      title: 'Carrusel del sábado: hogaza de masa madre',
-      channel: 'Instagram',
-      preview_text: 'Cuatro fotos del obrador. El texto no menciona el precio. Cierra con «sale del horno a las diez, hasta acabar».',
-      preview_url: 'https://docs.google.com/document/d/demo-espiga-carrusel',
-      stage: 'domingo',
-      status: 'pending',
-      needs_reapproval: false,
-      rejection_comment: '',
-      version: 1,
-      submitted_at: '2026-10-31T09:40:00.000Z',
-    },
-    {
-      id: 'ap_norte_limpieza',
-      client_id: 'cli_norte',
-      client_name: 'Marcos Peña',
-      company: 'Clínica Dental Norte',
-      title: 'Post de la limpieza',
-      channel: 'Google Business',
-      preview_text: 'Texto corto sobre la higiene dental. El precio que escribió el bot no coincide con la tarifa de la clínica.',
-      preview_url: 'https://docs.google.com/document/d/demo-norte-limpieza',
-      stage: 'domingo',
-      status: 'pending',
-      needs_reapproval: true,
-      rejection_comment: 'El precio de la limpieza no es 39, es 49. Cambiadlo antes de publicar.',
-      version: 2,
-      submitted_at: '2026-10-30T15:05:00.000Z',
-    },
-    {
-      id: 'ap_aire_reel',
-      client_id: 'cli_aire',
-      client_name: 'Lucía Romero',
-      company: 'Estudio Aire',
-      title: 'Reel de la clase del jueves',
-      channel: 'Instagram',
-      preview_text: 'Respiración y espalda, sin música estridente. El texto invita a la clase de las 19:00 y no promete resultados clínicos.',
-      preview_url: 'https://docs.google.com/document/d/demo-aire-reel',
-      stage: 'client',
-      status: 'pending',
-      needs_reapproval: false,
-      rejection_comment: '',
-      version: 1,
-      submitted_at: '2026-10-28T17:00:00.000Z',
-    },
-    {
-      id: 'ap_aire_portada',
-      client_id: 'cli_aire',
-      client_name: 'Lucía Romero',
-      company: 'Estudio Aire',
-      title: 'Texto de la portada',
-      channel: 'Web',
-      preview_text: '«Clases en grupos pequeños, en Chamberí. Si es tu primera vez, escribe y te decimos por dónde empezar.»',
-      preview_url: 'https://docs.google.com/document/d/demo-aire-portada',
-      stage: 'client',
-      status: 'pending',
-      needs_reapproval: false,
-      rejection_comment: '',
-      version: 3,
-      submitted_at: '2026-10-29T11:15:00.000Z',
-    },
-  ]
-
-  const vault = [
-    {
-      id: 'v_aire_ig',
-      client_id: 'cli_aire',
-      label: 'Instagram de Aire',
-      kind: 'instagram',
-      username: '@estudio.aire',
-      url: 'https://instagram.com/estudio.aire',
-      notes: 'Cuenta de la marca. La clave no se muestra en el panel.',
-      has_secret: true,
-      updated_at: '2026-09-20T10:00:00.000Z',
-    },
-    {
-      id: 'v_aire_bot',
-      client_id: 'cli_aire',
-      label: 'Clave del bot de publicación',
-      kind: 'bot_api_key',
-      username: 'aire-bot',
-      url: '',
-      notes: 'La usa el bot para dejar piezas en borrador. No publica sola.',
-      has_secret: true,
-      updated_at: '2026-10-01T10:00:00.000Z',
-    },
-  ]
-
-  const reports = [
-    {
-      id: 'rep_aire_oct',
-      client_id: 'cli_aire',
-      period_label: 'Octubre 2026',
-      title: 'Informe de octubre',
-      summary: 'La clase del jueves se llenó las dos últimas semanas. La portada nueva todavía está en revisión.',
-      google_doc_url: 'https://docs.google.com/document/d/demo-aire-octubre-2026',
-      published_at: '2026-11-01T08:00:00.000Z',
-    },
-    {
-      id: 'rep_aire_sep',
-      client_id: 'cli_aire',
-      period_label: 'Septiembre 2026',
-      title: 'Informe de septiembre',
-      summary: 'Arranque: web publicada y primeras cuatro piezas. Dos reservas llegaron desde el perfil.',
-      google_doc_url: 'https://docs.google.com/document/d/demo-aire-septiembre-2026',
-      published_at: '2026-10-01T08:00:00.000Z',
-    },
-  ]
-
-  const meetings = [
-    {
-      id: 'meet_aire_nov',
-      client_id: 'cli_aire',
-      title: 'Revisión en el estudio',
-      starts_at: '2026-11-03T10:00:00.000Z',
-      place: 'Calle de Fuencarral 88, Chamberí',
-      status: 'scheduled',
-      notes: 'Llevar el reel del jueves por si Lucía quiere verlo en el móvil.',
-    },
-    {
-      id: 'meet_aire_mensual',
-      client_id: 'cli_aire',
-      title: 'Revisión mensual',
-      starts_at: '2026-11-12T17:00:00.000Z',
-      place: 'Videollamada',
-      status: 'scheduled',
-      notes: 'Repasar el informe de octubre y el calendario de diciembre.',
-    },
-  ]
-
-  const invoices = [
-    {
-      id: 'inv_aire_014',
-      client_id: 'cli_aire',
-      number: 'F-2026-014',
-      concept: 'Departamento de marketing · octubre',
-      amount_cents: 14900,
-      currency: 'eur',
-      status: 'open',
-      issued_at: '2026-11-01T08:00:00.000Z',
-      due_at: '2026-11-08T08:00:00.000Z',
-    },
-    {
-      id: 'inv_aire_011',
-      client_id: 'cli_aire',
-      number: 'F-2026-011',
-      concept: 'Departamento de marketing · septiembre',
-      amount_cents: 14900,
-      currency: 'eur',
-      status: 'paid',
-      issued_at: '2026-09-08T08:00:00.000Z',
-      due_at: null,
-    },
-  ]
-
-  return { leads, clients, approvals, vault, secrets: {}, reports, meetings, invoices, challenges: {} }
-}
+export const DEMO_MFA_CODE = '482913'
+export const DEMO_CLIENT_ID = '64b0000000000000000000a1'
 
 export const DEMO_ACCOUNTS = [
   {
     email: 'domingo@midiginode.com',
     password: 'Madrid-2026',
     role: 'admin',
-    name: 'Domingo Ugas',
     client_id: null,
   },
   {
     email: 'lucia@aireyoga.test',
     password: 'Aire-2026',
     role: 'client',
-    name: 'Lucía Romero',
-    client_id: 'cli_aire',
+    client_id: DEMO_CLIENT_ID,
   },
 ]
 
-export const DEMO_MFA_CODE = '482913'
+const AIRE = DEMO_CLIENT_ID
+const LAMA = '64b0000000000000000000a2'
+
+function row(id, fields) {
+  return {
+    id,
+    _id: id,
+    created_at: '2026-10-01T09:00:00.000Z',
+    updated_at: '2026-10-30T09:00:00.000Z',
+    ...fields,
+  }
+}
+
+export function createFixtures() {
+  const leads = [
+    row('64b0000000000000000000b1', {
+      name: 'Nuria Gil',
+      company: 'Peluquería Nuria',
+      business: 'Peluquería Nuria',
+      email: 'nuria@peluquerianuria.test',
+      phone: '+34 611 203 441',
+      country: 'España',
+      origin_detail: 'Carabanchel',
+      pipeline_status: 'nuevo',
+      service_interest: 'brand_management',
+      goal: 'Quiere que las clientas reserven por Instagram sin contestar ella a cada mensaje.',
+      next_action: 'Llamar el lunes 2 de noviembre, 10:30',
+      next_action_at: '2026-11-02T09:30:00.000Z',
+      updated_at: '2026-10-31T16:10:00.000Z',
+      activity: [
+        {
+          id: '64b000000000000000000101',
+          _id: '64b000000000000000000101',
+          type: 'siguiente_accion',
+          summary: 'Dejó el teléfono en el formulario. Todavía no la hemos llamado.',
+          at: '2026-10-31T16:10:00.000Z',
+          actor: 'domingo@midiginode.com',
+        },
+      ],
+    }),
+    row('64b0000000000000000000b2', {
+      name: 'Héctor Lama',
+      company: 'Reformas Lama',
+      business: 'Reformas Lama',
+      email: 'hector@reformaslama.test',
+      phone: '+34 622 118 903',
+      country: 'España',
+      origin_detail: 'Vallecas',
+      pipeline_status: 'contactado',
+      service_interest: 'web_project',
+      goal: 'Pedir obras con fotos de antes y después.',
+      next_action: 'Si no contesta, llamar el miércoles 4',
+      next_action_at: '2026-11-04T10:00:00.000Z',
+      updated_at: '2026-10-29T11:20:00.000Z',
+      activity: [
+        {
+          id: '64b000000000000000000102',
+          _id: '64b000000000000000000102',
+          type: 'mensaje_enviado',
+          summary: 'WhatsApp con dos ejemplos de reformas en Madrid.',
+          at: '2026-10-29T11:20:00.000Z',
+          actor: 'domingo@midiginode.com',
+        },
+      ],
+    }),
+    row('64b0000000000000000000b3', {
+      name: 'Javier Soto',
+      company: 'Taller Sol',
+      business: 'Taller Sol',
+      email: 'javier@tallersol.test',
+      phone: '+34 610 552 778',
+      country: 'España',
+      origin_detail: 'Usera',
+      pipeline_status: 'respondio',
+      service_interest: 'digital_clinic',
+      goal: 'Recordatorios de ITV. Ahora se le olvidan en una libreta.',
+      next_action: 'Pasarse el viernes 6, a las 9:00, antes de abrir',
+      next_action_at: '2026-11-06T08:00:00.000Z',
+      updated_at: '2026-10-30T18:40:00.000Z',
+      activity: [
+        {
+          id: '64b000000000000000000103',
+          _id: '64b000000000000000000103',
+          type: 'mensaje_enviado',
+          summary: 'Propuesta corta: recordatorios por WhatsApp.',
+          at: '2026-10-28T09:05:00.000Z',
+          actor: 'domingo@midiginode.com',
+        },
+        {
+          id: '64b000000000000000000104',
+          _id: '64b000000000000000000104',
+          type: 'respuesta',
+          summary: 'Quiere verlo en el taller el viernes a primera hora.',
+          at: '2026-10-30T18:40:00.000Z',
+          actor: 'javier@tallersol.test',
+        },
+      ],
+    }),
+    row('64b0000000000000000000b4', {
+      name: 'Belén García',
+      company: 'Floristería Belén',
+      business: 'Floristería Belén',
+      email: 'belen@floristeriabelen.test',
+      phone: '+34 655 441 220',
+      country: 'España',
+      origin_detail: 'Lavapiés',
+      pipeline_status: 'reunion_visita',
+      service_interest: 'brand_management',
+      goal: 'Encargos del mismo día y un Instagram que no parezca de banco de fotos.',
+      next_action: 'Visita el jueves 5 de noviembre, 17:00',
+      next_action_at: '2026-11-05T16:00:00.000Z',
+      activity: [
+        {
+          id: '64b000000000000000000105',
+          _id: '64b000000000000000000105',
+          type: 'pieza_enviada',
+          summary: 'Boceto de historia: ramo de temporada y el precio escrito a mano.',
+          at: '2026-10-30T08:30:00.000Z',
+          actor: 'contenido',
+        },
+      ],
+    }),
+    row('64b0000000000000000000b5', {
+      name: 'Ana Ruiz',
+      company: 'Estudio Ana',
+      business: 'Estudio Ana',
+      pipeline_status: 'analizado',
+      country: 'España',
+      service_interest: 'undecided',
+      goal: 'Todavía no ha elegido entre la web y la gestión mensual.',
+      next_action: 'Mandarle las dos opciones por escrito',
+      activity: [],
+    }),
+    row('64b0000000000000000000b6', {
+      name: 'Pedro Gil',
+      company: 'Panadería Gil',
+      business: 'Panadería Gil',
+      pipeline_status: 'pieza_lista',
+      country: 'España',
+      goal: 'Una pieza de muestra del pan del sábado, lista para que Domingo la mire.',
+      next_action: 'Revisar la pieza antes de enviarla',
+      activity: [],
+    }),
+    row('64b0000000000000000000b7', {
+      name: 'Marta León',
+      company: 'Clínica León',
+      business: 'Clínica León',
+      pipeline_status: 'pendiente_de_aprobacion',
+      country: 'España',
+      goal: 'La muestra ya está en la cola de aprobación.',
+      activity: [],
+    }),
+    row('64b0000000000000000000b8', {
+      name: 'Lucía Aire',
+      company: 'Estudio Aire',
+      business: 'Estudio Aire',
+      pipeline_status: 'ganado',
+      country: 'España',
+      goal: 'Ya es clienta. El trabajo sigue en el portal.',
+      activity: [],
+    }),
+    row('64b0000000000000000000b9', {
+      name: 'Óscar Vega',
+      company: 'Fontanería Vega',
+      business: 'Fontanería Vega',
+      pipeline_status: 'perdido',
+      country: 'España',
+      goal: 'Dijo que este año no.',
+      activity: [
+        {
+          id: '64b000000000000000000106',
+          _id: '64b000000000000000000106',
+          type: 'nota',
+          summary: 'No sigue por ahora. No insistir este trimestre.',
+          at: '2026-10-20T12:00:00.000Z',
+          actor: 'domingo@midiginode.com',
+        },
+      ],
+    }),
+  ]
+
+  const clients = [
+    row(AIRE, {
+      name: 'Lucía Aire',
+      company: 'Estudio Aire',
+      email: 'lucia@aireyoga.test',
+      country: 'España',
+      plan: 'individual',
+      status: 'active',
+      service_package: 'Gestión de marca',
+      brand: { name: 'Estudio Aire', city: 'Madrid', sector: 'Yoga' },
+      kpis: [
+        { name: 'Clases reservadas', value: '38', unit: 'reservas', period: '2026-10' },
+      ],
+      strategy_links: [
+        { label: 'Guía de voz', url: 'https://docs.google.com/document/d/aire-voz' },
+      ],
+      created_at: '2026-06-02T09:00:00.000Z',
+    }),
+    row(LAMA, {
+      name: 'Héctor Lama',
+      company: 'Reformas Lama',
+      email: 'hector@reformaslama.test',
+      country: 'España',
+      plan: 'estudio',
+      status: 'active',
+      service_package: 'Web y contenidos',
+      brand: { city: 'Vallecas' },
+      kpis: [],
+      strategy_links: [],
+      created_at: '2026-09-12T09:00:00.000Z',
+    }),
+  ]
+
+  const pieces = [
+    row('64b0000000000000000000c1', {
+      client_id: AIRE,
+      type: 'reel',
+      title: 'Reel de la clase del jueves',
+      drive_url: 'https://drive.google.com/file/d/aire-reel/view',
+      status: 'en_revision',
+      version: 1,
+      author_bot: 'contenido',
+      versions: [{ version: 1, drive_url: 'https://drive.google.com/file/d/aire-reel/view', note: 'Clase en la sala grande, sin música de fondo.', created_by: 'contenido' }],
+      updated_at: '2026-11-03T17:00:00.000Z',
+    }),
+    row('64b0000000000000000000c2', {
+      client_id: LAMA,
+      type: 'post',
+      title: 'Antes y después, calle del Pico',
+      drive_url: 'https://drive.google.com/file/d/lama-post/view',
+      status: 'borrador',
+      version: 2,
+      author_bot: 'contenido',
+      versions: [
+        { version: 2, drive_url: 'https://drive.google.com/file/d/lama-post/view', note: 'El cliente pidió menos texto.', created_by: 'contenido' },
+      ],
+      updated_at: '2026-11-04T09:00:00.000Z',
+    }),
+    row('64b0000000000000000000c3', {
+      client_id: AIRE,
+      type: 'story',
+      title: 'Historia de los horarios',
+      drive_url: 'https://docs.google.com/document/d/aire-horarios',
+      status: 'aprobado',
+      version: 1,
+      versions: [{ version: 1, note: 'Horario de noviembre.', created_by: 'contenido' }],
+    }),
+  ]
+
+  const approvals = [
+    row('64b0000000000000000000d1', {
+      piece_id: '64b0000000000000000000c1',
+      client_id: AIRE,
+      mode: 'dos_fases',
+      status: 'pendiente_cliente',
+      round: 1,
+      author_bot: 'contenido',
+      audit: [{ at: '2026-10-28T17:00:00.000Z', actor_type: 'admin', action: 'aprobada_domingo', actor_label: 'domingo@midiginode.com' }],
+    }),
+    row('64b0000000000000000000d2', {
+      piece_id: '64b0000000000000000000c2',
+      client_id: LAMA,
+      mode: 'dos_fases',
+      status: 'pendiente_domingo',
+      round: 2,
+      author_bot: 'contenido',
+      audit: [
+        { at: '2026-10-27T11:00:00.000Z', actor_type: 'client', action: 'rechazada_cliente', comment: 'Demasiado texto. Que se vea la obra.', actor_label: 'hector@reformaslama.test' },
+        { at: '2026-10-29T09:00:00.000Z', actor_type: 'bot', action: 'reenviada', actor_label: 'contenido' },
+      ],
+    }),
+    row('64b0000000000000000000d3', {
+      piece_id: '64b0000000000000000000c3',
+      client_id: AIRE,
+      mode: 'dos_fases',
+      status: 'aprobado',
+      round: 1,
+      audit: [{ at: '2026-10-20T10:00:00.000Z', actor_type: 'client', action: 'aprobada_cliente' }],
+    }),
+  ]
+
+  const reports = [
+    row('64b0000000000000000000e1', {
+      client_id: AIRE,
+      period: '2026-10',
+      title: 'Octubre en Estudio Aire',
+      drive_url: 'https://docs.google.com/document/d/aire-octubre',
+      status: 'enviado',
+    }),
+    row('64b0000000000000000000e2', {
+      client_id: AIRE,
+      period: '2026-11',
+      title: 'Noviembre, todavía en borrador',
+      drive_url: 'https://docs.google.com/document/d/aire-noviembre',
+      status: 'borrador',
+    }),
+  ]
+
+  const meetings = [
+    row('64b0000000000000000000f1', {
+      client_id: AIRE,
+      title: 'Revisión de noviembre',
+      starts_at: '2026-11-12T10:00:00.000Z',
+      ends_at: '2026-11-12T10:30:00.000Z',
+      location: 'Videollamada',
+      notes: 'Mirar el reel del jueves y las reservas.',
+      status: 'programada',
+    }),
+    row('64b0000000000000000000f2', {
+      client_id: AIRE,
+      title: 'Puesta en marcha',
+      starts_at: '2026-09-04T09:00:00.000Z',
+      location: 'Estudio, calle de Argumosa',
+      status: 'hecha',
+      notes: '',
+    }),
+  ]
+
+  const invoices = [
+    row('64b0000000000000000000aa', {
+      client_id: AIRE,
+      concept: 'Gestión de marca, octubre',
+      amount_eur: 640,
+      currency: 'EUR',
+      status: 'pendiente',
+      payment_url: 'https://checkout.stripe.com/c/pay/cs_test_aire_octubre',
+      stripe_session_id: 'cs_test_aire_octubre',
+    }),
+    row('64b0000000000000000000ab', {
+      client_id: LAMA,
+      concept: 'Primera pieza de muestra',
+      amount_eur: 180,
+      currency: 'EUR',
+      status: 'pendiente',
+      payment_url: '',
+    }),
+    row('64b0000000000000000000ac', {
+      client_id: AIRE,
+      concept: 'Gestión de marca, septiembre',
+      amount_eur: 640,
+      currency: 'EUR',
+      status: 'pagada',
+      paid_at: '2026-09-28T12:00:00.000Z',
+    }),
+  ]
+
+  const credentialId = '64b0000000000000000000c0'
+  const credentials = [
+    row(credentialId, {
+      client_id: AIRE,
+      provider: 'meta_business',
+      label: 'Instagram de Estudio Aire',
+    }),
+  ]
+
+  return {
+    challenges: {},
+    leads,
+    clients,
+    pieces,
+    approvals,
+    reports,
+    meetings,
+    invoices,
+    credentials,
+    secrets: { [credentialId]: 'clave-de-demostracion' },
+  }
+}

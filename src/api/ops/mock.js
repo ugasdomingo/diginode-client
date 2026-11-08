@@ -22,12 +22,18 @@ function b64(value) {
 
 export function signDemoToken(user) {
   const payload = {
-    user_id: user.role === 'admin' ? 'demo-admin' : user.client_id,
-    email: user.email,
+    user_id: user.role === 'admin' ? '64b0000000000000000000ad' : user.client_id,
     role: user.role,
+    token_version: 0,
     client_id: user.client_id,
   }
   return `${b64({ alg: 'none', typ: 'JWT' })}.${b64(payload)}.demo`
+}
+
+function routeOf(path) {
+  const [pathname, queryString = ''] = String(path).split('?')
+  const query = Object.fromEntries(new URLSearchParams(queryString))
+  return { pathname, query }
 }
 
 function readToken(explicit) {
@@ -39,49 +45,63 @@ function readToken(explicit) {
 function payloadOf(token) {
   if (!token) return null
   try {
-    const part = token.split('.')[1]
-    return JSON.parse(atob(part))
+    return JSON.parse(atob(token.split('.')[1]))
   } catch {
     return null
   }
 }
 
-function requireRole(token, role) {
+function actorFrom(token, roles) {
   const payload = payloadOf(token)
-  if (!payload) fail(401, 'Tu sesión expiró. Entra de nuevo.')
-  if (payload.role !== role) fail(403, 'No tienes permiso para ver esto.')
+  if (!payload?.role) fail(401, 'No autorizado')
+  if (roles && !roles.includes(payload.role)) fail(403, 'Acceso denegado')
   return payload
 }
 
-function publicVault(entry) {
+function byId(rows, id) {
+  return rows.find((item) => item.id === id || item._id === id)
+}
+
+function page(rows, query) {
+  const limit = Math.min(Math.max(parseInt(query.limit, 10) || 20, 1), 100)
+  const pageNum = Math.max(parseInt(query.page, 10) || 1, 1)
+  const start = (pageNum - 1) * limit
+  return { success: true, data: clone(rows.slice(start, start + limit)), total: rows.length }
+}
+
+function scoped(rows, actor) {
+  if (actor.role !== 'client') return rows
+  return rows.filter((item) => item.client_id === actor.client_id)
+}
+
+function publicCredential(entry) {
   return {
     id: entry.id,
+    _id: entry._id,
     client_id: entry.client_id,
+    provider: entry.provider,
     label: entry.label,
-    kind: entry.kind,
-    username: entry.username || '',
-    url: entry.url || '',
-    notes: entry.notes || '',
-    has_secret: Boolean(entry.has_secret),
+    created_at: entry.created_at,
     updated_at: entry.updated_at,
   }
 }
 
-function findApproval(id) {
-  const item = db.approvals.find((entry) => entry.id === id)
-  if (!item) fail(404, 'No encontramos esa pieza.')
-  return item
+function publicLead(lead, { withActivity = false } = {}) {
+  const copy = clone(lead)
+  copy.business = copy.company || null
+  if (!withActivity) delete copy.activity
+  return copy
 }
 
-function routeOf(path) {
-  const [pathname, queryString = ''] = String(path).split('?')
-  const query = Object.fromEntries(new URLSearchParams(queryString))
-  return { pathname, query }
+function newChallenge(email) {
+  const challenge_id = `ch_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`
+  db.challenges[challenge_id] = { email, attempts: 0, expires_at: Date.now() + 10 * 60 * 1000 }
+  return challenge_id
 }
 
 /**
- * Imita la API de operación. El secreto de la bóveda se guarda aparte
- * y ninguna respuesta lo incluye.
+ * Imita los contratos de /api/auth y /api/agency. El secreto de la bóveda
+ * no sale en las listas ni en el alta.
  */
 export function mockOps(method, path, body = null, token) {
   const authToken = readToken(token)
@@ -89,158 +109,142 @@ export function mockOps(method, path, body = null, token) {
   const key = `${method} ${pathname}`
 
   if (key === 'POST /auth/login') return login(body)
-  if (key === 'POST /auth/mfa/verify') return verifyMfa(body)
-  if (key === 'POST /auth/mfa/resend') return resendMfa(body)
+  if (key === 'POST /auth/otp/verify') return verifyOtp(body)
+  if (key === 'POST /auth/otp/resend') return resendOtp(body)
 
-  if (key === 'GET /admin/ops/leads') {
-    requireRole(authToken, 'admin')
-    const status = query.status
-    const rows = db.leads.filter((item) => !status || item.status === status)
-    return { success: true, data: clone(rows) }
+  const credentialList = pathname.match(/^\/agency\/clients\/([^/]+)\/credentials$/)
+  if (credentialList && method === 'GET') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    if (actor.role === 'client' && actor.client_id !== credentialList[1]) fail(403, 'Acceso denegado')
+    const rows = db.credentials.filter((item) => item.client_id === credentialList[1])
+    return { success: true, data: rows.map(publicCredential) }
+  }
+  if (credentialList && method === 'POST') {
+    actorFrom(authToken, ['admin', 'client'])
+    return { success: true, data: createCredential(credentialList[1], body) }
   }
 
-  const leadMatch = pathname.match(/^\/admin\/ops\/leads\/([^/]+)$/)
-  if (method === 'GET' && leadMatch) {
-    requireRole(authToken, 'admin')
-    const item = db.leads.find((lead) => lead.id === leadMatch[1])
-    if (!item) fail(404, 'No encontramos ese lead.')
+  const clientOne = pathname.match(/^\/agency\/clients\/([^/]+)$/)
+  if (clientOne && method === 'GET') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    const item = byId(db.clients, clientOne[1])
+    if (!item) fail(404, 'Cliente no encontrado')
+    if (actor.role === 'client' && actor.client_id !== item.id) fail(403, 'Acceso denegado')
     return { success: true, data: clone(item) }
   }
 
-  if (key === 'GET /admin/ops/clients') {
-    requireRole(authToken, 'admin')
-    return { success: true, data: clone(db.clients) }
+  const leadOne = pathname.match(/^\/agency\/leads\/([^/]+)$/)
+  if (leadOne && method === 'GET') {
+    actorFrom(authToken, ['admin'])
+    const item = byId(db.leads, leadOne[1])
+    if (!item) fail(404, 'Lead no encontrado')
+    return { success: true, data: publicLead(item, { withActivity: true }) }
   }
 
-  const clientMatch = pathname.match(/^\/admin\/ops\/clients\/([^/]+)$/)
-  if (method === 'GET' && clientMatch) {
-    requireRole(authToken, 'admin')
-    const item = db.clients.find((client) => client.id === clientMatch[1])
-    if (!item) fail(404, 'No encontramos ese cliente.')
-    return { success: true, data: clone(item) }
+  const submit = pathname.match(/^\/agency\/pieces\/([^/]+)\/submit$/)
+  if (submit && method === 'POST') {
+    actorFrom(authToken, ['admin'])
+    return { success: true, data: submitPiece(submit[1]) }
   }
 
-  if (key === 'GET /admin/ops/approvals') {
-    requireRole(authToken, 'admin')
-    let rows = db.approvals.filter((item) => item.stage === 'domingo' && item.status === 'pending')
-    if (query.client_id) rows = db.approvals.filter((item) => item.client_id === query.client_id)
-    return { success: true, data: clone(rows) }
+  const domingo = pathname.match(/^\/agency\/approvals\/([^/]+)\/domingo$/)
+  if (domingo && method === 'POST') {
+    actorFrom(authToken, ['admin'])
+    return { success: true, data: decide(domingo[1], 'domingo', body) }
   }
 
-  const approveMatch = pathname.match(/^\/admin\/ops\/approvals\/([^/]+)\/approve$/)
-  if (method === 'POST' && approveMatch) {
-    requireRole(authToken, 'admin')
-    const item = findApproval(approveMatch[1])
-    if (item.stage !== 'domingo' || item.status !== 'pending') {
-      fail(409, 'Esta pieza no está esperando a Domingo.')
+  const clientDecision = pathname.match(/^\/agency\/approvals\/([^/]+)\/client$/)
+  if (clientDecision && method === 'POST') {
+    const actor = actorFrom(authToken, ['client'])
+    return { success: true, data: decide(clientDecision[1], 'client', body, actor) }
+  }
+
+  const decrypt = pathname.match(/^\/agency\/credentials\/([^/]+)\/decrypt$/)
+  if (decrypt && method === 'POST') {
+    actorFrom(authToken, ['admin'])
+    const entry = byId(db.credentials, decrypt[1])
+    if (!entry) fail(404, 'Credencial no encontrada')
+    const secret = db.secrets[entry.id]
+    if (secret == null) fail(404, 'Credencial no encontrada')
+    return { success: true, data: { id: entry.id, provider: entry.provider, label: entry.label, secret } }
+  }
+
+  const drop = pathname.match(/^\/agency\/credentials\/([^/]+)$/)
+  if (drop && method === 'DELETE') {
+    actorFrom(authToken, ['admin'])
+    const index = db.credentials.findIndex((item) => item.id === drop[1])
+    if (index < 0) fail(404, 'Credencial no encontrada')
+    db.credentials.splice(index, 1)
+    delete db.secrets[drop[1]]
+    return { success: true }
+  }
+
+  const checkout = pathname.match(/^\/agency\/invoices\/([^/]+)\/checkout$/)
+  if (checkout && method === 'POST') {
+    actorFrom(authToken, ['admin'])
+    return checkoutInvoice(checkout[1])
+  }
+
+  if (key === 'GET /agency/leads') {
+    actorFrom(authToken, ['admin'])
+    let rows = db.leads
+    if (query.pipeline_status) rows = rows.filter((item) => item.pipeline_status === query.pipeline_status)
+    return page(rows.map((item) => publicLead(item)), query)
+  }
+
+  if (key === 'GET /agency/clients') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    const rows = actor.role === 'client' ? db.clients.filter((item) => item.id === actor.client_id) : db.clients
+    return page(rows, query)
+  }
+
+  if (key === 'GET /agency/pieces') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    let rows = scoped(db.pieces, actor)
+    if (query.client_id) {
+      if (actor.role === 'client' && query.client_id !== actor.client_id) fail(403, 'Acceso denegado')
+      rows = rows.filter((item) => item.client_id === query.client_id)
     }
-    item.stage = 'client'
-    item.status = 'pending'
-    item.needs_reapproval = false
-    item.rejection_comment = ''
-    return { success: true, data: clone(item) }
+    if (query.status) rows = rows.filter((item) => item.status === query.status)
+    return page(rows, query)
   }
 
-  const rejectMatch = pathname.match(/^\/admin\/ops\/approvals\/([^/]+)\/reject$/)
-  if (method === 'POST' && rejectMatch) {
-    requireRole(authToken, 'admin')
-    const item = findApproval(rejectMatch[1])
-    if (item.stage !== 'domingo' || item.status !== 'pending') {
-      fail(409, 'Esta pieza no está esperando a Domingo.')
+  if (key === 'GET /agency/approvals') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    let rows = scoped(db.approvals, actor)
+    if (query.client_id) {
+      if (actor.role === 'client' && query.client_id !== actor.client_id) fail(403, 'Acceso denegado')
+      rows = rows.filter((item) => item.client_id === query.client_id)
     }
-    item.status = 'rejected'
-    item.rejection_comment = String(body?.comment || '').trim()
-    return { success: true, data: clone(item) }
+    if (query.status) rows = rows.filter((item) => item.status === query.status)
+    return page(rows, query)
   }
 
-  if (key === 'GET /admin/ops/vault') {
-    requireRole(authToken, 'admin')
-    const rows = db.vault.filter((item) => !query.client_id || item.client_id === query.client_id)
-    return { success: true, data: rows.map(publicVault) }
+  if (key === 'GET /agency/reports') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    return page(scoped(db.reports, actor), query)
   }
 
-  if (key === 'POST /admin/ops/vault') {
-    requireRole(authToken, 'admin')
-    return { success: true, data: createVault(body) }
+  if (key === 'GET /agency/meetings') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    const rows = scoped(db.meetings, actor).slice().sort((a, b) => String(b.starts_at || '').localeCompare(String(a.starts_at || '')))
+    return page(rows, query)
   }
 
-  const vaultMatch = pathname.match(/^\/admin\/ops\/vault\/([^/]+)$/)
-  if (method === 'PATCH' && vaultMatch) {
-    requireRole(authToken, 'admin')
-    return { success: true, data: updateVault(vaultMatch[1], body) }
+  if (key === 'POST /agency/meetings') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    if (actor.role === 'client') fail(403, 'Acceso denegado')
+    fail(400, 'El alta de reuniones no está en esta pantalla.')
   }
 
-  if (key === 'GET /portal/ops/deliverables') {
-    const user = requireRole(authToken, 'client')
-    const rows = db.approvals.filter((item) => item.client_id === user.client_id)
-    return { success: true, data: clone(rows) }
+  if (key === 'GET /agency/invoices') {
+    const actor = actorFrom(authToken, ['admin', 'client'])
+    let rows = scoped(db.invoices, actor)
+    if (query.status) rows = rows.filter((item) => item.status === query.status)
+    return page(rows, query)
   }
 
-  const clientApprove = pathname.match(/^\/portal\/ops\/deliverables\/([^/]+)\/approve$/)
-  if (method === 'POST' && clientApprove) {
-    const user = requireRole(authToken, 'client')
-    const item = findApproval(clientApprove[1])
-    assertClientPiece(item, user)
-    item.status = 'approved'
-    return { success: true, data: clone(item) }
-  }
-
-  const clientReject = pathname.match(/^\/portal\/ops\/deliverables\/([^/]+)\/reject$/)
-  if (method === 'POST' && clientReject) {
-    const user = requireRole(authToken, 'client')
-    const item = findApproval(clientReject[1])
-    assertClientPiece(item, user)
-    const comment = String(body?.comment || '').trim()
-    if (comment.length < 8) fail(400, 'Cuéntanos qué hay que cambiar, con una frase al menos.')
-    item.stage = 'domingo'
-    item.status = 'pending'
-    item.needs_reapproval = true
-    item.rejection_comment = comment
-    item.version += 1
-    return { success: true, data: clone(item) }
-  }
-
-  if (key === 'GET /portal/ops/reports') {
-    const user = requireRole(authToken, 'client')
-    const rows = db.reports.filter((item) => item.client_id === user.client_id)
-    return { success: true, data: clone(rows) }
-  }
-
-  if (key === 'GET /portal/ops/meetings') {
-    const user = requireRole(authToken, 'client')
-    const rows = db.meetings
-      .filter((item) => item.client_id === user.client_id)
-      .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
-    return { success: true, data: clone(rows) }
-  }
-
-  if (key === 'POST /portal/ops/meetings') {
-    const user = requireRole(authToken, 'client')
-    return { success: true, data: requestMeeting(user, body) }
-  }
-
-  if (key === 'GET /portal/ops/invoices') {
-    const user = requireRole(authToken, 'client')
-    const rows = db.invoices.filter((item) => item.client_id === user.client_id)
-    return { success: true, data: clone(rows) }
-  }
-
-  const checkoutMatch = pathname.match(/^\/portal\/ops\/invoices\/([^/]+)\/checkout$/)
-  if (method === 'POST' && checkoutMatch) {
-    const user = requireRole(authToken, 'client')
-    const invoice = db.invoices.find((item) => item.id === checkoutMatch[1] && item.client_id === user.client_id)
-    if (!invoice) fail(404, 'No encontramos esa factura.')
-    if (invoice.status !== 'open') fail(409, 'Esta factura no está pendiente de pago.')
-    return {
-      success: true,
-      data: {
-        checkout_url: `https://checkout.stripe.com/c/pay/cs_test_${invoice.id}`,
-        mock: true,
-      },
-    }
-  }
-
-  fail(404, `Endpoint no disponible (${method} ${pathname}).`)
+  fail(404, `No encontramos ${method} ${pathname}.`)
 }
 
 function login(body) {
@@ -249,24 +253,14 @@ function login(body) {
   const account = DEMO_ACCOUNTS.find((item) => item.email === email && item.password === password)
   if (!account) fail(401, 'Correo o contraseña incorrectos.')
   if (account.role === 'client') {
-    const challengeId = `ch_${Math.random().toString(36).slice(2, 10)}`
-    db.challenges[challengeId] = {
-      email: account.email,
-      expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-    }
-    return {
-      success: true,
-      mfa_required: true,
-      challenge_id: challengeId,
-      expires_at: db.challenges[challengeId].expires_at,
-      destination_hint: maskEmail(account.email),
-    }
+    const challenge_id = newChallenge(account.email)
+    return { success: true, requires_otp: true, challenge_id }
   }
   return {
     success: true,
     token: signDemoToken(account),
     user: {
-      id: 'demo-admin',
+      id: '64b0000000000000000000ad',
       email: account.email,
       role: 'admin',
       client_id: null,
@@ -275,14 +269,16 @@ function login(body) {
   }
 }
 
-function verifyMfa(body) {
+function verifyOtp(body) {
   const challenge = db.challenges[body?.challenge_id]
-  if (!challenge) fail(400, 'Ese código ya no sirve. Vuelve a entrar con tu contraseña.')
-  if (new Date(challenge.expires_at).getTime() < Date.now()) {
-    fail(400, 'El código caducó. Pide otro.')
+  if (!challenge) fail(401, 'Código no válido o caducado')
+  if (challenge.expires_at < Date.now()) fail(401, 'Código no válido o caducado')
+  challenge.attempts += 1
+  const code = String(body?.code || '')
+  if (!/^\d{6}$/.test(code) || code !== DEMO_MFA_CODE || challenge.attempts > 5) {
+    if (challenge.attempts >= 5) delete db.challenges[body.challenge_id]
+    fail(401, 'Código no válido o caducado')
   }
-  const code = String(body?.code || '').replace(/\D/g, '')
-  if (code !== DEMO_MFA_CODE) fail(401, 'El código no coincide. Revisa el correo e inténtalo de nuevo.')
   const account = DEMO_ACCOUNTS.find((item) => item.email === challenge.email)
   delete db.challenges[body.challenge_id]
   return {
@@ -298,85 +294,106 @@ function verifyMfa(body) {
   }
 }
 
-function resendMfa(body) {
+function resendOtp(body) {
   const challenge = db.challenges[body?.challenge_id]
-  if (!challenge) fail(400, 'Vuelve a entrar con tu contraseña para recibir otro código.')
-  challenge.expires_at = new Date(Date.now() + 10 * 60 * 1000).toISOString()
-  return { success: true, expires_at: challenge.expires_at }
+  if (!challenge) fail(401, 'Código no válido o caducado')
+  delete db.challenges[body.challenge_id]
+  const challenge_id = newChallenge(challenge.email)
+  return { success: true, requires_otp: true, challenge_id }
 }
 
-function maskEmail(email) {
-  const [name, domain] = email.split('@')
-  const visible = name.slice(0, 1)
-  return `${visible}***@${domain}`
-}
+const PROVIDERS = ['meta_business', 'google_business', 'web', 'analytics', 'otro']
 
-function assertClientPiece(item, user) {
-  if (item.client_id !== user.client_id) fail(403, 'Esa pieza es de otra cuenta.')
-  if (item.stage !== 'client' || item.status !== 'pending') {
-    fail(409, 'Esta pieza ya no está pendiente de tu aprobación.')
+function createCredential(clientId, body) {
+  if (!byId(db.clients, clientId)) fail(404, 'Cliente no encontrado')
+  const keys = Object.keys(body || {})
+  if (keys.some((key) => !['provider', 'label', 'secret'].includes(key))) {
+    fail(400, 'Valor no permitido')
   }
-}
-
-function createVault(body) {
   const label = String(body?.label || '').trim()
-  const clientId = String(body?.client_id || '').trim()
-  const secret = String(body?.secret || '')
-  if (!clientId || !db.clients.some((item) => item.id === clientId)) {
-    fail(400, 'Elige el cliente al que pertenece el acceso.')
-  }
   if (!label) fail(400, 'Pon un nombre que reconozcas dentro de un año.')
-  if (!secret.trim()) fail(400, 'Falta la clave. No la guardamos en el navegador.')
+  if (body?.secret == null || body.secret === '') fail(400, 'Falta la clave. No la guardamos en el navegador.')
+  const provider = body.provider || 'otro'
+  if (!PROVIDERS.includes(provider)) fail(400, 'Valor no permitido')
+  const id = `64b0${Math.random().toString(16).slice(2, 14).padEnd(20, '0')}`.slice(0, 24)
   const entry = {
-    id: `v_${Math.random().toString(36).slice(2, 10)}`,
+    id,
+    _id: id,
     client_id: clientId,
+    provider,
     label,
-    kind: body?.kind || 'otro',
-    username: String(body?.username || '').trim(),
-    url: String(body?.url || '').trim(),
-    notes: String(body?.notes || '').trim(),
-    has_secret: true,
+    created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }
-  db.secrets[entry.id] = secret
-  db.vault.unshift(entry)
-  return publicVault(entry)
+  db.secrets[id] = body.secret
+  db.credentials.unshift(entry)
+  return publicCredential(entry)
 }
 
-function updateVault(id, body) {
-  const entry = db.vault.find((item) => item.id === id)
-  if (!entry) fail(404, 'No encontramos ese acceso.')
-  if (body?.label) entry.label = String(body.label).trim()
-  if (body?.kind) entry.kind = body.kind
-  if (body?.username !== undefined) entry.username = String(body.username || '').trim()
-  if (body?.url !== undefined) entry.url = String(body.url || '').trim()
-  if (body?.notes !== undefined) entry.notes = String(body.notes || '').trim()
-  if (body?.client_id) entry.client_id = body.client_id
-  const secret = String(body?.secret || '')
-  if (secret.trim()) {
-    db.secrets[entry.id] = secret
-    entry.has_secret = true
+function decide(id, side, body, actor) {
+  const item = byId(db.approvals, id)
+  if (!item) fail(404, 'Aprobación no encontrada')
+  const decision = body?.decision
+  if (decision !== 'aprobar' && decision !== 'rechazar') fail(400, 'Valor no permitido')
+  const comment = String(body?.comment || '').trim()
+  if (decision === 'rechazar' && !comment) fail(400, 'El rechazo necesita un comentario')
+
+  if (side === 'domingo') {
+    if (item.status !== 'pendiente_domingo') fail(409, 'No está pendiente de Domingo')
+    item.status = decision === 'aprobar' ? (item.mode === 'solo_domingo' ? 'aprobado' : 'pendiente_cliente') : 'devuelto'
+    item.audit.push({
+      at: new Date().toISOString(),
+      actor_type: 'admin',
+      action: decision === 'aprobar' ? 'aprobada_domingo' : 'rechazada_domingo',
+      ...(comment ? { comment } : {}),
+    })
+  } else {
+    if (item.client_id !== actor.client_id) fail(403, 'Acceso denegado')
+    if (item.status !== 'pendiente_cliente') fail(409, 'Aún no está pendiente del cliente')
+    item.status = decision === 'aprobar' ? 'aprobado' : 'devuelto'
+    item.audit.push({
+      at: new Date().toISOString(),
+      actor_type: 'client',
+      action: decision === 'aprobar' ? 'aprobada_cliente' : 'rechazada_cliente',
+      ...(comment ? { comment } : {}),
+    })
   }
-  entry.updated_at = new Date().toISOString()
-  return publicVault(entry)
+
+  const piece = byId(db.pieces, item.piece_id)
+  if (piece) {
+    if (item.status === 'aprobado') piece.status = 'aprobado'
+    else if (item.status === 'devuelto') piece.status = 'borrador'
+    else piece.status = 'en_revision'
+  }
+  return clone(item)
 }
 
-function requestMeeting(user, body) {
-  const when = String(body?.preferred_at || '')
-  if (!when || Number.isNaN(new Date(when).getTime())) {
-    fail(400, 'Indica día y hora.')
+function submitPiece(pieceId) {
+  const piece = byId(db.pieces, pieceId)
+  if (!piece) fail(404, 'Pieza no encontrada')
+  const existing = db.approvals.find((item) => item.piece_id === pieceId)
+  if (!existing) fail(409, 'La pieza ya está en un ciclo de aprobación')
+  if (existing.status !== 'devuelto') fail(409, 'La pieza ya está en un ciclo de aprobación')
+  existing.status = 'pendiente_domingo'
+  existing.round = (existing.round || 1) + 1
+  existing.audit.push({ at: new Date().toISOString(), actor_type: 'bot', action: 'reenviada', actor_label: piece.author_bot || 'bot' })
+  piece.status = 'en_revision'
+  return clone(existing)
+}
+
+function checkoutInvoice(id) {
+  const invoice = byId(db.invoices, id)
+  if (!invoice) fail(404, 'Factura no encontrada')
+  if (invoice.status === 'pagada') fail(409, 'La factura ya está pagada')
+  if (invoice.status === 'anulada') fail(409, 'La factura está anulada')
+  if (invoice.payment_url && invoice.stripe_session_id && invoice.status === 'pendiente') {
+    return { success: true, data: { url: invoice.payment_url, session_id: invoice.stripe_session_id } }
   }
-  const channel = body?.channel || 'videollamada'
-  const labels = { llamada: 'Llamada', visita: 'Visita', videollamada: 'Videollamada' }
-  const meeting = {
-    id: `meet_${Math.random().toString(36).slice(2, 8)}`,
-    client_id: user.client_id,
-    title: `${labels[channel] || 'Reunión'} solicitada`,
-    starts_at: new Date(when).toISOString(),
-    place: labels[channel] || 'Por confirmar',
-    status: 'requested',
-    notes: String(body?.note || '').trim(),
+  invoice.payment_url = `https://checkout.stripe.com/c/pay/cs_test_${invoice.id}`
+  invoice.stripe_session_id = `cs_test_${invoice.id}`
+  invoice.status = 'pendiente'
+  return {
+    success: true,
+    data: { url: invoice.payment_url, session_id: invoice.stripe_session_id, invoice_id: invoice.id },
   }
-  db.meetings.push(meeting)
-  return clone(meeting)
 }

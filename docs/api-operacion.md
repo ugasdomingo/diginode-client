@@ -1,140 +1,133 @@
-# API de operación que espera el panel
+# Llamadas de operación que hace la web
 
-El frontend llama a estos endpoints solo cuando `VITE_OPS_USE_MOCK=false`.
-En `main` de `diginode-api` todavía no están. Hasta entonces el panel usa
-`src/api/ops/mock.js` y lo dice en pantalla.
+El prefijo es `VITE_API_URL` (por defecto `http://localhost:3000/api`).
+En la API esas rutas cuelgan de `/api/auth` y `/api/agency`.
 
-El prefijo es el de siempre: `VITE_API_URL` (por defecto `http://localhost:3000/api`).
-Las respuestas siguen el estilo actual: `{ success, data?, message?, token? }`.
-Los nombres van en snake_case. El admin lleva `Authorization: Bearer`.
+Los ejemplos solo se usan si `VITE_OPS_USE_MOCK=true`. Sin definir, o con
+cualquier otro valor, el panel llama a la API y muestra el error si algo falla.
+No inventa datos.
 
-Contratos en JSDoc: `src/api/ops/contracts.js`.
+Las respuestas siguen `{ success, data?, total?, message? }`. Los ids de Mongo
+llegan como `_id`; el cliente los normaliza a `id`.
+
+Contrato resumido en `src/api/ops/contracts.js`. El detalle de permisos está
+en el README de `diginode-api`.
 
 ## Acceso
 
 ### POST /auth/login
 
-Igual que ahora para Domingo (`role: admin`): devuelve `token` y `user`.
+Domingo (`role: admin`) recibe `token` y `user`.
 
-Para un cliente, no devuelve token:
+Un cliente no recibe token:
 
 ```json
-{
-  "success": true,
-  "mfa_required": true,
-  "challenge_id": "ch_123",
-  "expires_at": "2026-11-01T18:10:00.000Z",
-  "destination_hint": "l***@aireyoga.test"
-}
+{ "success": true, "requires_otp": true, "challenge_id": "…" }
 ```
 
-El código es de 6 dígitos y llega por correo.
+El código tiene 6 dígitos, llega por correo y caduca a los 10 minutos.
+La API no manda una pista del correo: la pantalla usa el que se acaba de escribir.
 
-### POST /auth/mfa/verify
+### POST /auth/otp/verify
 
-`{ "challenge_id": "ch_123", "code": "482913" }` → `{ success, token, user }` con `user.role = "client"`.
+`{ "challenge_id", "code" }` → `{ success, token, user }` con `user.role = "client"`.
+El JWT lleva `user_id`, `role` y `token_version`.
 
-### POST /auth/mfa/resend
+### POST /auth/otp/resend
 
-`{ "challenge_id": "ch_123" }` → `{ success }`.
+`{ "challenge_id" }` → `{ success, requires_otp, challenge_id }`.
+El identificador nuevo sustituye al anterior. El código viejo deja de valer.
 
-## Leads (solo lectura)
+## Pipeline (solo lectura)
 
-### GET /admin/ops/leads
+### GET /agency/leads
 
-Lista del pipeline. Cada lead tiene `status` (`nuevo`, `mensaje_enviado`, `con_respuesta`, `llamada_visita`, `pieza_enviada`, `cliente`, `perdido`), `next_action` (`type`: `call` o `visit`) y `timeline`.
+`pipeline_status`: `nuevo`, `analizado`, `pieza_lista`, `pendiente_de_aprobacion`,
+`contactado`, `respondio`, `reunion_visita`, `ganado`, `perdido`.
 
-### GET /admin/ops/leads/:id
+`next_action` es un texto. La fecha va en `next_action_at`.
+La lista no incluye `activity`. Se pide `limit=100` y se siguen las páginas.
 
-La ficha. `timeline[]` usa `type`: `message_sent`, `piece_sent`, `reply`, `next_action`.
+### GET /agency/leads/:id
 
-## Clientes (solo lectura)
+La ficha trae `activity[]` con `type` (`mensaje_enviado`, `pieza_enviada`,
+`respuesta`, `nota`, `siguiente_accion`), `summary` y `at`.
 
-### GET /admin/ops/clients
+## Clientes, piezas y aprobaciones
 
-### GET /admin/ops/clients/:id
+### GET /agency/clients
 
-Incluye `kpis`: `pieces_this_month`, `approved`, `pending`, `avg_approval_days`, `open_invoices_cents`, `next_meeting_at`, `messages_sent`, `replies`.
+Ficha real: `company`, `name`, `plan`, `service_package`, `brand`, `kpis[]`
+(`name`, `value`, `unit`, `period`), `strategy_links`, `created_at`.
+El cliente autenticado solo recibe la suya.
 
-## Aprobaciones en dos pasos
+### GET /agency/pieces
 
-El bot deja la pieza en `stage: "domingo"`. Si Domingo aprueba, pasa a `stage: "client"`. Si el cliente la rechaza con comentario, vuelve a `stage: "domingo"` con `needs_reapproval: true` y no se publica hasta una nueva aprobación.
+`title`, `type`, `drive_url`, `status`, `version`, `versions[]`.
 
-### GET /admin/ops/approvals
+### GET /agency/approvals
 
-Pendientes de Domingo. `?client_id=` devuelve las de esa cuenta.
+`status`: `pendiente_domingo`, `pendiente_cliente`, `aprobado`, `devuelto`.
+`round`, `mode` (`dos_fases` o `solo_domingo`), `piece_id`, `audit[]`.
+El título y el enlace se leen de la pieza.
 
-### POST /admin/ops/approvals/:id/approve
+### POST /agency/approvals/:id/domingo
 
-### POST /admin/ops/approvals/:id/reject
+`{ "decision": "aprobar" | "rechazar", "comment": "…" }`.
+El rechazo sin comentario responde 400. Aprobar en `dos_fases` pasa a
+`pendiente_cliente`. Rechazar deja la pieza en `devuelto`.
 
-Cuerpo opcional: `{ "comment": "..." }`. No llega al cliente.
+### POST /agency/approvals/:id/client
+
+El mismo cuerpo, solo si está `pendiente_cliente` y la pieza es de esa cuenta.
+Un rechazo vuelve a `devuelto`. Domingo la ve otra vez cuando el bot la reenvía.
 
 ## Bóveda
 
-La respuesta nunca incluye `secret`, `password`, `api_key` ni `value`. El cliente también los borra si un backend los devolviera por error.
+La lista y el alta no incluyen `secret`. Ver la clave es otra llamada y queda auditada.
 
-### GET /admin/ops/vault
+### GET /agency/clients/:id/credentials
 
-Metadatos: `id`, `client_id`, `label`, `kind`, `username`, `url`, `notes`, `has_secret`, `updated_at`.
+`id`, `client_id`, `provider`, `label`, `created_at`, `updated_at`.
 
-`kind`: `instagram`, `facebook`, `google_business`, `dominio`, `hosting`, `email`, `bot_api_key`, `otro`.
+`provider`: `meta_business`, `google_business`, `web`, `analytics`, `otro`.
 
-### POST /admin/ops/vault
+### POST /agency/clients/:id/credentials
 
-```json
-{
-  "client_id": "cli_aire",
-  "label": "Instagram de Aire",
-  "kind": "instagram",
-  "username": "@estudio.aire",
-  "secret": "solo-en-el-cuerpo-de-esta-peticion",
-  "url": "https://instagram.com/estudio.aire",
-  "notes": ""
-}
-```
+`{ "provider", "label", "secret" }`. `secret` es un texto o un objeto.
+No hay PATCH: para cambiarla se borra y se crea otra.
 
-### PATCH /admin/ops/vault/:id
+### DELETE /agency/credentials/:id
 
-Igual, con `secret` opcional. Si viene vacío, la clave guardada no cambia.
+### POST /agency/credentials/:id/decrypt
 
-## Portal del cliente
+Solo Domingo. Responde `{ id, provider, label, secret }`.
 
-### GET /portal/ops/deliverables
+## Informes, reuniones y facturas
 
-Piezas de la cuenta del token.
+### GET /agency/reports
 
-### POST /portal/ops/deliverables/:id/approve
+`period` (`YYYY-MM`), `title`, `drive_url`, `status` (`borrador` o `enviado`).
 
-### POST /portal/ops/deliverables/:id/reject
+### GET /agency/meetings
 
-`{ "comment": "..." }` obligatorio. La pieza vuelve a Domingo.
+El cliente solo lee. `title`, `starts_at`, `location`, `notes`,
+`status` (`programada`, `hecha`, `cancelada`). No hay alta desde el portal.
 
-### GET /portal/ops/reports
+### GET /agency/invoices
 
-`google_doc_url` es un enlace https al documento.
+`concept`, `amount_eur`, `currency` (`EUR`), `status`
+(`borrador`, `pendiente`, `pagada`, `anulada`, `revision`), `payment_url`, `paid_at`.
 
-### GET /portal/ops/meetings
+### POST /agency/invoices/:id/checkout
 
-### POST /portal/ops/meetings
+Solo Domingo o un bot. Devuelve `{ url, session_id, invoice_id }` y guarda `url`
+en `payment_url`. El portal abre esa URL si es `https://checkout.stripe.com/…`.
+El cliente no llama a esta ruta.
 
-`{ "preferred_at": "2026-11-20T09:00:00.000Z", "channel": "visita", "note": "" }`
-
-`channel`: `llamada`, `visita` o `videollamada`.
-
-### GET /portal/ops/invoices
-
-Importes en céntimos. `status`: `open`, `paid`, `void`, `draft`.
-
-### POST /portal/ops/invoices/:id/checkout
-
-`{ "success": true, "data": { "checkout_url": "https://checkout.stripe.com/c/pay/cs_..." } }`
-
-El navegador solo navega si la URL es de `checkout.stripe.com`.
-
-## Cuentas de la demostración
-
-No son cuentas reales. Sirven con `VITE_OPS_USE_MOCK` distinto de `false`.
+## Cuentas de demostración
 
 - Domingo: `domingo@midiginode.com` / `Madrid-2026`
-- Cliente (Lucía, Estudio Aire): `lucia@aireyoga.test` / `Aire-2026`, código `482913`
+- Cliente: `lucia@aireyoga.test` / `Aire-2026`, código `482913`
+
+No son cuentas reales. Solo existen con `VITE_OPS_USE_MOCK=true`.

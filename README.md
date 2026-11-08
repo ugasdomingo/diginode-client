@@ -9,11 +9,11 @@ Laboratorio local: [PRUEBA_DIGINODE.md](PRUEBA_DIGINODE.md). Arranca con `npm ru
 
 ## Panel, portal y cookies
 
-Hay un área privada para Domingo y un portal para el cliente. Los contratos con la API están en [docs/api-operacion.md](docs/api-operacion.md). Esos endpoints aún no están en `main` de `diginode-api`: con `VITE_OPS_USE_MOCK` distinto de `false` el panel enseña datos de demostración y lo dice en pantalla. No son clientes reales.
+Hay un área privada para Domingo y un portal para el cliente. Las llamadas siguen la API de agencia: [docs/api-operacion.md](docs/api-operacion.md). Los datos de ejemplo solo aparecen si `VITE_OPS_USE_MOCK=true`. Sin esa variable, o con cualquier otro valor, se usa la API real.
 
 - Domingo entra en `/login` con `domingo@midiginode.com` / `Madrid-2026` y ve el pipeline, la cartera, las aprobaciones y la bóveda.
-- Un cliente entra con `lucia@aireyoga.test` / `Aire-2026` y el código `482913`. Ahí aprueba piezas, abre los informes, pide reunión y paga por Stripe.
+- Un cliente entra con `lucia@aireyoga.test` / `Aire-2026` y el código `482913`. Ahí aprueba piezas, abre los informes, ve las reuniones que Domingo ha confirmado y paga en Stripe si la factura ya tiene enlace.
 - La clave de un acceso se envía a la bóveda y no se guarda en el navegador.
 - La medición, la publicidad y los calendarios incrustados no se cargan hasta que la persona acepta. Rechazar es tan directo como aceptar. Se cambia desde «Configurar cookies» en el pie.
 
-Para hablar con la API de verdad: `VITE_OPS_USE_MOCK=false`. Las pruebas de consentimiento y de acceso: `npm test`.
+Las pruebas de consentimiento y de acceso: `npm test`.

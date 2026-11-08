@@ -122,7 +122,7 @@ import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useClientStore } from '@/stores/client'
 import { login, opsUsesMock, resendMfa, verifyMfa } from '@/api/ops/client'
-import { interpretLogin, interpretMfa, normalizeCode } from '@/lib/authFlow'
+import { interpretLogin, interpretMfa, interpretOtpResend, normalizeCode } from '@/lib/authFlow'
 import AppButton from '@/components/ui/AppButton.vue'
 
 const auth         = useAuthStore()
@@ -165,12 +165,12 @@ async function handleLogin() {
       email:    form.value.email.trim().toLowerCase(),
       password,
     })
-    const next = interpretLogin(data)
+    const next = interpretLogin(data, form.value.email.trim().toLowerCase())
     if (!next.ok) {
       error.value = next.message
       return
     }
-    if (next.step === 'mfa') {
+    if (next.step === 'otp') {
       step.value = 'mfa'
       challengeId.value = next.challengeId
       mfaHint.value = next.hint
@@ -214,8 +214,14 @@ async function resend() {
   error.value = ''
   notice.value = ''
   try {
-    await resendMfa({ challenge_id: challengeId.value })
-    notice.value = 'Te enviamos otro código.'
+    const data = await resendMfa({ challenge_id: challengeId.value })
+    const next = interpretOtpResend(data)
+    if (!next.ok) {
+      error.value = next.message
+      return
+    }
+    challengeId.value = next.challengeId
+    notice.value = 'Te enviamos otro código. El anterior ya no sirve.'
   } catch (err) {
     error.value = err.message
   }

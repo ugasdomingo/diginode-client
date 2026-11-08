@@ -4,20 +4,19 @@
       <div>
         <p class="ops-kicker">Informes</p>
         <h1 class="ops-title">El mes, en un documento</h1>
-        <p class="ops-lead">Cada informe abre un Google Doc. No hace falta otra contraseña de Diginode.</p>
+        <p class="ops-lead">Cada informe abre el documento de Drive o Docs. No hace falta otra contraseña de Diginode.</p>
       </div>
     </header>
     <OpsState :loading="loading" :error="error" @retry="reload">
-      <p v-if="data && !data.length" class="ops-state">Todavía no hay un informe publicado.</p>
+      <p v-if="data && !data.length" class="ops-state">Todavía no hay un informe.</p>
       <article v-for="report in data" :key="report.id" class="ops-panel ops-rise">
-        <p class="ops-kicker">{{ report.period_label }}</p>
-        <h2>{{ report.title }}</h2>
-        <p>{{ report.summary }}</p>
+        <p class="ops-kicker">{{ periodLabel(report.period) }} · {{ report.status === 'enviado' ? 'Enviado' : 'Borrador' }}</p>
+        <h2>{{ report.title || periodLabel(report.period) }}</h2>
         <a v-if="href(report)" class="ops-link" :href="href(report)" target="_blank" rel="noopener noreferrer">
           Abrir el documento
         </a>
-        <p v-else class="ops-card__meta">El enlace del documento no es válido.</p>
-        <p class="ops-card__meta">Publicado el {{ formatDate(report.published_at) }}</p>
+        <p v-else class="ops-card__meta">Todavía no hay un enlace al documento.</p>
+        <p class="ops-card__meta">{{ formatDate(report.created_at) }}</p>
       </article>
     </OpsState>
   </div>
@@ -25,13 +24,13 @@
 
 <script setup>
 import { listReports } from '@/api/ops/client'
-import { formatDate, safeHttpsUrl } from '@/api/ops/format'
+import { formatDate, periodLabel, safeHttpsUrl } from '@/api/ops/format'
 import { useAsyncData } from '@/composables/useAsyncData'
 import OpsState from '@/components/ops/OpsState.vue'
 
 const { data, error, loading, reload } = useAsyncData(listReports)
 function href(report) {
-  return safeHttpsUrl(report.google_doc_url)
+  return safeHttpsUrl(report.drive_url)
 }
 </script>
 
